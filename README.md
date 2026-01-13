@@ -1,35 +1,38 @@
-#  Modern Furniture E-commerce Store
+ Modern Furniture E-commerce Store
+A stylish and responsive e-commerce application designed for a premium furniture brand. Built with React (Vite) and Tailwind CSS, focusing on speed, aesthetics, and user experience.
 
-A stylish and responsive e-commerce application designed for a premium furniture brand. Built with **React (Vite)** and **Tailwind CSS**, focusing on speed, aesthetics, and user experience.
+Note: This is a frontend-only application using mock data to simulate a real-world shopping experience.
 
-> **Note:** This is a frontend-only application using mock data to simulate a real-world shopping experience.
+🌟 Key Features
+Multi-Language Support: Integrated i18next for seamless language switching (EN/AZ/RU).
 
-## 🌟 Key Features
+Modern Tech Stack: Powered by Vite for lightning-fast performance.
 
-- **Multi-Language Support:** Integrated **i18next** for seamless language switching (EN/AZ/RU).
-- **Modern Tech Stack:** Powered by **Vite** for lightning-fast performance.
-- **Product Catalog:** Interactive product listing with filtering capabilities.
-- **Product Details:** Dedicated pages for each item with detailed descriptions.
-- **Responsive Design:** Fully optimized for mobile, tablet, and desktop screens.
-- **Hero Slider:** Dynamic carousel showcasing top products.
+Product Catalog: Interactive product listing with filtering capabilities.
 
-## 🛠️ Tech Stack
+Product Details: Dedicated pages for each item with detailed descriptions.
 
-- **Core:** React.js + Vite
-- **Styling:** Tailwind CSS
-- **Routing:** React Router DOM
-- **Internationalization:** i18next
-- **State Management:** React Hooks (useState, useEffect)
+Responsive Design: Fully optimized for mobile, tablet, and desktop screens.
 
-## 🚀 Getting Started
+Hero Slider: Dynamic carousel showcasing top products.
 
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/NurlanQadirov/furniture-ecommerce-store.git](https://github.com/NurlanQadirov/furniture-ecommerce-store.git)
-2. Install dependencies: npm install
-3. Run the development server:  npm run dev
+🛠️ Tech Stack
+Core: React.js + Vite
 
+Styling: Tailwind CSS
 
+Routing: React Router DOM
+
+Internationalization: i18next
+
+State Management: React Hooks (useState, useEffect)
+
+🚀 Getting Started
+Clone the repository: git clone [https://github.com/NurlanQadirov/furniture-ecommerce-store.git](https://github.com/NurlanQadirov/furniture-ecommerce-store.git)
+
+Install dependencies:  npm install 
+
+Run the development server:  npm run dev
 
 📂 Project Structure
 ├── src/
@@ -42,6 +45,6 @@ A stylish and responsive e-commerce application designed for a premium furniture
 └── tailwind.config.js # Tailwind configuration
 
 🌐 Live Demo
-Check out the live version here: 
+Check out the live version here: https://furniture-ecommerce-store-rosy.vercel.app/
 
 Designed & Developed by Nurlan Qadirov
