@@ -1,12 +1,45 @@
-# React + Vite
+#  Modern Furniture E-commerce Store
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A stylish and responsive e-commerce application designed for a premium furniture brand. Built with **React (Vite)** and **Tailwind CSS**, focusing on speed, aesthetics, and user experience.
 
-Currently, two official plugins are available:
+> **Note:** This is a frontend-only application using mock data to simulate a real-world shopping experience.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌟 Key Features
 
-## Expanding the ESLint configuration
+- **Multi-Language Support:** Integrated **i18next** for seamless language switching (EN/AZ/RU).
+- **Modern Tech Stack:** Powered by **Vite** for lightning-fast performance.
+- **Product Catalog:** Interactive product listing with filtering capabilities.
+- **Product Details:** Dedicated pages for each item with detailed descriptions.
+- **Responsive Design:** Fully optimized for mobile, tablet, and desktop screens.
+- **Hero Slider:** Dynamic carousel showcasing top products.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+
+- **Core:** React.js + Vite
+- **Styling:** Tailwind CSS
+- **Routing:** React Router DOM
+- **Internationalization:** i18next
+- **State Management:** React Hooks (useState, useEffect)
+
+## 🚀 Getting Started
+
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/NurlanQadirov/furniture-ecommerce-store.git](https://github.com/NurlanQadirov/furniture-ecommerce-store.git)
+2. Install dependencies: npm install
+3. Run the development server:  npm run dev
+
+
+
+📂 Project Structure
+├── src/
+│   ├── components/    # Reusable UI components (Header, ProductCard, etc.)
+│   ├── pages/         # Page layouts (Home, About, Products, Contact)
+│   ├── data/          # Mock data for products
+│   ├── assets/        # Images and icons
+│   ├── i18n.js        # Internationalization configuration
+│   └── App.jsx        # Main application component
+└── tailwind.config.js # Tailwind configuration
+
+🌐 Live Demo
+Check out the live version here: 
