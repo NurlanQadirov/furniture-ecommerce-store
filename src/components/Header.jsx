@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import logo from "../assets/logo2.png";
+import logo from "../assets/Logo2.png";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import LanguageSwitcher from "./LanguageSwitcher";
 
