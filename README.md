@@ -43,3 +43,5 @@ A stylish and responsive e-commerce application designed for a premium furniture
 
 🌐 Live Demo
 Check out the live version here: 
+
+Designed & Developed by Nurlan Qadirov
