@@ -98,18 +98,24 @@ export default function AdminShell({ children }: AdminShellProps) {
       {/* Mobile bar */}
       <div className="lg:hidden sticky top-0 z-30 flex items-center justify-between bg-white border-b border-gray-200 px-4 h-16">
         <Image src="/Logo2.png" alt="Mebeltech" width={200} height={200} className="h-9 w-auto" />
-        <button type="button" onClick={() => setMenuOpen(true)} aria-label="Menyu">
+        <button
+          type="button"
+          onClick={() => setMenuOpen(true)}
+          aria-label="Menyu"
+          aria-expanded={menuOpen}
+          className="-mr-3 p-3 touch-manipulation"
+        >
           <Bars3Icon className="h-7 w-7 text-custom-black" />
         </button>
       </div>
 
       {menuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-white p-6 flex flex-col">
+        <div className="lg:hidden fixed inset-0 z-40 flex flex-col overflow-y-auto overscroll-contain bg-white p-6">
           <button
             type="button"
             onClick={() => setMenuOpen(false)}
             aria-label="Bağla"
-            className="self-end mb-6"
+            className="self-end -mr-3 mb-6 p-3 touch-manipulation"
           >
             <XMarkIcon className="h-8 w-8 text-custom-black" />
           </button>

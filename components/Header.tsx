@@ -75,8 +75,19 @@ export default function Header() {
             <LanguageSwitcher />
           </nav>
 
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(true)} aria-label="Open menu">
+          <div className="md:hidden -mr-3">
+            {/*
+              The negative margin keeps the icon where it was while the padding
+              grows the tap target to 56px: the bare 32px icon sat 16px from the
+              screen edge, where a slightly-off thumb tap hit nothing.
+            */}
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              aria-label="Open menu"
+              aria-expanded={isMenuOpen}
+              className="p-3 touch-manipulation"
+            >
               <Bars3Icon className="h-8 w-8 text-custom-black" />
             </button>
           </div>
@@ -87,28 +98,29 @@ export default function Header() {
 
       <div
         className={`
-          fixed inset-0 z-50 flex flex-col items-center justify-center 
-          bg-white p-6
+          fixed inset-0 z-50 flex flex-col items-center justify-center gap-10
+          overflow-y-auto overscroll-contain bg-white px-6 py-20
           transition-opacity duration-300 ease-in-out 
           md:hidden
           ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}
         `}
       >
         <button
+          type="button"
           onClick={() => setIsMenuOpen(false)}
           aria-label="Close menu"
-          className="absolute top-6 right-6"
+          className="absolute top-3 right-3 p-3 touch-manipulation"
         >
           <XMarkIcon className="h-10 w-10 text-custom-black" />
         </button>
 
         <nav>
-          <ul className="flex flex-col items-center space-y-10 font-inter text-center">
+          <ul className="flex flex-col items-center space-y-8 font-inter text-center">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-3xl font-bold text-custom-black hover:text-dark-green"
+                  className="block py-1 text-3xl font-bold text-custom-black hover:text-dark-green"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {t(item.labelKey)}
@@ -118,9 +130,9 @@ export default function Header() {
           </ul>
         </nav>
 
-        <div className="absolute bottom-10">
-          <LanguageSwitcher size="small" />
-        </div>
+        {/* In flow rather than pinned to the bottom, so it cannot land on top
+            of the links when the overlay is shorter than its contents. */}
+        <LanguageSwitcher size="small" />
       </div>
     </>
   );
