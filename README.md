@@ -10,7 +10,7 @@ Product Pages: A main photo, a thumbnail gallery of additional photos, a full de
 
 Furniture Calculator: A five-step estimator at /calculator. It never quotes an exact figure — it returns a price band and then asks for a phone number so the workshop can measure on site.
 
-Admin Panel: Password-protected at /admin. Add, edit, delete and star products; manage categories; edit contact details; change every calculator tariff; read the measurement requests the calculator captured.
+Admin Panel: Email and password protected at /admin. Add, edit, delete and star products; manage categories; edit contact details; change every calculator tariff; read the measurement requests the calculator captured.
 
 Multi-Language Support: i18next for the interface (AZ/EN/RU), plus three-language fields on every product and category. Missing translations fall back to Azerbaijani.
 
@@ -34,11 +34,12 @@ Wardrobes, bedroom units and TV walls are quoted by facade area (width × height
 Every rate, multiplier and fee above is editable at /admin/calculator.
 
 🔐 Admin access
-Copy .env.example to .env.local and set a password:
+Copy .env.example to .env.local and set the account:
 
+  ADMIN_EMAIL=you@your-domain.az
   ADMIN_PASSWORD=your-own-password
 
-Without it the panel falls back to mebeltech2024 — fine locally, not for production. ADMIN_SECRET is optional; when unset the session cookie is signed with a key derived from the password, so changing the password signs everyone out.
+Without them the panel falls back to admin@mebeltech.az / mebeltech2024 — fine locally, not for production. The address is compared case-insensitively. ADMIN_SECRET is optional; when unset the session cookie is signed with a key derived from the password, so changing the password signs everyone out.
 
 The session is an HMAC-signed, httpOnly cookie valid for seven days. Both the panel pages and every /api/admin route check it.
 
@@ -63,7 +64,7 @@ Clone the repository: git clone [https://github.com/NurlanQadirov/furniture-ecom
 
 Install dependencies:  npm install 
 
-Set the admin password:  cp .env.example .env.local  and edit it
+Set the admin account:  cp .env.example .env.local  and edit it
 
 Run the development server:  npm run dev
 
@@ -81,7 +82,7 @@ Type-check:  npm run typecheck
 │   │   ├── calculator/         # The estimator
 │   │   ├── about/  contact/
 │   ├── admin/
-│   │   ├── login/              # Password screen (outside the panel shell)
+│   │   ├── login/              # Sign-in screen (outside the panel shell)
 │   │   └── (panel)/            # Dashboard, products, categories, calculator, contact, leads
 │   └── api/                    # /api/leads (public) and /api/admin/* (guarded)
 ├── components/

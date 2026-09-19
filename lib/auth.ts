@@ -2,7 +2,8 @@
  * Minimal single-owner admin session.
  *
  * The panel has exactly one user — the workshop owner — so there is no user
- * table: a password from the environment is exchanged for an HMAC-signed cookie.
+ * table: an email and password from the environment are exchanged for an
+ * HMAC-signed cookie.
  * Web Crypto is used (rather than `node:crypto`) so the same helpers run in the
  * Edge middleware and in the Node route handlers.
  */
@@ -14,8 +15,17 @@ const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 const encoder = new TextEncoder();
 
+export function getAdminEmail(): string {
+  return normalizeEmail(process.env.ADMIN_EMAIL ?? 'admin@mebeltech.az');
+}
+
 export function getAdminPassword(): string {
   return process.env.ADMIN_PASSWORD ?? 'mebeltech2024';
+}
+
+/** Mail addresses are not case-sensitive, so neither is the login form. */
+export function normalizeEmail(value: string): string {
+  return value.trim().toLowerCase();
 }
 
 function getSecret(): string {

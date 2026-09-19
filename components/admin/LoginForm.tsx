@@ -9,6 +9,7 @@ import { Button, inputClass } from '@/components/admin/ui';
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -22,12 +23,12 @@ export default function LoginForm() {
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
         const payload = (await response.json().catch(() => ({}))) as { error?: string };
-        setError(payload.error ?? 'Şifrə yanlışdır');
+        setError(payload.error ?? 'E-poçt və ya şifrə yanlışdır');
         return;
       }
 
@@ -56,7 +57,9 @@ export default function LoginForm() {
             priority
           />
           <h1 className="mt-4 text-lg font-bold">İdarə paneli</h1>
-          <p className="text-sm text-gray-500">Davam etmək üçün şifrəni daxil edin</p>
+          <p className="text-sm text-gray-500">
+            Davam etmək üçün e-poçt və şifrəni daxil edin
+          </p>
         </div>
 
         <form
@@ -65,12 +68,27 @@ export default function LoginForm() {
         >
           <label className="block">
             <span className="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5">
+              E-poçt
+            </span>
+            <input
+              type="email"
+              autoFocus
+              required
+              autoComplete="username"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              className={inputClass}
+            />
+          </label>
+
+          <label className="block">
+            <span className="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5">
               Şifrə
             </span>
             <input
               type="password"
-              autoFocus
               required
+              autoComplete="current-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className={inputClass}
