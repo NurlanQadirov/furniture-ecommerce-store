@@ -1,4 +1,4 @@
-import type { Language, LanguageOption } from '@/types';
+import type { Language } from '@/types';
 import { az } from '@/lib/i18n/locales/az';
 import { en } from '@/lib/i18n/locales/en';
 import { ru } from '@/lib/i18n/locales/ru';
@@ -9,16 +9,11 @@ export type TranslationKey = keyof typeof az;
 /** Shape every locale file has to satisfy, so locales can never drift apart. */
 export type Translation = { [K in TranslationKey]: string };
 
-export const defaultLanguage: Language = 'az';
-
-export const supportedLanguages: Language[] = ['az', 'en', 'ru'];
-
-export const languageOptions: LanguageOption[] = [
-  { code: 'az', name: 'AZ' },
-  { code: 'en', name: 'EN' },
-  { code: 'ru', name: 'RU' },
-];
-
+/**
+ * All three languages. Server-only by convention: importing this from a client
+ * component would ship every locale to the browser. Client code gets the active
+ * language's strings through `TranslationProvider`.
+ */
 export const resources: Record<Language, { translation: Translation }> = {
   az: { translation: az },
   en: { translation: en },

@@ -1,11 +1,9 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { getT } from '@/lib/i18n/server';
 
-export default function Philosophy() {
-  const { t } = useTranslation();
+export default async function Philosophy() {
+  const t = await getT();
 
   return (
     <section

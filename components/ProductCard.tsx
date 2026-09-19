@@ -3,8 +3,7 @@
 import SiteImage from '@/components/SiteImage';
 import Link from 'next/link';
 import { StarIcon } from '@heroicons/react/24/solid';
-import { useTranslation } from 'react-i18next';
-import { useLocalized } from '@/lib/i18n/localized';
+import { useLocalized, useT } from '@/components/providers/TranslationProvider';
 import type { Product } from '@/types';
 
 interface ProductCardProps {
@@ -17,7 +16,7 @@ export default function ProductCard({
   product,
   showFeaturedBadge = true,
 }: ProductCardProps) {
-  const { t } = useTranslation();
+  const t = useT();
   const loc = useLocalized();
   const name = loc(product.name);
 

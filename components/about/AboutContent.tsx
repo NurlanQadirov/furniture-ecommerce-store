@@ -1,11 +1,9 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { getT } from '@/lib/i18n/server';
 
-export default function AboutContent() {
-  const { t } = useTranslation();
+export default async function AboutContent() {
+  const t = await getT();
 
   return (
     <div data-reveal="pending" data-reveal-duration="1000" data-reveal-stagger="300" data-reveal-start="80" className="bg-white py-24">

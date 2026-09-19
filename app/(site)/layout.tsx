@@ -2,9 +2,10 @@ import type { ReactNode } from 'react';
 import Header from '@/components/Header';
 import RevealObserver from '@/components/RevealObserver';
 import Footer from '@/components/Footer';
-import I18nProvider from '@/components/providers/I18nProvider';
+import TranslationProvider from '@/components/providers/TranslationProvider';
 import SiteDataProvider from '@/components/providers/SiteDataProvider';
 import { getContact } from '@/lib/store/server';
+import { getLanguage, getMessagesFor } from '@/lib/i18n/server';
 
 interface SiteLayoutProps {
   children: ReactNode;
@@ -12,10 +13,10 @@ interface SiteLayoutProps {
 
 /** The public-facing shell: translations, contact data, header and footer. */
 export default async function SiteLayout({ children }: SiteLayoutProps) {
-  const contact = await getContact();
+  const [contact, language] = await Promise.all([getContact(), getLanguage()]);
 
   return (
-    <I18nProvider>
+    <TranslationProvider language={language} messages={getMessagesFor(language)}>
       <SiteDataProvider contact={contact}>
         <div className="w-full font-sans text-custom-black bg-white">
           {/* Reveals hide their items until the observer runs, so a visitor
@@ -34,6 +35,6 @@ export default async function SiteLayout({ children }: SiteLayoutProps) {
           <Footer />
         </div>
       </SiteDataProvider>
-    </I18nProvider>
+    </TranslationProvider>
   );
 }

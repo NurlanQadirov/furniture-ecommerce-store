@@ -1,11 +1,9 @@
-'use client';
-
 import SiteImage from '@/components/SiteImage';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { getLanguage, getT } from '@/lib/i18n/server';
+import { pickLocalized } from '@/lib/i18n/localized';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
-import { useLocalized } from '@/lib/i18n/localized';
-import type { Category } from '@/types';
+import type { Category, Localized } from '@/types';
 
 interface CategoriesGridProps {
   categories: Category[];
@@ -13,9 +11,11 @@ interface CategoriesGridProps {
   counts: Record<string, number>;
 }
 
-export default function CategoriesGrid({ categories, counts }: CategoriesGridProps) {
-  const { t } = useTranslation();
-  const loc = useLocalized();
+export default async function CategoriesGrid({ categories, counts }: CategoriesGridProps) {
+  const t = await getT();
+  // The server resolves the language once; `loc` keeps the call sites unchanged.
+  const language = await getLanguage();
+  const loc = (value: Localized | undefined) => pickLocalized(value, language);
 
   return (
     <div data-reveal="pending" data-reveal-stagger="120" className="w-full max-w-[1100px] mx-auto px-4 py-16">

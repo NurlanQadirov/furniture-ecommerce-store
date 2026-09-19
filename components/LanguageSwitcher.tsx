@@ -1,7 +1,10 @@
 'use client';
 
-import { useTranslation } from 'react-i18next';
-import { languageOptions } from '@/lib/i18n/resources';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { languageOptions } from '@/lib/i18n/languages';
+import { LANGUAGE_COOKIE, LANGUAGE_COOKIE_MAX_AGE } from '@/lib/i18n/cookie';
+import { useLanguage } from '@/components/providers/TranslationProvider';
 import type { SwitcherSize } from '@/types';
 
 interface LanguageSwitcherProps {
@@ -9,7 +12,19 @@ interface LanguageSwitcherProps {
 }
 
 export default function LanguageSwitcher({ size = 'default' }: LanguageSwitcherProps) {
-  const { i18n } = useTranslation();
+  const router = useRouter();
+  const language = useLanguage();
+  const [, startTransition] = useTransition();
+
+  /**
+   * The language lives in a cookie so the server can render in it. Writing it
+   * and refreshing re-renders the tree server-side, which is what replaced
+   * i18next's client-side `changeLanguage`.
+   */
+  const selectLanguage = (code: string) => {
+    document.cookie = `${LANGUAGE_COOKIE}=${code};path=/;max-age=${LANGUAGE_COOKIE_MAX_AGE};samesite=lax`;
+    startTransition(() => router.refresh());
+  };
 
   const containerStyle =
     size === 'small'
@@ -30,11 +45,9 @@ export default function LanguageSwitcher({ size = 'default' }: LanguageSwitcherP
       {languageOptions.map((lang) => (
         <button
           key={lang.code}
-          onClick={() => {
-            void i18n.changeLanguage(lang.code);
-          }}
+          onClick={() => selectLanguage(lang.code)}
           className={`${buttonStyle} font-bold rounded-full transition-colors duration-300 ${
-            i18n.language.startsWith(lang.code) ? activeButtonStyle : inactiveButtonStyle
+            language === lang.code ? activeButtonStyle : inactiveButtonStyle
           }`}
         >
           {lang.name}

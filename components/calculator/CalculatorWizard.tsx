@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useLocalized, useT } from '@/components/providers/TranslationProvider';
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -13,7 +13,6 @@ import QuantityStepper from '@/components/calculator/QuantityStepper';
 import LeadForm from '@/components/calculator/LeadForm';
 import { estimate, type CalculatorInput, type Quantities } from '@/lib/calc/estimate';
 import type { AddOn, CalculatorSettings, RoomType } from '@/lib/store/schema';
-import { useLocalized } from '@/lib/i18n/localized';
 import type { TranslationKey } from '@/lib/i18n/resources';
 
 interface CalculatorWizardProps {
@@ -99,7 +98,7 @@ function initialChoices(settings: CalculatorSettings): Record<string, string> {
 }
 
 export default function CalculatorWizard({ settings }: CalculatorWizardProps) {
-  const { t } = useTranslation();
+  const t = useT();
   const loc = useLocalized();
 
   const [room, setRoom] = useState<RoomType>('kitchen');

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { useT } from '@/components/providers/TranslationProvider';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Parallax } from 'swiper/modules';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
@@ -11,7 +11,7 @@ import type { HeroSlide } from '@/types';
 import 'swiper/css';
 
 export default function HeroSlider() {
-  const { t } = useTranslation();
+  const t = useT();
 
   const sliderData: HeroSlide[] = [
     {

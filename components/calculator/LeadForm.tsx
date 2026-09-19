@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useT } from '@/components/providers/TranslationProvider';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { FaWhatsapp } from 'react-icons/fa';
-import { useContactInfo, whatsappLink } from '@/components/providers/SiteDataProvider';
+import { useContactInfo } from '@/components/providers/SiteDataProvider';
+import { whatsappLink } from '@/lib/contact';
 
 interface LeadFormProps {
   summary: string;
@@ -20,7 +21,7 @@ type Status = 'idle' | 'sending' | 'sent' | 'error';
  * gets captured here.
  */
 export default function LeadForm({ summary, estimateMin, estimateMax }: LeadFormProps) {
-  const { t } = useTranslation();
+  const t = useT();
   const contact = useContactInfo();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');

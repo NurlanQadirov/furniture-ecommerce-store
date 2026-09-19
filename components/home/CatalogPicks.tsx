@@ -1,7 +1,5 @@
-'use client';
-
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { getT } from '@/lib/i18n/server';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import ProductCard from '@/components/ProductCard';
 import type { Product } from '@/types';
@@ -11,8 +9,8 @@ interface CatalogPicksProps {
   products: Product[];
 }
 
-export default function CatalogPicks({ products }: CatalogPicksProps) {
-  const { t } = useTranslation();
+export default async function CatalogPicks({ products }: CatalogPicksProps) {
+  const t = await getT();
 
   if (products.length === 0) return null;
 

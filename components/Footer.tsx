@@ -1,11 +1,11 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { getLanguage, getT } from '@/lib/i18n/server';
+import { pickLocalized } from '@/lib/i18n/localized';
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa';
-import { useContactInfo, whatsappLink } from '@/components/providers/SiteDataProvider';
-import { useLocalized } from '@/lib/i18n/localized';
+import { getContact } from '@/lib/store/server';
+import { whatsappLink } from '@/lib/contact';
+import type { Localized } from '@/types';
 
 const menuLinks = [
   { href: '/', labelKey: 'home' },
@@ -15,10 +15,12 @@ const menuLinks = [
   { href: '/contact', labelKey: 'contact' },
 ] as const;
 
-export default function Footer() {
-  const { t } = useTranslation();
-  const contact = useContactInfo();
-  const loc = useLocalized();
+export default async function Footer() {
+  const t = await getT();
+  const contact = await getContact();
+  // The server resolves the language once; `loc` keeps the call sites unchanged.
+  const language = await getLanguage();
+  const loc = (value: Localized | undefined) => pickLocalized(value, language);
   const currentYear = new Date().getFullYear();
 
   return (

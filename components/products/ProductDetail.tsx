@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import SiteImage from '@/components/SiteImage';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { useLocalized, useT } from '@/components/providers/TranslationProvider';
 import {
   ArrowLeftIcon,
   ChevronLeftIcon,
@@ -12,8 +12,8 @@ import {
 } from '@heroicons/react/24/solid';
 import { FaWhatsapp } from 'react-icons/fa';
 import ProductCard from '@/components/ProductCard';
-import { useContactInfo, whatsappLink } from '@/components/providers/SiteDataProvider';
-import { useLocalized } from '@/lib/i18n/localized';
+import { useContactInfo } from '@/components/providers/SiteDataProvider';
+import { whatsappLink } from '@/lib/contact';
 import type { Category, Product } from '@/types';
 
 interface ProductDetailProps {
@@ -23,7 +23,7 @@ interface ProductDetailProps {
 }
 
 export default function ProductDetail({ product, category, related }: ProductDetailProps) {
-  const { t } = useTranslation();
+  const t = useT();
   const loc = useLocalized();
   const contact = useContactInfo();
 

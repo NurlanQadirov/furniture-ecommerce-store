@@ -1,12 +1,10 @@
-'use client';
-
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { getT } from '@/lib/i18n/server';
 import { CalculatorIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 
 /** Pulls visitors from the home page into the estimator before they bounce. */
-export default function CalculatorTeaser() {
-  const { t } = useTranslation();
+export default async function CalculatorTeaser() {
+  const t = await getT();
 
   return (
     <section data-reveal="pending" className="w-full bg-custom-green py-20">

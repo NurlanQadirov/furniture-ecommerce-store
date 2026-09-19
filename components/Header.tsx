@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
+import { useT } from '@/components/providers/TranslationProvider';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import type { TranslationKey } from '@/lib/i18n/resources';
@@ -28,7 +28,7 @@ function isRouteActive(pathname: string, href: string): boolean {
 }
 
 export default function Header() {
-  const { t } = useTranslation();
+  const t = useT();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 

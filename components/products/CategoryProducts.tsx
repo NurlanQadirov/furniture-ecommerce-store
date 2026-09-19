@@ -1,20 +1,20 @@
-'use client';
-
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { getLanguage, getT } from '@/lib/i18n/server';
+import { pickLocalized } from '@/lib/i18n/localized';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import ProductCard from '@/components/ProductCard';
-import { useLocalized } from '@/lib/i18n/localized';
-import type { Category, Product } from '@/types';
+import type { Category, Product, Localized } from '@/types';
 
 interface CategoryProductsProps {
   category: Category;
   products: Product[];
 }
 
-export default function CategoryProducts({ category, products }: CategoryProductsProps) {
-  const { t } = useTranslation();
-  const loc = useLocalized();
+export default async function CategoryProducts({ category, products }: CategoryProductsProps) {
+  const t = await getT();
+  // The server resolves the language once; `loc` keeps the call sites unchanged.
+  const language = await getLanguage();
+  const loc = (value: Localized | undefined) => pickLocalized(value, language);
 
   return (
     <div data-reveal="pending" data-reveal-stagger="120" className="w-full max-w-[1100px] mx-auto px-4 py-12">

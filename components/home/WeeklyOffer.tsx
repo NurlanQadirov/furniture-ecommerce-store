@@ -3,9 +3,8 @@
 import { useCallback, useMemo, useRef, useState, type MouseEvent } from 'react';
 import SiteImage from '@/components/SiteImage';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { useLocalized, useT } from '@/components/providers/TranslationProvider';
 import ArrowIcon from '@/components/ArrowIcon';
-import { useLocalized } from '@/lib/i18n/localized';
 import type { Product } from '@/types';
 
 const CLIP_VISIBLE = 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)';
@@ -37,7 +36,7 @@ interface WeeklyOfferProps {
 }
 
 export default function WeeklyOffer({ products }: WeeklyOfferProps) {
-  const { t } = useTranslation();
+  const t = useT();
   const loc = useLocalized();
 
   const [currentNum, setCurrentNum] = useState(0);

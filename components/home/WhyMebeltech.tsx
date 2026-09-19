@@ -1,10 +1,8 @@
-'use client';
-
-import { useTranslation } from 'react-i18next';
+import { getT } from '@/lib/i18n/server';
 import { CheckBadgeIcon, TruckIcon, ShieldCheckIcon } from '@heroicons/react/24/solid';
 
-export default function WhyMebeltech() {
-  const { t } = useTranslation();
+export default async function WhyMebeltech() {
+  const t = await getT();
 
   return (
     <section data-reveal="pending" id="why-mebeltech" className="w-full bg-custom-green py-24">
