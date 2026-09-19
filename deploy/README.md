@@ -14,8 +14,12 @@ nginx. Heç bir mövcud sayt konfiqi dəyişdirilmir — yalnız yeni fayllar ə
 
 ## Yeniləmə (yerli kompüterdən)
 
+`--delete` vacibdir: onsuz repodan silinmiş fayl serverdə qalır və build tip
+yoxlamasında sınır. Xaric edilən yollar (`store.json`, `uploads/`) silinmir —
+rsync onları transferdən gizlədir.
+
 ```bash
-rsync -az --exclude '.git/' --exclude 'node_modules/' --exclude '.next/' \
+rsync -az --delete --exclude '.git/' --exclude 'node_modules/' --exclude '.next/' \
   --exclude 'data/store.json' --exclude 'public/uploads/*' --exclude '.env*' \
   ./ root@91.99.96.163:/srv/apps/mebeltech/
 

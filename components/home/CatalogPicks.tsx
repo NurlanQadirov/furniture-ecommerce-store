@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import ProductCard from '@/components/ProductCard';
-import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
 import type { Product } from '@/types';
 
 interface CatalogPicksProps {
@@ -14,12 +13,11 @@ interface CatalogPicksProps {
 
 export default function CatalogPicks({ products }: CatalogPicksProps) {
   const { t } = useTranslation();
-  const sectionRef = useSectionReveal<HTMLElement>();
 
   if (products.length === 0) return null;
 
   return (
-    <section ref={sectionRef} id="catalog-picks" className="w-full bg-white py-24">
+    <section data-reveal="pending" id="catalog-picks" className="w-full bg-white py-24">
       <div className="w-full max-w-[1100px] mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="font-serif text-5xl text-dark-green animate-item">

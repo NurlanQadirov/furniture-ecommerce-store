@@ -14,7 +14,6 @@ import { FaWhatsapp } from 'react-icons/fa';
 import ProductCard from '@/components/ProductCard';
 import { useContactInfo, whatsappLink } from '@/components/providers/SiteDataProvider';
 import { useLocalized } from '@/lib/i18n/localized';
-import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
 import type { Category, Product } from '@/types';
 
 interface ProductDetailProps {
@@ -27,7 +26,6 @@ export default function ProductDetail({ product, category, related }: ProductDet
   const { t } = useTranslation();
   const loc = useLocalized();
   const contact = useContactInfo();
-  const containerRef = useSectionReveal<HTMLDivElement>({ scrollTrigger: false });
 
   // The main image always leads the gallery, extra photos follow it.
   const gallery = [product.mainImage, ...product.images].filter(Boolean);
@@ -42,7 +40,7 @@ export default function ProductDetail({ product, category, related }: ProductDet
   const enquiry = `Salam! "${name}" məhsulu ilə maraqlanıram.`;
 
   return (
-    <div ref={containerRef} className="w-full max-w-[1100px] mx-auto px-4 py-12">
+    <div data-reveal="pending" data-reveal-now="" className="w-full max-w-[1100px] mx-auto px-4 py-12">
       <div className="mb-8 animate-item">
         <Link
           href={category ? `/products/${category.slug}` : '/products'}

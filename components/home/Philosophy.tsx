@@ -3,15 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
 
 export default function Philosophy() {
   const { t } = useTranslation();
-  const sectionRef = useSectionReveal<HTMLElement>();
 
   return (
     <section
-      ref={sectionRef}
+      data-reveal="pending"
       id="philosophy"
       className="w-full bg-custom-black text-white py-24"
     >

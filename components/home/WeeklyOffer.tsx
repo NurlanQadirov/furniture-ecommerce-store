@@ -1,18 +1,35 @@
 'use client';
 
-import { useMemo, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useMemo, useRef, useState, type MouseEvent } from 'react';
 import SiteImage from '@/components/SiteImage';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { gsap } from 'gsap';
-import { useGSAP } from '@gsap/react';
 import ArrowIcon from '@/components/ArrowIcon';
 import { useLocalized } from '@/lib/i18n/localized';
-import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
 import type { Product } from '@/types';
 
 const CLIP_VISIBLE = 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)';
 const CLIP_HIDDEN = 'polygon(0 0, 100% 0, 100% 0%, 0% 0%)';
+
+/*
+ * The card swap, formerly two GSAP timelines. The Web Animations API sequences
+ * it natively — GSAP's `'<0.4'` offsets are plain delays here — so the 112 KB
+ * library is not shipped for one transition. Durations and easings are the ones
+ * the timelines used: 0.7s on sine.out going out, sine.in coming back.
+ */
+const PHASE_MS = 700;
+const EASE_OUT = 'cubic-bezier(0.39, 0.575, 0.565, 1)';
+const EASE_IN = 'cubic-bezier(0.47, 0, 0.745, 0.715)';
+
+/** The masks park above and below the panel and sweep across it to cover the card. */
+const MASK_TOP = {
+  parked: 'translateY(-100%) scaleY(1)',
+  crossed: 'translateY(100%) scaleY(1.4)',
+};
+const MASK_BOTTOM = {
+  parked: 'translateY(100%) scaleY(1)',
+  crossed: 'translateY(-100%) scaleY(1.4)',
+};
 
 interface WeeklyOfferProps {
   /** Rotated through by the "next" control; starred products come first. */
@@ -31,54 +48,85 @@ export default function WeeklyOffer({ products }: WeeklyOfferProps) {
   const mask1Ref = useRef<HTMLDivElement>(null);
   const mask2Ref = useRef<HTMLDivElement>(null);
 
-  const sectionRef = useSectionReveal<HTMLElement>();
-  const { contextSafe } = useGSAP({ scope: sectionRef });
+  const running = useRef<Animation[]>([]);
+  const busy = useRef(false);
 
-  const playReverse = contextSafe(() => {
+  /**
+   * Plays one half of the swap: `cover` sweeps the masks over the card and
+   * clips the copy away, `clear` sweeps them back out once the next product has
+   * rendered underneath.
+   */
+  const play = useCallback((phase: 'cover' | 'clear') => {
     const mask1 = mask1Ref.current;
     const mask2 = mask2Ref.current;
     const title = cardInfoTitleRef.current;
     const desc = cardInfoDescRef.current;
-    if (!mask1 || !mask2 || !title || !desc) return;
+    if (!mask1 || !mask2 || !title || !desc) return Promise.resolve();
 
-    gsap
-      .timeline({ defaults: { duration: 0.7, ease: 'sine.in' } })
-      .to(mask1, { yPercent: -100, scaleY: 1.4 })
-      .to(mask2, { yPercent: 100, scaleY: 1.4 }, '<')
-      .to(title, { clipPath: CLIP_VISIBLE }, '<0.2')
-      .to(desc, { clipPath: CLIP_VISIBLE }, '<0.3');
-  });
+    const covering = phase === 'cover';
+    const easing = covering ? EASE_OUT : EASE_IN;
 
-  const playFoward = contextSafe(() => {
-    const mask1 = mask1Ref.current;
-    const mask2 = mask2Ref.current;
-    const title = cardInfoTitleRef.current;
-    const desc = cardInfoDescRef.current;
-    if (!mask1 || !mask2 || !title || !desc) return;
+    const animate = (
+      element: HTMLElement,
+      property: 'transform' | 'clipPath',
+      from: string,
+      to: string,
+      delay: number,
+    ) =>
+      element.animate([{ [property]: from }, { [property]: to }], {
+        duration: PHASE_MS,
+        delay,
+        easing,
+        // Holds the end state, so the masks stay put while the card swaps.
+        fill: 'forwards',
+      });
 
-    gsap
-      .timeline({
-        defaults: { duration: 0.7, ease: 'sine.out' },
-        onComplete: () => {
-          setCurrentNum((prevNum) => (prevNum + 1) % products.length);
-          playReverse();
-        },
-      })
-      .to(mask1, { yPercent: 100, scaleY: 1.4 })
-      .to(mask2, { yPercent: -100, scaleY: 1.4 }, '<')
-      .to(title, { clipPath: CLIP_HIDDEN }, '<0.4')
-      .to(desc, { clipPath: CLIP_HIDDEN }, '<0.3');
-  });
+    running.current.forEach((animation) => animation.cancel());
+    running.current = covering
+      ? [
+          animate(mask1, 'transform', MASK_TOP.parked, MASK_TOP.crossed, 0),
+          animate(mask2, 'transform', MASK_BOTTOM.parked, MASK_BOTTOM.crossed, 0),
+          animate(title, 'clipPath', CLIP_VISIBLE, CLIP_HIDDEN, 400),
+          animate(desc, 'clipPath', CLIP_VISIBLE, CLIP_HIDDEN, 700),
+        ]
+      : [
+          animate(mask1, 'transform', MASK_TOP.crossed, MASK_TOP.parked, 0),
+          animate(mask2, 'transform', MASK_BOTTOM.crossed, MASK_BOTTOM.parked, 0),
+          animate(title, 'clipPath', CLIP_HIDDEN, CLIP_VISIBLE, 200),
+          animate(desc, 'clipPath', CLIP_HIDDEN, CLIP_VISIBLE, 500),
+        ];
 
-  const handleNextCard = (event: MouseEvent<HTMLAnchorElement>) => {
+    // A cancelled animation rejects; that only happens when a newer phase has
+    // already taken over, so there is nothing to handle.
+    return Promise.all(running.current.map((animation) => animation.finished)).then(
+      () => undefined,
+      () => undefined,
+    );
+  }, []);
+
+  const handleNextCard = async (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    playFoward();
+
+    const nextCard = () => setCurrentNum((prevNum) => (prevNum + 1) % products.length);
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      nextCard();
+      return;
+    }
+
+    // The GSAP timeline ignored a second click while it ran; keep that.
+    if (busy.current) return;
+    busy.current = true;
+    await play('cover');
+    nextCard();
+    await play('clear');
+    busy.current = false;
   };
 
   if (!currentCard) return null;
 
   return (
-    <section ref={sectionRef} id="weekly-offer" className="w-full bg-white py-24">
+    <section data-reveal="pending" id="weekly-offer" className="w-full bg-white py-24">
       <div className="w-full max-w-[1000px] mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="font-serif text-5xl text-dark-green animate-item">

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { useLocalized } from '@/lib/i18n/localized';
-import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
 import type { Category } from '@/types';
 
 interface CategoriesGridProps {
@@ -17,10 +16,9 @@ interface CategoriesGridProps {
 export default function CategoriesGrid({ categories, counts }: CategoriesGridProps) {
   const { t } = useTranslation();
   const loc = useLocalized();
-  const containerRef = useSectionReveal<HTMLDivElement>({ stagger: 0.12 });
 
   return (
-    <div ref={containerRef} className="w-full max-w-[1100px] mx-auto px-4 py-16">
+    <div data-reveal="pending" data-reveal-stagger="120" className="w-full max-w-[1100px] mx-auto px-4 py-16">
       <section className="text-center mb-12">
         <h1 className="font-serif text-5xl text-dark-green animate-item">
           {t('categories_title')}

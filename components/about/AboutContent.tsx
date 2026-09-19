@@ -3,18 +3,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
 
 export default function AboutContent() {
   const { t } = useTranslation();
-  const containerRef = useSectionReveal<HTMLDivElement>({
-    duration: 1,
-    stagger: 0.3,
-    start: 'top 80%',
-  });
 
   return (
-    <div ref={containerRef} className="bg-white py-24">
+    <div data-reveal="pending" data-reveal-duration="1000" data-reveal-stagger="300" data-reveal-start="80" className="bg-white py-24">
       <div className="w-full max-w-[1100px] mx-auto px-4">
         <div className="text-center mb-16">
           <h1 className="font-serif text-6xl text-dark-green animate-item">

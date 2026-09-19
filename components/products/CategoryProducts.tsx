@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import ProductCard from '@/components/ProductCard';
 import { useLocalized } from '@/lib/i18n/localized';
-import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
 import type { Category, Product } from '@/types';
 
 interface CategoryProductsProps {
@@ -16,10 +15,9 @@ interface CategoryProductsProps {
 export default function CategoryProducts({ category, products }: CategoryProductsProps) {
   const { t } = useTranslation();
   const loc = useLocalized();
-  const containerRef = useSectionReveal<HTMLDivElement>({ stagger: 0.12 });
 
   return (
-    <div ref={containerRef} className="w-full max-w-[1100px] mx-auto px-4 py-12">
+    <div data-reveal="pending" data-reveal-stagger="120" className="w-full max-w-[1100px] mx-auto px-4 py-12">
       <div className="mb-8 animate-item">
         <Link
           href="/products"

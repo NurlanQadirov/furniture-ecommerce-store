@@ -5,20 +5,14 @@ import { PhoneIcon, EnvelopeIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { useContactInfo, whatsappLink } from '@/components/providers/SiteDataProvider';
 import { useLocalized } from '@/lib/i18n/localized';
-import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
 
 export default function ContactContent() {
   const { t } = useTranslation();
   const contact = useContactInfo();
   const loc = useLocalized();
-  const containerRef = useSectionReveal<HTMLDivElement>({
-    duration: 1.2,
-    stagger: 0.2,
-    start: 'top 80%',
-  });
 
   return (
-    <div ref={containerRef} className="bg-custom-green py-24">
+    <div data-reveal="pending" data-reveal-duration="1200" data-reveal-start="80" className="bg-custom-green py-24">
       <div className="w-full max-w-[700px] mx-auto px-4">
         <div className="text-center mb-16">
           <h1 className="font-serif text-6xl text-dark-green animate-item">

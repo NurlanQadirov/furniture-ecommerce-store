@@ -17,3 +17,35 @@
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
+/*
+ * Section reveals — the fade-up GSAP used to run.
+ *
+ * `RevealObserver` flips a `[data-reveal]` scope from `pending` to `in` when it
+ * scrolls into view and writes each item's stagger as an inline delay. The
+ * hidden state is scoped to `pending` so the `<noscript>` rule in the site
+ * layout can unhide everything when JavaScript never arrives.
+ */
+[data-reveal] .animate-item {
+  transition-property: opacity, transform;
+  transition-duration: 800ms;
+  /* GSAP's power3.out. */
+  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+[data-reveal='pending'] .animate-item {
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+/* A reveal is decoration: honour a visitor who asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] .animate-item {
+    transition: none;
+  }
+
+  [data-reveal='pending'] .animate-item {
+    opacity: 1;
+    transform: none;
+  }
+}

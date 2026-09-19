@@ -2,14 +2,12 @@
 
 import { useTranslation } from 'react-i18next';
 import { CheckBadgeIcon, TruckIcon, ShieldCheckIcon } from '@heroicons/react/24/solid';
-import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
 
 export default function WhyMebeltech() {
   const { t } = useTranslation();
-  const sectionRef = useSectionReveal<HTMLElement>();
 
   return (
-    <section ref={sectionRef} id="why-mebeltech" className="w-full bg-custom-green py-24">
+    <section data-reveal="pending" id="why-mebeltech" className="w-full bg-custom-green py-24">
       <div className="w-full max-w-[1100px] mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="font-serif text-6xl text-dark-green animate-item">
