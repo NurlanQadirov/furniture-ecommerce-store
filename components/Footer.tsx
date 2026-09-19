@@ -4,9 +4,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { useContactInfo, whatsappLink } from '@/components/providers/SiteDataProvider';
+import { useLocalized } from '@/lib/i18n/localized';
+
+const menuLinks = [
+  { href: '/', labelKey: 'home' },
+  { href: '/products', labelKey: 'products' },
+  { href: '/calculator', labelKey: 'calculator' },
+  { href: '/about', labelKey: 'about' },
+  { href: '/contact', labelKey: 'contact' },
+] as const;
 
 export default function Footer() {
   const { t } = useTranslation();
+  const contact = useContactInfo();
+  const loc = useLocalized();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -28,61 +40,61 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-bold mb-4">{t('footer_menu')}</h3>
             <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-gray-400 hover:text-white transition-colors">
-                  {t('home')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/products" className="text-gray-400 hover:text-white transition-colors">
-                  {t('products')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
-                  {t('about')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
-                  {t('contact')}
-                </Link>
-              </li>
+              {menuLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    {t(link.labelKey)}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div>
             <h3 className="text-lg font-bold mb-4">{t('footer_contact_info')}</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li className="flex items-start">
-                <span className="font-bold w-16">{t('footer_address_label')}</span>
-                <span>{t('footer_address_value')}</span>
+              <li className="flex items-start gap-2">
+                <span className="font-bold shrink-0">{t('footer_address_label')}</span>
+                <span>{loc(contact.address)}</span>
               </li>
-              <li className="flex items-start">
-                <span className="font-bold w-16">{t('phone_label')}:</span>
-                <span>{t('footer_phone_value')}</span>
+              <li className="flex items-start gap-2">
+                <span className="font-bold shrink-0">{t('phone_label')}:</span>
+                <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="hover:text-white">
+                  {contact.phone}
+                </a>
               </li>
-              <li className="flex items-start">
-                <span className="font-bold w-16">{t('email_label')}:</span>
-                <span>{t('footer_email_value')}</span>
+              <li className="flex items-start gap-2">
+                <span className="font-bold shrink-0">{t('email_label')}:</span>
+                <a href={`mailto:${contact.email}`} className="hover:text-white">
+                  {contact.email}
+                </a>
               </li>
             </ul>
             <div className="flex items-center gap-4 mt-6">
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <FaInstagram size={24} />
-              </a>
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <FaWhatsapp size={24} />
-              </a>
+              {contact.instagram && (
+                <a
+                  href={contact.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <FaInstagram size={24} />
+                </a>
+              )}
+              {contact.whatsapp && (
+                <a
+                  href={whatsappLink(contact.whatsapp)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <FaWhatsapp size={24} />
+                </a>
+              )}
             </div>
           </div>
         </div>

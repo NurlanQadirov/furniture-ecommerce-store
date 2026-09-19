@@ -1,15 +1,22 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import ProductCard from '@/components/ProductCard';
-import { productsData } from '@/data/products';
 import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
+import type { Product } from '@/types';
 
-const featuredProducts = productsData.slice(0, 3);
+interface CatalogPicksProps {
+  /** Products the owner starred in the admin panel. */
+  products: Product[];
+}
 
-export default function CatalogPicks() {
+export default function CatalogPicks({ products }: CatalogPicksProps) {
   const { t } = useTranslation();
   const sectionRef = useSectionReveal<HTMLElement>();
+
+  if (products.length === 0) return null;
 
   return (
     <section ref={sectionRef} id="catalog-picks" className="w-full bg-white py-24">
@@ -18,13 +25,23 @@ export default function CatalogPicks() {
           <h2 className="font-serif text-5xl text-dark-green animate-item">
             {t('catalog_picks_title')}
           </h2>
+          <p className="mt-2 text-custom-black animate-item">{t('catalog_picks_subtitle')}</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredProducts.map((product) => (
+          {products.map((product) => (
             <div className="animate-item" key={product.id}>
-              <ProductCard product={product} />
+              <ProductCard product={product} showFeaturedBadge={false} />
             </div>
           ))}
+        </div>
+        <div className="text-center mt-12 animate-item">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 font-serif text-xl text-dark-green bg-custom-green px-8 py-3 rounded-full shadow-md transition-all duration-300 hover:bg-dark-green hover:text-white hover:scale-105 group"
+          >
+            {t('goToCatalog')}
+            <ArrowRightIcon className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
     </section>

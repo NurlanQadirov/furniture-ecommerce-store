@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import { Allura, Inter, Poppins } from 'next/font/google';
 import type { ReactNode } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import I18nProvider from '@/components/providers/I18nProvider';
 import '@/app/globals.css';
 
 /**
@@ -33,7 +30,7 @@ const allura = Allura({
 
 const inter = Inter({
   subsets: ['latin', 'latin-ext', 'cyrillic'],
-  weight: ['700'],
+  weight: ['400', '600', '700'],
   variable: '--font-inter',
   display: 'swap',
 });
@@ -47,6 +44,13 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * The catalogue, contact details and calculator tariffs all live in a JSON
+ * store the owner edits at runtime, so nothing below this layout may be
+ * captured into the build output.
+ */
+export const dynamic = 'force-dynamic';
+
 interface RootLayoutProps {
   children: ReactNode;
 }
@@ -54,18 +58,10 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
-      lang="en"
+      lang="az"
       className={`${poppins.variable} ${allura.variable} ${inter.variable}`}
     >
-      <body className="bg-white">
-        <I18nProvider>
-          <div className="w-full font-sans text-custom-black bg-white">
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </div>
-        </I18nProvider>
-      </body>
+      <body className="bg-white">{children}</body>
     </html>
   );
 }

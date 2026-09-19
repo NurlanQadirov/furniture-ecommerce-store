@@ -6,17 +6,24 @@ import { useTranslation } from 'react-i18next';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import ArrowIcon from '@/components/ArrowIcon';
-import { productsData } from '@/data/products';
+import { useLocalized } from '@/lib/i18n/localized';
 import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
+import type { Product } from '@/types';
 
 const CLIP_VISIBLE = 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)';
 const CLIP_HIDDEN = 'polygon(0 0, 100% 0, 100% 0%, 0% 0%)';
 
-export default function WeeklyOffer() {
+interface WeeklyOfferProps {
+  /** Rotated through by the "next" control; starred products come first. */
+  products: Product[];
+}
+
+export default function WeeklyOffer({ products }: WeeklyOfferProps) {
   const { t } = useTranslation();
+  const loc = useLocalized();
 
   const [currentNum, setCurrentNum] = useState(0);
-  const currentCard = useMemo(() => productsData[currentNum], [currentNum]);
+  const currentCard = useMemo(() => products[currentNum], [products, currentNum]);
 
   const cardInfoTitleRef = useRef<HTMLHeadingElement>(null);
   const cardInfoDescRef = useRef<HTMLParagraphElement>(null);
@@ -52,7 +59,7 @@ export default function WeeklyOffer() {
       .timeline({
         defaults: { duration: 0.7, ease: 'sine.out' },
         onComplete: () => {
-          setCurrentNum((prevNum) => (prevNum + 1) % productsData.length);
+          setCurrentNum((prevNum) => (prevNum + 1) % products.length);
           playReverse();
         },
       })
@@ -78,24 +85,26 @@ export default function WeeklyOffer() {
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 bg-white shadow-2xl rounded-lg overflow-hidden animate-item">
-          <div className="grid grid-rows-3 p-8 order-2 md:order-1 md:h-auto">
+          <div className="relative grid grid-rows-3 p-8 order-2 md:order-1 md:h-auto">
             <h1
               ref={cardInfoTitleRef}
               className="font-serif text-6xl md:text-8xl text-dark-green self-center"
               style={{ clipPath: CLIP_VISIBLE }}
             >
-              {t(currentCard.titleKey)}
+              {loc(currentCard.name)}
             </h1>
             <p
               ref={cardInfoDescRef}
               className="text-sm font-bold self-center leading-6"
               style={{ clipPath: CLIP_VISIBLE }}
             >
-              {t(currentCard.descKey)}
+              {loc(currentCard.description)}
             </p>
             <Link
               href={`/product/${currentCard.id}`}
-              className="flex items-center gap-x-3 font-serif text-xl text-dark-green bg-custom-green px-6 py-2 rounded-full shadow-md transition-all duration-300 ease-out hover:bg-dark-green hover:text-white hover:shadow-lg hover:scale-105 group self-center justify-self-end"
+              // Pinned to the same inset as the "next" control in the image
+              // panel, so on desktop the two buttons sit on one line.
+              className="flex items-center gap-x-3 font-serif text-xl text-dark-green bg-custom-green px-6 py-2 rounded-full shadow-md transition-all duration-300 ease-out hover:bg-dark-green hover:text-white hover:shadow-lg hover:scale-105 group self-center justify-self-end md:absolute md:bottom-[5%] md:right-[8%]"
             >
               <p>{t('details')}</p>
               <ArrowIcon className="stroke-dark-green transition-colors duration-300 group-hover:stroke-white" />
@@ -112,6 +121,7 @@ export default function WeeklyOffer() {
               id="mask-2"
               className="absolute top-0 right-0 h-full w-1/2 bg-white z-[5] translate-y-full"
             ></div>
+            {products.length > 1 && (
             <a
               href="#"
               onClick={handleNextCard}
@@ -120,10 +130,11 @@ export default function WeeklyOffer() {
               <p>{t('next')}</p>
               <ArrowIcon className="stroke-dark-green stroke-2 transition-all duration-300 group-hover:stroke-white group-hover:translate-x-1" />
             </a>
+            )}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={currentCard.photo}
-              alt={t(currentCard.titleKey)}
+              src={currentCard.mainImage}
+              alt={loc(currentCard.name)}
               className="block w-full h-full object-cover aspect-square"
             />
           </div>

@@ -17,6 +17,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: '/', labelKey: 'home' },
   { href: '/products', labelKey: 'products' },
+  { href: '/calculator', labelKey: 'calculator' },
   { href: '/about', labelKey: 'about' },
   { href: '/contact', labelKey: 'contact' },
 ];
@@ -58,8 +59,8 @@ export default function Header() {
             />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-x-8">
-            <ul className="flex items-center gap-x-8 font-inter">
+          <nav className="hidden md:flex items-center gap-x-6 lg:gap-x-8">
+            <ul className="flex items-center gap-x-6 lg:gap-x-8 font-inter">
               {navItems.map((item) => (
                 <li key={item.href}>
                   <Link

@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Admin number fields are typed, not nudged: the native spinners sit awkwardly
+ * inside the rounded inputs and are easy to hit by accident while scrolling.
+ * Scoped to the panel so the public calculator keeps its steppers.
+ */
+.admin-panel input[type='number']::-webkit-outer-spin-button,
+.admin-panel input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.admin-panel input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

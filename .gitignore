@@ -30,3 +30,11 @@ next-env.d.ts
 *.njsproj
 *.sln
 *.sw?
+
+# Site content edited from the admin panel — seeded from lib/store/defaults.ts
+# on first run, and owned by the running server from then on.
+data/store.json
+
+# Product photos uploaded through the admin panel
+public/uploads/*
+!public/uploads/.gitignore
