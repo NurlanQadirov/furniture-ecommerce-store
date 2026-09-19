@@ -33,6 +33,14 @@ const inter = Inter({
   weight: ['400', '600', '700'],
   variable: '--font-inter',
   display: 'swap',
+  // Not preloaded, unlike the other two. Inter's three subset files are 148 KB
+  // together — more than every other font here — and nothing on a phone's
+  // first screen is set in it: the nav that uses it is `hidden md:flex`, and
+  // the mobile menu that repeats it starts closed. Preloading it meant 148 KB
+  // of high-priority requests racing the hero image on a slow connection.
+  // Dropped from the preload list it still arrives whenever something is
+  // actually painted in it, one subset at a time.
+  preload: false,
 });
 
 export const metadata: Metadata = {
