@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import SiteImage from '@/components/SiteImage';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import {
@@ -55,8 +56,13 @@ export default function ProductDetail({ product, category, related }: ProductDet
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="animate-item">
           <div className="relative rounded-lg overflow-hidden shadow-xl bg-custom-green aspect-[4/3]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={activeImage} alt={name} className="w-full h-full object-cover" />
+            <SiteImage
+              src={activeImage}
+              alt={name}
+              sizes="(min-width: 768px) 50vw, 100vw"
+              priority
+              className="object-cover"
+            />
             {product.featured && (
               <span className="absolute top-4 left-4 inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-dark-green text-xs font-bold px-3 py-1 rounded-full shadow">
                 <StarIcon className="h-4 w-4" />
@@ -107,8 +113,14 @@ export default function ProductDetail({ product, category, related }: ProductDet
                         : 'border-transparent opacity-75 hover:opacity-100'
                     }`}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={image} alt={name} className="w-full h-full object-cover" />
+                    <div className="relative h-full w-full">
+                      <SiteImage
+                        src={image}
+                        alt={name}
+                        sizes="(min-width: 768px) 12vw, 25vw"
+                        className="object-cover"
+                      />
+                    </div>
                   </button>
                 ))}
               </div>

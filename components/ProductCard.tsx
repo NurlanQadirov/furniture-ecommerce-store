@@ -1,5 +1,6 @@
 'use client';
 
+import SiteImage from '@/components/SiteImage';
 import Link from 'next/link';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
@@ -26,11 +27,11 @@ export default function ProductCard({
       className="flex flex-col h-full bg-white shadow-lg rounded-lg overflow-hidden group"
     >
       <div className="relative overflow-hidden h-64 bg-custom-green">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <SiteImage
           src={product.mainImage}
           alt={name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-in-out"
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className="object-cover group-hover:scale-110 transition-transform duration-500 ease-in-out"
         />
         {showFeaturedBadge && product.featured && (
           <span className="absolute top-3 left-3 inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-dark-green text-xs font-bold px-3 py-1 rounded-full shadow">

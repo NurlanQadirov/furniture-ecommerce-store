@@ -1,5 +1,6 @@
 'use client';
 
+import SiteImage from '@/components/SiteImage';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
@@ -34,11 +35,11 @@ export default function CategoriesGrid({ categories, counts }: CategoriesGridPro
             href={`/products/${category.slug}`}
             className="animate-item group relative block h-72 rounded-lg overflow-hidden shadow-lg"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <SiteImage
               src={category.image}
               alt={loc(category.name)}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-custom-black/90 via-custom-black/40 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 text-white">

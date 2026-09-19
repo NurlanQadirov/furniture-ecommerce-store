@@ -1,5 +1,6 @@
 'use client';
 
+import SiteImage from '@/components/SiteImage';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import type { ReactNode } from 'react';
 
@@ -35,9 +36,13 @@ export default function OptionCard({
       }`}
     >
       {image && (
-        <div className="h-28 sm:h-32 w-full overflow-hidden bg-custom-green">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={image} alt={title} className="w-full h-full object-cover" />
+        <div className="relative h-28 sm:h-32 w-full overflow-hidden bg-custom-green">
+          <SiteImage
+            src={image}
+            alt={title}
+            sizes="(min-width: 640px) 25vw, 50vw"
+            className="object-cover"
+          />
         </div>
       )}
       <div className="p-3">

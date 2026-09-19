@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useSectionReveal } from '@/lib/hooks/useSectionReveal';
@@ -25,12 +26,15 @@ export default function Philosophy() {
             {t('about_us_more')}
           </Link>
         </div>
-        <div className="animate-item">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+        {/* The aspect ratio is fixed here so the picture cannot shift the
+            section's layout while it loads. */}
+        <div className="animate-item relative aspect-[3/2] rounded-lg overflow-hidden shadow-lg">
+          <Image
             src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1932"
             alt="Müasir İnteryer"
-            className="rounded-lg shadow-lg"
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
           />
         </div>
       </div>

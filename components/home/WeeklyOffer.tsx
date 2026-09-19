@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useRef, useState, type MouseEvent } from 'react';
+import SiteImage from '@/components/SiteImage';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { gsap } from 'gsap';
@@ -86,13 +87,15 @@ export default function WeeklyOffer({ products }: WeeklyOfferProps) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 bg-white shadow-2xl rounded-lg overflow-hidden animate-item">
           <div className="relative grid grid-rows-3 p-8 order-2 md:order-1 md:h-auto">
-            <h1
+            {/* An <h3> under the section's <h2>: the page's only <h1> is the
+                hero headline, and product names are <h3> in the cards too. */}
+            <h3
               ref={cardInfoTitleRef}
               className="font-serif text-6xl md:text-8xl text-dark-green self-center"
               style={{ clipPath: CLIP_VISIBLE }}
             >
               {loc(currentCard.name)}
-            </h1>
+            </h3>
             <p
               ref={cardInfoDescRef}
               className="text-sm font-bold self-center leading-6"
@@ -131,11 +134,11 @@ export default function WeeklyOffer({ products }: WeeklyOfferProps) {
               <ArrowIcon className="stroke-dark-green stroke-2 transition-all duration-300 group-hover:stroke-white group-hover:translate-x-1" />
             </a>
             )}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <SiteImage
               src={currentCard.mainImage}
               alt={loc(currentCard.name)}
-              className="block w-full h-full object-cover aspect-square"
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
             />
           </div>
         </div>

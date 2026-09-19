@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -49,11 +50,21 @@ export default function HeroSlider() {
       >
         {sliderData.map((slide, index) => (
           <SwiperSlide key={index} className="relative w-full h-full overflow-hidden">
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${slide.img})` }}
-              data-swiper-parallax="50%"
-            ></div>
+            {/*
+              A CSS background here would be fetched raw — several megabytes
+              apiece, and unpreloadable, which is what used to sink the LCP.
+              next/image serves a sized WebP and preloads the first slide.
+            */}
+            <div className="absolute inset-0" data-swiper-parallax="50%">
+              <Image
+                src={slide.img}
+                alt=""
+                fill
+                sizes="100vw"
+                priority={index === 0}
+                className="object-cover object-center"
+              />
+            </div>
 
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent z-10"></div>
 
@@ -68,13 +79,23 @@ export default function HeroSlider() {
                   {slide.subtitle}
                 </span>
 
-                {/* Title */}
-                <h1
-                  className="font-sans font-bold text-5xl md:text-7xl leading-tight drop-shadow-sm"
-                  data-swiper-parallax="-200"
-                >
-                  {slide.title}
-                </h1>
+                {/* Title — only the first slide is the page's <h1>; the other
+                    two would otherwise give the home page three of them. */}
+                {index === 0 ? (
+                  <h1
+                    className="font-sans font-bold text-5xl md:text-7xl leading-tight drop-shadow-sm"
+                    data-swiper-parallax="-200"
+                  >
+                    {slide.title}
+                  </h1>
+                ) : (
+                  <p
+                    className="font-sans font-bold text-5xl md:text-7xl leading-tight drop-shadow-sm"
+                    data-swiper-parallax="-200"
+                  >
+                    {slide.title}
+                  </p>
+                )}
 
                 {/* Description */}
                 <p

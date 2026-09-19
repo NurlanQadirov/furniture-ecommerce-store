@@ -98,7 +98,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+        <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
           <p>{t('footer_copyright', { year: currentYear })}</p>
         </div>
       </div>
