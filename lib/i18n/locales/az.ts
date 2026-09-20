@@ -158,4 +158,66 @@ export const az = {
   calc_whatsapp: 'WhatsApp ilə yaz',
   calc_no_options: 'Bu bölmə üçün variant tənzimlənməyib.',
   currency_azn: 'AZN',
+
+  // SEO — səhifə başlıqları və təsvirləri
+  seo_home_title: 'Mebeltech — Bakıda ölçüyə uyğun mebel: mətbəx, qarderob, salon',
+  seo_home_description:
+    'Mebeltech 2015-ci ildən Bakıda sifarişlə mebel hazırlayır: mətbəx dəstləri, kupe və qarderob şkaflar, TV divarları, yataq və ofis mebeli. Pulsuz ölçü, rəsmi zəmanət, onlayn qiymət kalkulyatoru.',
+  seo_products_title: 'Mebel kataloqu — bütün kateqoriyalar',
+  seo_products_description:
+    'Mebeltech kataloqu: mətbəx mebeli, qarderob və şkaflar, salon və TV divarları, yataq otağı, ofis və uşaq otağı mebeli. Hər model Bakıda ölçüyə uyğun hazırlanır.',
+  seo_category_title: '{{name}} — Bakıda sifarişlə hazırlanır',
+  seo_category_description:
+    '{{name}} — {{description}} Mebeltech Bakıda ölçüyə uyğun hazırlayır: pulsuz ölçü, rəsmi zəmanət, çatdırılma və montaj.',
+  seo_product_title: '{{name}} — {{category}}',
+  seo_product_description: '{{name}} — {{description}}',
+  seo_product_price_note: 'Qiymət {{price}} AZN.',
+  seo_about_title: 'Haqqımızda — Mebeltech mebel emalatxanası',
+  seo_about_description:
+    '2015-ci ildən Bakıda fəaliyyət göstərən Mebeltech komandası: dizaynerlər, sənətkarlar və satış mütəxəssisləri. Ekoloji təmiz materiallar, rəsmi zəmanət və ölçüyə uyğun istehsal.',
+  seo_contact_title: 'Əlaqə — ünvan, telefon və WhatsApp',
+  seo_contact_description:
+    'Mebeltech ilə əlaqə: {{address}}. Telefon {{phone}}, e-poçt {{email}}. WhatsApp ilə yazın və ya pulsuz ölçü üçün müraciət edin.',
+  seo_calculator_title: 'Mebel qiymət kalkulyatoru — təxmini büdcə',
+  seo_calculator_description:
+    'Mətbəx, qarderob, salon və yataq mebelinin təxmini qiymətini 40 saniyəyə hesablayın: material, furnitura və aksesuar seçin, nəticəni dərhal görün. Dəqiq qiymət pulsuz ölçüdən sonra verilir.',
+  seo_keywords:
+    'mebel, Bakı mebel, sifarişlə mebel, ölçüyə uyğun mebel, mətbəx mebeli, qarderob, kupe şkaf, TV divarı, yataq otağı mebeli, ofis mebeli, uşaq otağı mebeli, mebel qiyməti, Mebeltech',
+
+  // Şəkil alt mətnləri
+  alt_logo: 'Mebeltech — Bakıda ölçüyə uyğun mebel istehsalı',
+  alt_hero_slide: '{{title}} — Mebeltech tərəfindən hazırlanmış mebel interyeri',
+  alt_product: '{{name}} — Mebeltech tərəfindən ölçüyə uyğun hazırlanan mebel',
+  alt_product_in_category: '{{name}} — {{category}}, Mebeltech Bakı',
+  alt_product_photo: '{{name}} — foto {{index}} / {{total}}',
+  alt_category: '{{name}} kateqoriyası — Mebeltech mebel kataloqu',
+  alt_team: 'Mebeltech komandası — dizaynerlər və sənətkarlar emalatxanada',
+  alt_interior: 'Mebeltech mebeli ilə təchiz olunmuş müasir interyer',
+  alt_calculator_option: '{{name}} — kalkulyatorda seçilə bilən variant',
+
+  // Əlçatanlıq etiketləri
+  aria_main_nav: 'Əsas menyu',
+  aria_mobile_nav: 'Mobil menyu',
+  aria_footer_nav: 'Altbilgi menyusu',
+  aria_breadcrumb: 'Naviqasiya yolu',
+  aria_language_switcher: 'Saytın dilini seçin',
+  aria_select_language: '{{language}} dilinə keç',
+  aria_view_product: '{{name}} — məhsulun səhifəsinə bax',
+  aria_view_category: '{{name}} — kateqoriyanın məhsullarına bax',
+  aria_call: '{{phone}} nömrəsinə zəng et',
+  aria_email: '{{email}} ünvanına məktub yaz',
+  aria_whatsapp: 'WhatsApp ilə yaz',
+  aria_instagram: 'Instagram səhifəmizə bax',
+  aria_select_photo: '{{name}} — {{index}}-ci şəkli göstər',
+  aria_product_gallery: 'Məhsulun şəkil qalereyası',
+  aria_lead_form: 'Pulsuz ölçü sifarişi formu',
+  aria_calculator_progress: 'Kalkulyatorun addımları',
+  aria_map: 'Mebeltech mağazasının xəritədəki yeri',
+  aria_category_products: '{{name}} kateqoriyasındakı məhsullar',
+  aria_open_menu: 'Menyunu aç',
+  aria_close_menu: 'Menyunu bağla',
+  aria_decrease: '{{name}} — sayı azalt',
+  aria_increase: '{{name}} — sayı artır',
+  aria_calculator_options: '{{question}} — variantlar',
+  aria_hero: 'Mebeltech mebel kolleksiyaları — slayder',
 } as const;

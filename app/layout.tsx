@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { Allura, Inter, Poppins } from 'next/font/google';
 import type { ReactNode } from 'react';
+import { getLanguage, getMessagesFor } from '@/lib/i18n/server';
+import { createTranslator } from '@/lib/i18n/translate';
+import { SITE_NAME, SITE_URL } from '@/lib/seo/site';
 import '@/app/globals.css';
 
 /**
@@ -43,14 +46,49 @@ const inter = Inter({
   preload: false,
 });
 
-export const metadata: Metadata = {
-  title: 'Mebel Tech',
-  description:
-    'Evinizə və ofisinizə rahatlıq, funksionallıq və gözəllik gətirən müasir mebel həlləri.',
-  icons: {
-    icon: '/Logo2.png',
-  },
-};
+/**
+ * Site-wide defaults. Every public page then overrides the title, description
+ * and social cards through `pageMetadata`, which also emits the `hreflang`
+ * cluster; what stays here is what no page needs to restate.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const language = await getLanguage();
+  const t = createTranslator(getMessagesFor(language));
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: t('seo_home_title'),
+      template: `%s | ${SITE_NAME}`,
+    },
+    description: t('seo_home_description'),
+    applicationName: SITE_NAME,
+    authors: [{ name: SITE_NAME, url: SITE_URL }],
+    creator: SITE_NAME,
+    publisher: SITE_NAME,
+    category: 'furniture',
+    referrer: 'origin-when-cross-origin',
+    // The phone number and the Baku address are contact details, not accidents
+    // of formatting: let the browser linkify them.
+    formatDetection: { telephone: true, address: true, email: true },
+    icons: {
+      icon: '/Logo2.png',
+      shortcut: '/Logo2.png',
+      apple: '/Logo2.png',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+        'max-video-preview': -1,
+      },
+    },
+  };
+}
 
 /**
  * The catalogue, contact details and calculator tariffs all live in a JSON
@@ -63,10 +101,16 @@ interface RootLayoutProps {
   children: ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  // `lang` was pinned to Azerbaijani while the page below it rendered in
+  // Russian or English, which mis-declares the document to screen readers,
+  // to translation tooling and to every crawler that reads the attribute.
+  const language = await getLanguage();
+
   return (
     <html
-      lang="az"
+      lang={language}
+      dir="ltr"
       className={`${poppins.variable} ${allura.variable} ${inter.variable}`}
     >
       <body className="bg-white">{children}</body>

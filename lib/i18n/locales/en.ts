@@ -160,4 +160,66 @@ export const en: Translation = {
   calc_whatsapp: 'Write on WhatsApp',
   calc_no_options: 'No options have been configured for this section.',
   currency_azn: 'AZN',
+
+  // SEO — page titles and descriptions
+  seo_home_title: 'Mebeltech — made-to-measure furniture in Baku: kitchens, wardrobes, living rooms',
+  seo_home_description:
+    'Mebeltech has been building made-to-measure furniture in Baku since 2015: kitchen sets, sliding and hinged wardrobes, TV walls, bedroom and office furniture. Free measurement, official warranty, online price calculator.',
+  seo_products_title: 'Furniture catalogue — all categories',
+  seo_products_description:
+    'The Mebeltech catalogue: kitchen furniture, wardrobes and cabinets, living rooms and TV walls, bedroom, office and kids room furniture. Every model is built to your measurements in Baku.',
+  seo_category_title: '{{name}} — made to measure in Baku',
+  seo_category_description:
+    '{{name}} — {{description}} Mebeltech builds it to your measurements in Baku: free measurement, official warranty, delivery and installation.',
+  seo_product_title: '{{name}} — {{category}}',
+  seo_product_description: '{{name}} — {{description}}',
+  seo_product_price_note: 'Priced at {{price}} AZN.',
+  seo_about_title: 'About us — the Mebeltech furniture workshop',
+  seo_about_description:
+    'The Mebeltech team has worked in Baku since 2015: designers, craftsmen and sales specialists. Environmentally clean materials, an official warranty and production built to your measurements.',
+  seo_contact_title: 'Contact — address, phone and WhatsApp',
+  seo_contact_description:
+    'Get in touch with Mebeltech: {{address}}. Phone {{phone}}, email {{email}}. Write on WhatsApp or book a free measurement.',
+  seo_calculator_title: 'Furniture price calculator — estimate your budget',
+  seo_calculator_description:
+    'Estimate the price of a kitchen, wardrobe, living room or bedroom in 40 seconds: choose materials, hardware and accessories and see the range at once. The exact price follows a free on-site measurement.',
+  seo_keywords:
+    'furniture, Baku furniture, custom furniture, made-to-measure furniture, kitchen furniture, wardrobe, sliding wardrobe, TV wall, bedroom furniture, office furniture, kids room furniture, furniture price, Mebeltech',
+
+  // Image alt text
+  alt_logo: 'Mebeltech — made-to-measure furniture manufacturing in Baku',
+  alt_hero_slide: '{{title}} — an interior furnished by Mebeltech',
+  alt_product: '{{name}} — furniture built to measure by Mebeltech',
+  alt_product_in_category: '{{name}} — {{category}}, Mebeltech Baku',
+  alt_product_photo: '{{name}} — photo {{index}} of {{total}}',
+  alt_category: '{{name}} category — the Mebeltech furniture catalogue',
+  alt_team: 'The Mebeltech team — designers and craftsmen in the workshop',
+  alt_interior: 'A modern interior furnished with Mebeltech furniture',
+  alt_calculator_option: '{{name}} — an option you can pick in the calculator',
+
+  // Accessibility labels
+  aria_main_nav: 'Main menu',
+  aria_mobile_nav: 'Mobile menu',
+  aria_footer_nav: 'Footer menu',
+  aria_breadcrumb: 'Breadcrumb',
+  aria_language_switcher: 'Choose the site language',
+  aria_select_language: 'Switch to {{language}}',
+  aria_view_product: '{{name}} — open the product page',
+  aria_view_category: '{{name}} — see the products in this category',
+  aria_call: 'Call {{phone}}',
+  aria_email: 'Email {{email}}',
+  aria_whatsapp: 'Write on WhatsApp',
+  aria_instagram: 'Visit our Instagram page',
+  aria_select_photo: '{{name}} — show photo {{index}}',
+  aria_product_gallery: 'Product photo gallery',
+  aria_lead_form: 'Free measurement request form',
+  aria_calculator_progress: 'Calculator steps',
+  aria_map: 'The Mebeltech showroom on the map',
+  aria_category_products: 'Products in the {{name}} category',
+  aria_open_menu: 'Open the menu',
+  aria_close_menu: 'Close the menu',
+  aria_decrease: '{{name}} — decrease the quantity',
+  aria_increase: '{{name}} — increase the quantity',
+  aria_calculator_options: '{{question}} — options',
+  aria_hero: 'Mebeltech furniture collections — slider',
 };

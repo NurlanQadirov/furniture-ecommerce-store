@@ -162,4 +162,66 @@ export const ru: Translation = {
   calc_whatsapp: 'Написать в WhatsApp',
   calc_no_options: 'Для этого раздела не настроены варианты.',
   currency_azn: 'AZN',
+
+  // SEO — заголовки и описания страниц
+  seo_home_title: 'Mebeltech — мебель на заказ в Баку: кухни, гардеробные, гостиные',
+  seo_home_description:
+    'Mebeltech с 2015 года изготавливает мебель на заказ в Баку: кухонные гарнитуры, шкафы-купе и распашные гардеробы, ТВ-стенки, мебель для спальни и офиса. Бесплатный замер, официальная гарантия, онлайн-калькулятор цены.',
+  seo_products_title: 'Каталог мебели — все категории',
+  seo_products_description:
+    'Каталог Mebeltech: кухонная мебель, гардеробы и шкафы, гостиные и ТВ-стенки, мебель для спальни, офиса и детской. Каждая модель изготавливается в Баку точно по вашим размерам.',
+  seo_category_title: '{{name}} — на заказ в Баку',
+  seo_category_description:
+    '{{name}} — {{description}} Mebeltech изготовит по вашим размерам в Баку: бесплатный замер, официальная гарантия, доставка и монтаж.',
+  seo_product_title: '{{name}} — {{category}}',
+  seo_product_description: '{{name}} — {{description}}',
+  seo_product_price_note: 'Цена {{price}} AZN.',
+  seo_about_title: 'О нас — мебельная мастерская Mebeltech',
+  seo_about_description:
+    'Команда Mebeltech работает в Баку с 2015 года: дизайнеры, мастера и специалисты по продажам. Экологически чистые материалы, официальная гарантия и производство точно по вашим размерам.',
+  seo_contact_title: 'Контакты — адрес, телефон и WhatsApp',
+  seo_contact_description:
+    'Связаться с Mebeltech: {{address}}. Телефон {{phone}}, эл. почта {{email}}. Напишите в WhatsApp или закажите бесплатный замер.',
+  seo_calculator_title: 'Калькулятор цены мебели — примерный бюджет',
+  seo_calculator_description:
+    'Рассчитайте примерную стоимость кухни, гардероба, гостиной или спальни за 40 секунд: выберите материал, фурнитуру и аксессуары и сразу увидите диапазон. Точная цена — после бесплатного замера.',
+  seo_keywords:
+    'мебель, мебель Баку, мебель на заказ, кухонная мебель, гардероб, шкаф-купе, ТВ-стенка, мебель для спальни, офисная мебель, детская мебель, цена мебели, Mebeltech',
+
+  // Alt-тексты изображений
+  alt_logo: 'Mebeltech — изготовление мебели на заказ в Баку',
+  alt_hero_slide: '{{title}} — интерьер с мебелью Mebeltech',
+  alt_product: '{{name}} — мебель, изготовленная Mebeltech по индивидуальным размерам',
+  alt_product_in_category: '{{name}} — {{category}}, Mebeltech Баку',
+  alt_product_photo: '{{name}} — фото {{index}} из {{total}}',
+  alt_category: 'Категория «{{name}}» — каталог мебели Mebeltech',
+  alt_team: 'Команда Mebeltech — дизайнеры и мастера в мастерской',
+  alt_interior: 'Современный интерьер с мебелью Mebeltech',
+  alt_calculator_option: '{{name}} — вариант на выбор в калькуляторе',
+
+  // Метки доступности
+  aria_main_nav: 'Главное меню',
+  aria_mobile_nav: 'Мобильное меню',
+  aria_footer_nav: 'Меню в подвале сайта',
+  aria_breadcrumb: 'Навигационная цепочка',
+  aria_language_switcher: 'Выберите язык сайта',
+  aria_select_language: 'Переключиться на {{language}}',
+  aria_view_product: '{{name}} — открыть страницу товара',
+  aria_view_category: '{{name}} — посмотреть товары категории',
+  aria_call: 'Позвонить по номеру {{phone}}',
+  aria_email: 'Написать на {{email}}',
+  aria_whatsapp: 'Написать в WhatsApp',
+  aria_instagram: 'Перейти на нашу страницу в Instagram',
+  aria_select_photo: '{{name}} — показать фото {{index}}',
+  aria_product_gallery: 'Галерея фотографий товара',
+  aria_lead_form: 'Форма заказа бесплатного замера',
+  aria_calculator_progress: 'Шаги калькулятора',
+  aria_map: 'Расположение салона Mebeltech на карте',
+  aria_category_products: 'Товары категории «{{name}}»',
+  aria_open_menu: 'Открыть меню',
+  aria_close_menu: 'Закрыть меню',
+  aria_decrease: '{{name}} — уменьшить количество',
+  aria_increase: '{{name}} — увеличить количество',
+  aria_calculator_options: '{{question}} — варианты',
+  aria_hero: 'Коллекции мебели Mebeltech — слайдер',
 };

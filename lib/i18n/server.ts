@@ -3,6 +3,7 @@ import { LANGUAGE_COOKIE } from '@/lib/i18n/cookie';
 import { defaultLanguage, supportedLanguages } from '@/lib/i18n/languages';
 import { resources } from '@/lib/i18n/resources';
 import { createTranslator, type Messages, type Translator } from '@/lib/i18n/translate';
+import { LANGUAGE_HEADER } from '@/lib/seo/site';
 import type { Language } from '@/types';
 
 /**
@@ -22,12 +23,25 @@ export function matchLanguage(tag: string | null | undefined): Language | null {
   return supportedLanguages.find((language) => normalized.startsWith(language)) ?? null;
 }
 
-/** The cookie first, then what the browser asks for, then Azerbaijani. */
+/**
+ * An explicit `?lang=` first, then the cookie, then what the browser asks for,
+ * then Azerbaijani.
+ *
+ * The parameter reaches this function as a header `proxy.ts` set on the
+ * request: layouts receive no `searchParams`, and the header is the only thing
+ * both a layout and a page can read. It is what makes `hreflang` honest —
+ * `/products?lang=ru` renders in Russian for a crawler that carries no cookie.
+ */
 export async function getLanguage(): Promise<Language> {
+  const requestHeaders = await headers();
+
+  const requested = matchLanguage(requestHeaders.get(LANGUAGE_HEADER));
+  if (requested) return requested;
+
   const stored = matchLanguage((await cookies()).get(LANGUAGE_COOKIE)?.value);
   if (stored) return stored;
 
-  const acceptLanguage = (await headers()).get('accept-language') ?? '';
+  const acceptLanguage = requestHeaders.get('accept-language') ?? '';
   for (const part of acceptLanguage.split(',')) {
     // `az-AZ;q=0.9` — the tag is everything before the quality value.
     const matched = matchLanguage(part.split(';')[0]?.trim());
