@@ -1,5 +1,6 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { cache } from 'react';
 import { createDefaultStore } from '@/lib/store/defaults';
 import type { SiteStore } from '@/lib/store/schema';
 import type { Category, Lead, Product } from '@/types';
@@ -42,8 +43,8 @@ function withDefaults(raw: Partial<SiteStore> | null): SiteStore {
   return store;
 }
 
-/** Reads the whole store, seeding `data/store.json` on first run. */
-export async function readStore(): Promise<SiteStore> {
+/** Reads the whole store from disk, seeding `data/store.json` on first run. */
+async function loadStore(): Promise<SiteStore> {
   try {
     const contents = await fs.readFile(STORE_FILE, 'utf8');
     return withDefaults(JSON.parse(contents) as Partial<SiteStore>);
@@ -51,6 +52,32 @@ export async function readStore(): Promise<SiteStore> {
     const seeded = createDefaultStore();
     await writeStore(seeded);
     return seeded;
+  }
+}
+
+/**
+ * The read every page goes through, memoised for the length of one request.
+ *
+ * A single page render asks for the contact details, the categories and the
+ * products separately — and now for the JSON-LD graph as well, which wants all
+ * three. Without this each of those re-read and re-parsed the same file.
+ * `mutateStore` deliberately calls `loadStore` instead, so a write always
+ * starts from what is actually on disk.
+ */
+export const readStore = cache(loadStore);
+
+/**
+ * When the catalogue last changed, for `<lastmod>`.
+ *
+ * The store file is rewritten by every admin edit, so its mtime is the one
+ * honest answer the site has — better than stamping the sitemap with the time
+ * the crawler happened to ask, which tells a crawler nothing.
+ */
+export async function getStoreModifiedAt(): Promise<Date> {
+  try {
+    return (await fs.stat(STORE_FILE)).mtime;
+  } catch {
+    return new Date();
   }
 }
 
@@ -64,7 +91,7 @@ export async function mutateStore<T>(
   mutator: (store: SiteStore) => T | Promise<T>,
 ): Promise<T> {
   const run = writeQueue.then(async () => {
-    const store = await readStore();
+    const store = await loadStore();
     const result = await mutator(store);
     await writeStore(store);
     return result;
