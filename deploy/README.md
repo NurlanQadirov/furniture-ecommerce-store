@@ -18,8 +18,17 @@ nginx. Heç bir mövcud sayt konfiqi dəyişdirilmir — yalnız yeni fayllar ə
 yoxlamasında sınır. Xaric edilən yollar (`store.json`, `uploads/`) silinmir —
 rsync onları transferdən gizlədir.
 
+`.npm/` və `.config/` də xaric edilməlidir. Build `HOME=/srv/apps/mebeltech` ilə
+işlədiyi üçün npm keşini elə app qovluğunun içində yaradır. İlk deploy-da onlar
+hələ yox idi, ona görə siyahıda deyildilər — indi isə `--delete` hər yeniləmədə
+npm keşini silir.
+
+Əvvəlcə `--dry-run --itemize-changes` ilə işlət və `*deleting` sətirlərinə bax:
+silinən nə varsa, doğrudan da silinməlidirmi?
+
 ```bash
 rsync -az --delete --exclude '.git/' --exclude 'node_modules/' --exclude '.next/' \
+  --exclude '.npm/' --exclude '.config/' \
   --exclude 'data/store.json' --exclude 'public/uploads/*' --exclude '.env*' \
   ./ root@91.99.96.163:/srv/apps/mebeltech/
 
@@ -54,6 +63,25 @@ yalnız 75 ola bilər — Next 16 başqa dəyərə 400 qaytarır.
 
 ```bash
 ssh root@91.99.96.163 'journalctl -u mebeltech -n 100 --no-pager'
+```
+
+## Sayt ünvanı (SEO üçün)
+
+Canonical, `hreflang`, JSON-LD `@id`-ləri, OpenGraph şəkilləri, `robots.txt` və
+`sitemap.xml` — hamısı `NEXT_PUBLIC_SITE_URL`-dən qurulur. `.env`-də hazırda yoxdur,
+yəni koddakı `https://mebeltech.az` defoltu işləyir: sayt `91.99.96.163:8083`-də
+açılsa da, canonical-lar `mebeltech.az` göstərir. Domen hələ bağlanmadığı və saytın
+heç yerdən linki olmadığı üçün bunu indi oxuyan bir crawler yoxdur, amma domen
+bağlanan kimi bu dəyər düz olmalıdır.
+
+`NEXT_PUBLIC_*` build zamanı koda yazılır, runtime-da oxunmur — dəyişəndən sonra
+sadəcə restart bəs etmir, mütləq yenidən build lazımdır:
+
+```bash
+ssh root@91.99.96.163 'echo "NEXT_PUBLIC_SITE_URL=https://domen.az" >> /srv/apps/mebeltech/.env &&
+  cd /srv/apps/mebeltech &&
+  sudo -u deploy env HOME=/srv/apps/mebeltech NODE_ENV=production npm run build &&
+  systemctl restart mebeltech'
 ```
 
 ## Domen bağlananda
