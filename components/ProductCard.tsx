@@ -23,12 +23,13 @@ export default function ProductCard({
   return (
     <Link
       href={`/product/${product.id}`}
+      aria-label={t('aria_view_product', { name })}
       className="flex flex-col h-full bg-white shadow-lg rounded-lg overflow-hidden group"
     >
       <div className="relative overflow-hidden h-64 bg-custom-green">
         <SiteImage
           src={product.mainImage}
-          alt={name}
+          alt={t('alt_product', { name })}
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="object-cover group-hover:scale-110 transition-transform duration-500 ease-in-out"
         />

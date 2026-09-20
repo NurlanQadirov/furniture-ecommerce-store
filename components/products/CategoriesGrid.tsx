@@ -19,23 +19,27 @@ export default async function CategoriesGrid({ categories, counts }: CategoriesG
 
   return (
     <div data-reveal="pending" data-reveal-stagger="120" className="w-full max-w-[1100px] mx-auto px-4 py-16">
-      <section className="text-center mb-12">
+      <header className="text-center mb-12">
         <h1 className="font-serif text-5xl text-dark-green animate-item">
           {t('categories_title')}
         </h1>
         <p className="mt-2 text-custom-black animate-item">{t('categories_subtitle')}</p>
-      </section>
+      </header>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section
+        aria-label={t('categories_title')}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
         {categories.map((category) => (
           <Link
             key={category.id}
             href={`/products/${category.slug}`}
+            aria-label={t('aria_view_category', { name: loc(category.name) })}
             className="animate-item group relative block h-72 rounded-lg overflow-hidden shadow-lg"
           >
             <SiteImage
               src={category.image}
-              alt={loc(category.name)}
+              alt={t('alt_category', { name: loc(category.name) })}
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               className="object-cover transition-transform duration-500 group-hover:scale-110"
             />

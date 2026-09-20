@@ -1,6 +1,7 @@
 'use client';
 
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid';
+import { useT } from '@/components/providers/TranslationProvider';
 
 interface QuantityStepperProps {
   label: string;
@@ -20,6 +21,7 @@ export default function QuantityStepper({
   max,
   onChange,
 }: QuantityStepperProps) {
+  const t = useT();
   const isToggle = max <= 1;
   const clamp = (next: number) => Math.max(0, Math.min(max, next));
 
@@ -57,7 +59,7 @@ export default function QuantityStepper({
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
             type="button"
-            aria-label="-"
+            aria-label={t('aria_decrease', { name: label })}
             onClick={() => onChange(clamp(value - 1))}
             disabled={value === 0}
             className="h-8 w-8 rounded-full border-2 border-gray-200 flex items-center justify-center text-dark-green disabled:opacity-40 hover:border-dark-green transition-colors"
@@ -67,7 +69,7 @@ export default function QuantityStepper({
           <span className="w-6 text-center font-bold tabular-nums">{value}</span>
           <button
             type="button"
-            aria-label="+"
+            aria-label={t('aria_increase', { name: label })}
             onClick={() => onChange(clamp(value + 1))}
             disabled={value >= max}
             className="h-8 w-8 rounded-full border-2 border-gray-200 flex items-center justify-center text-dark-green disabled:opacity-40 hover:border-dark-green transition-colors"

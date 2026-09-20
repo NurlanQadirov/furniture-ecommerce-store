@@ -60,11 +60,17 @@ export default function LeadForm({ summary, estimateMin, estimateMax }: LeadForm
       <h3 className="font-serif text-3xl text-dark-green">{t('calc_lead_title')}</h3>
       <p className="mt-2 text-sm text-custom-black">{t('calc_lead_desc')}</p>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        aria-label={t('aria_lead_form')}
+        className="mt-6 space-y-4"
+      >
         <label className="block">
           <span className="block text-sm font-bold mb-1">{t('calc_name')}</span>
           <input
             type="text"
+            name="name"
+            autoComplete="name"
             value={name}
             onChange={(event) => setName(event.target.value)}
             className="w-full rounded-lg border-2 border-transparent bg-white px-4 py-3 focus:border-dark-green focus:outline-none transition-colors"
@@ -74,6 +80,8 @@ export default function LeadForm({ summary, estimateMin, estimateMax }: LeadForm
           <span className="block text-sm font-bold mb-1">{t('calc_phone')} *</span>
           <input
             type="tel"
+            name="tel"
+            autoComplete="tel"
             required
             inputMode="tel"
             placeholder="+994 __ ___ __ __"
@@ -100,6 +108,7 @@ export default function LeadForm({ summary, estimateMin, estimateMax }: LeadForm
               href={whatsappLink(contact.whatsapp, whatsappMessage)}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={t('aria_whatsapp')}
               className="flex-1 inline-flex items-center justify-center gap-2 bg-white text-dark-green border-2 border-dark-green font-bold py-3 px-6 rounded-lg hover:bg-dark-green hover:text-white transition-all"
             >
               <FaWhatsapp size={20} />

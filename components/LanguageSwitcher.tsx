@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { languageOptions } from '@/lib/i18n/languages';
 import { LANGUAGE_COOKIE, LANGUAGE_COOKIE_MAX_AGE } from '@/lib/i18n/cookie';
-import { useLanguage } from '@/components/providers/TranslationProvider';
+import { useLanguage, useT } from '@/components/providers/TranslationProvider';
 import type { SwitcherSize } from '@/types';
 
 interface LanguageSwitcherProps {
@@ -13,6 +13,7 @@ interface LanguageSwitcherProps {
 
 export default function LanguageSwitcher({ size = 'default' }: LanguageSwitcherProps) {
   const router = useRouter();
+  const t = useT();
   const language = useLanguage();
   const [, startTransition] = useTransition();
 
@@ -41,11 +42,15 @@ export default function LanguageSwitcher({ size = 'default' }: LanguageSwitcherP
     size === 'small' ? 'text-gray-200 hover:bg-white/20' : 'text-gray-600 hover:bg-gray-300';
 
   return (
-    <div className={containerStyle}>
+    <div role="group" aria-label={t('aria_language_switcher')} className={containerStyle}>
       {languageOptions.map((lang) => (
         <button
           key={lang.code}
+          type="button"
+          lang={lang.code}
           onClick={() => selectLanguage(lang.code)}
+          aria-label={t('aria_select_language', { language: lang.name })}
+          aria-current={language === lang.code ? 'true' : undefined}
           className={`${buttonStyle} font-bold rounded-full transition-colors duration-300 ${
             language === lang.code ? activeButtonStyle : inactiveButtonStyle
           }`}

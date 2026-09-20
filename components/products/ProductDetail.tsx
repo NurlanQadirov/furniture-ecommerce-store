@@ -41,7 +41,7 @@ export default function ProductDetail({ product, category, related }: ProductDet
 
   return (
     <div data-reveal="pending" data-reveal-now="" className="w-full max-w-[1100px] mx-auto px-4 py-12">
-      <div className="mb-8 animate-item">
+      <nav aria-label={t('aria_breadcrumb')} className="mb-8 animate-item">
         <Link
           href={category ? `/products/${category.slug}` : '/products'}
           className="inline-flex items-center gap-2 text-dark-green font-bold hover:underline"
@@ -49,14 +49,20 @@ export default function ProductDetail({ product, category, related }: ProductDet
           <ArrowLeftIcon className="h-5 w-5" />
           {category ? t('back_to_category') : t('back_to_categories')}
         </Link>
-      </div>
+      </nav>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+      {/* The product itself, as one self-contained item. `grid` on the class
+          list already sets the display, so the tag change is inert. */}
+      <article className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="animate-item">
           <div className="relative rounded-lg overflow-hidden shadow-xl bg-custom-green aspect-[4/3]">
             <SiteImage
               src={activeImage}
-              alt={name}
+              alt={t('alt_product_photo', {
+                name,
+                index: activeIndex + 1,
+                total: gallery.length,
+              })}
               sizes="(min-width: 768px) 50vw, 100vw"
               priority
               className="object-cover"
@@ -98,13 +104,18 @@ export default function ProductDetail({ product, category, related }: ProductDet
               <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">
                 {t('product_gallery')}
               </p>
-              <div className="grid grid-cols-4 gap-3">
+              <div
+                role="group"
+                aria-label={t('aria_product_gallery')}
+                className="grid grid-cols-4 gap-3"
+              >
                 {gallery.map((image, index) => (
                   <button
                     key={image}
                     type="button"
                     onClick={() => setActiveIndex(index)}
-                    aria-label={name}
+                    aria-label={t('aria_select_photo', { name, index: index + 1 })}
+                    aria-current={index === activeIndex ? 'true' : undefined}
                     className={`aspect-square rounded-md overflow-hidden border-2 transition-all ${
                       index === activeIndex
                         ? 'border-dark-green scale-[1.03]'
@@ -114,7 +125,11 @@ export default function ProductDetail({ product, category, related }: ProductDet
                     <div className="relative h-full w-full">
                       <SiteImage
                         src={image}
-                        alt={name}
+                        alt={t('alt_product_photo', {
+                          name,
+                          index: index + 1,
+                          total: gallery.length,
+                        })}
                         sizes="(min-width: 768px) 12vw, 25vw"
                         className="object-cover"
                       />
@@ -158,6 +173,7 @@ export default function ProductDetail({ product, category, related }: ProductDet
               href={whatsappLink(contact.whatsapp, enquiry)}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`${t('aria_whatsapp')} — ${name}`}
               className="inline-flex items-center justify-center gap-2 bg-dark-green text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all"
             >
               <FaWhatsapp size={20} />
@@ -171,18 +187,18 @@ export default function ProductDetail({ product, category, related }: ProductDet
             </Link>
           </div>
         </div>
-      </div>
+      </article>
 
       {related.length > 0 && (
-        <section className="mt-20">
+        <section aria-label={t('catalog_picks_title')} className="mt-20">
           <h2 className="font-serif text-4xl text-dark-green text-center mb-8 animate-item">
             {t('catalog_picks_title')}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {related.map((item) => (
-              <div key={item.id} className="animate-item">
+              <article key={item.id} className="animate-item">
                 <ProductCard product={item} />
-              </div>
+              </article>
             ))}
           </div>
         </section>

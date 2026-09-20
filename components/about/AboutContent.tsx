@@ -6,21 +6,21 @@ export default async function AboutContent() {
   const t = await getT();
 
   return (
-    <div data-reveal="pending" data-reveal-duration="1000" data-reveal-stagger="300" data-reveal-start="80" className="bg-white py-24">
+    <section data-reveal="pending" data-reveal-duration="1000" data-reveal-stagger="300" data-reveal-start="80" className="bg-white py-24">
       <div className="w-full max-w-[1100px] mx-auto px-4">
-        <div className="text-center mb-16">
+        <header className="text-center mb-16">
           <h1 className="font-serif text-6xl text-dark-green animate-item">
             {t('about_page_title')}
           </h1>
           <p className="mt-4 text-lg text-custom-black max-w-3xl mx-auto animate-item">
             {t('about_page_subtitle')}
           </p>
-        </div>
+        </header>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="animate-item">
             <Image
               src="/team.jpg"
-              alt="Mebeltech Komandası"
+              alt={t('alt_team')}
               width={5616}
               height={3744}
               sizes="(min-width: 768px) 50vw, 100vw"
@@ -33,6 +33,7 @@ export default async function AboutContent() {
             <p className="mt-4 text-lg leading-relaxed">{t('our_story_p2')}</p>
             <Link
               href="/contact"
+              aria-label={`${t('contact_us')} — ${t('contact')}`}
               className="inline-block mt-8 bg-dark-green text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition-all shadow-lg"
             >
               {t('contact_us')}
@@ -40,6 +41,6 @@ export default async function AboutContent() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

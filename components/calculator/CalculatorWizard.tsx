@@ -224,7 +224,11 @@ export default function CalculatorWizard({ settings }: CalculatorWizardProps) {
 
       <div className="bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden">
         {/* Progress */}
-        <div className="flex items-center gap-1 px-4 sm:px-8 pt-6">
+        <div
+          role="group"
+          aria-label={t('aria_calculator_progress')}
+          className="flex items-center gap-1 px-4 sm:px-8 pt-6"
+        >
           {steps.map((step, index) => (
             <div key={step} className="flex-1">
               <div
@@ -247,9 +251,9 @@ export default function CalculatorWizard({ settings }: CalculatorWizardProps) {
           {isResult ? (
             <div className="space-y-8">
               <div className="text-center">
-                <p className="text-sm uppercase tracking-widest text-gray-400">
+                <h2 className="text-sm uppercase tracking-widest text-gray-400">
                   {t('calc_result_title')}
-                </p>
+                </h2>
                 <p className="font-serif text-5xl sm:text-6xl text-dark-green mt-2">
                   {result.min} – {result.max}
                 </p>
@@ -302,13 +306,16 @@ export default function CalculatorWizard({ settings }: CalculatorWizardProps) {
               </button>
             </div>
           ) : (
-            <div>
+            <div role="group" aria-labelledby="calculator-question">
               {/*
                 The page title stays in the script face, but these change on
                 every step and are instructions rather than decoration — they
                 read in the UI font so nobody has to decipher them mid-flow.
               */}
-              <h2 className="font-inter text-2xl font-semibold text-dark-green mb-6">
+              <h2
+                id="calculator-question"
+                className="font-inter text-2xl font-semibold text-dark-green mb-6"
+              >
                 {currentStep === 'room' && t('calc_room_question')}
                 {currentStep === 'size' && t('calc_size_question')}
                 {currentStep === 'material' && t('calc_material_question')}

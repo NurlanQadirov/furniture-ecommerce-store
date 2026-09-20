@@ -17,17 +17,17 @@ export default async function CatalogPicks({ products }: CatalogPicksProps) {
   return (
     <section data-reveal="pending" id="catalog-picks" className="w-full bg-white py-24">
       <div className="w-full max-w-[1100px] mx-auto px-4">
-        <div className="text-center mb-12">
+        <header className="text-center mb-12">
           <h2 className="font-serif text-5xl text-dark-green animate-item">
             {t('catalog_picks_title')}
           </h2>
           <p className="mt-2 text-custom-black animate-item">{t('catalog_picks_subtitle')}</p>
-        </div>
+        </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {products.map((product) => (
-            <div className="animate-item" key={product.id}>
+            <article className="animate-item" key={product.id}>
               <ProductCard product={product} showFeaturedBadge={false} />
-            </div>
+            </article>
           ))}
         </div>
         <div className="text-center mt-12 animate-item">

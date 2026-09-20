@@ -35,7 +35,10 @@ export default function HeroSlider() {
   ];
 
   return (
-    <section className="relative w-full h-[calc(100vh-72px)] min-h-[600px] bg-gray-900 group overflow-hidden">
+    <section
+      aria-label={t('aria_hero')}
+      className="relative w-full h-[calc(100vh-72px)] min-h-[600px] bg-gray-900 group overflow-hidden"
+    >
       <Swiper
         modules={[Autoplay, Parallax]}
         spaceBetween={0}
@@ -58,7 +61,7 @@ export default function HeroSlider() {
             <div className="absolute inset-0" data-swiper-parallax="50%">
               <Image
                 src={slide.img}
-                alt=""
+                alt={t('alt_hero_slide', { title: slide.title })}
                 fill
                 sizes="100vw"
                 priority={index === 0}
@@ -109,6 +112,7 @@ export default function HeroSlider() {
                 <div className="pt-4" data-swiper-parallax="-400">
                   <Link
                     href="/products"
+                    aria-label={`${t('goToCatalog')} — ${t('products')}`}
                     className="inline-flex items-center gap-3 bg-white text-custom-black font-bold py-4 px-8 rounded-full transition-all duration-300 hover:bg-dark-green hover:text-white hover:shadow-lg group/btn"
                   >
                     <span>{t('goToCatalog')}</span>

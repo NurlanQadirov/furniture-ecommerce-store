@@ -48,10 +48,10 @@ export default function Header() {
     <>
       <div className="w-full bg-white/90 backdrop-blur-sm sticky top-0 z-40 shadow-sm">
         <header className="w-full max-w-[1200px] mx-auto px-4 flex justify-between items-center h-[72px]">
-          <Link href="/">
+          <Link href="/" aria-label={`${t('alt_logo')} — ${t('home')}`}>
             <Image
               src="/Logo2.png"
-              alt="Mebeltech Logo"
+              alt={t('alt_logo')}
               width={500}
               height={500}
               className="h-12 w-auto"
@@ -59,18 +59,25 @@ export default function Header() {
             />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-x-6 lg:gap-x-8">
+          <nav
+            aria-label={t('aria_main_nav')}
+            className="hidden md:flex items-center gap-x-6 lg:gap-x-8"
+          >
             <ul className="flex items-center gap-x-6 lg:gap-x-8 font-inter">
-              {navItems.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={desktopNavLinkStyle(isRouteActive(pathname, item.href))}
-                  >
-                    {t(item.labelKey)}
-                  </Link>
-                </li>
-              ))}
+              {navItems.map((item) => {
+                const isActive = isRouteActive(pathname, item.href);
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={desktopNavLinkStyle(isActive)}
+                    >
+                      {t(item.labelKey)}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
             <LanguageSwitcher />
           </nav>
@@ -84,8 +91,9 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setIsMenuOpen(true)}
-              aria-label="Open menu"
+              aria-label={t('aria_open_menu')}
               aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
               className="p-3 touch-manipulation"
             >
               <Bars3Icon className="h-8 w-8 text-custom-black" />
@@ -97,6 +105,7 @@ export default function Header() {
       {/*  MOBİL MENYU === */}
 
       <div
+        id="mobile-menu"
         className={`
           fixed inset-0 z-50 flex flex-col items-center justify-center gap-10
           overflow-y-auto overscroll-contain bg-white px-6 py-20
@@ -108,18 +117,19 @@ export default function Header() {
         <button
           type="button"
           onClick={() => setIsMenuOpen(false)}
-          aria-label="Close menu"
+          aria-label={t('aria_close_menu')}
           className="absolute top-3 right-3 p-3 touch-manipulation"
         >
           <XMarkIcon className="h-10 w-10 text-custom-black" />
         </button>
 
-        <nav>
+        <nav aria-label={t('aria_mobile_nav')}>
           <ul className="flex flex-col items-center space-y-8 font-inter text-center">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  aria-current={isRouteActive(pathname, item.href) ? 'page' : undefined}
                   className="block py-1 text-3xl font-bold text-custom-black hover:text-dark-green"
                   onClick={() => setIsMenuOpen(false)}
                 >

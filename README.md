@@ -92,12 +92,28 @@ Type-check:  npm run typecheck
 ├── lib/
 │   ├── store/                  # JSON store, schema, seed data, input coercion
 │   ├── calc/estimate.ts        # The pricing engine (pure, shared)
-│   ├── i18n/                   # i18next instance, locales, localized-content helper
-│   └── hooks/                  # useSectionReveal (GSAP scroll reveals)
-├── proxy.ts                    # Guards /admin/*
+│   ├── i18n/                   # Locales, server language resolution, localized-content helper
+│   └── seo/                    # Site URL + hreflang, JSON-LD builders, metadata builder
+├── proxy.ts                    # Guards /admin/*, and turns ?lang= into the render language
 ├── types/                      # Shared TypeScript types
 ├── public/uploads/             # Admin-uploaded photos
 └── tailwind.config.ts
+
+🔎 SEO and answer engines
+Every public page emits a linked schema.org graph, server-rendered as plain <script type="application/ld+json"> so crawlers that do not run JavaScript still read it. Three nodes carry stable @ids and everything else points at them:
+
+  <origin>/#organization    the brand — products reference it as brand, manufacturer and seller
+  <origin>/#localbusiness   the Baku storefront: address, coordinates, service area, price range
+  <origin>/#website         the site, publisher → #organization
+
+On top of that each page adds its own: WebPage/CollectionPage/ItemPage, a BreadcrumbList, an ItemList of the categories or products it shows, a Product + Offer on a product page, and a WebApplication for the calculator. Nothing is invented — there are no opening hours, ratings or reviews, because the store holds none, and a product without a price in the panel is published without an Offer rather than with a made-up one.
+
+🌍 One page, three languages, three URLs
+The interface language is a cookie, which a crawler never sends. So the language is also addressable as ?lang=az|en|ru: proxy.ts reads the parameter, forwards it to the render as a header and mirrors it into the cookie. Azerbaijani keeps the bare URL and is x-default. Every page therefore has a self-referencing canonical plus a full hreflang cluster, and sitemap.xml lists all three variants of all three languages with the whole cluster attached to each.
+
+Set NEXT_PUBLIC_SITE_URL before going live: canonicals, hreflang, @ids, OpenGraph images, robots.txt and sitemap.xml are all built from it.
+
+robots.txt names the answer-engine crawlers explicitly (GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot, Google-Extended, Applebot-Extended…) and allows them. An absent robots.txt already allowed everything, so this grants nothing new — it just makes the policy visible in one place. To stay in search while opting out of model training, move the training crawlers to a Disallow rule in app/robots.ts.
 
 🌐 Live Demo
 Check out the live version here: https://furniture-ecommerce-store-rosy.vercel.app/

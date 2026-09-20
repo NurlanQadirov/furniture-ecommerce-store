@@ -152,6 +152,7 @@ export default function WeeklyOffer({ products }: WeeklyOfferProps) {
             </p>
             <Link
               href={`/product/${currentCard.id}`}
+              aria-label={t('aria_view_product', { name: loc(currentCard.name) })}
               // Pinned to the same inset as the "next" control in the image
               // panel, so on desktop the two buttons sit on one line.
               className="flex items-center gap-x-3 font-serif text-xl text-dark-green bg-custom-green px-6 py-2 rounded-full shadow-md transition-all duration-300 ease-out hover:bg-dark-green hover:text-white hover:shadow-lg hover:scale-105 group self-center justify-self-end md:absolute md:bottom-[5%] md:right-[8%]"
@@ -174,6 +175,8 @@ export default function WeeklyOffer({ products }: WeeklyOfferProps) {
             {products.length > 1 && (
             <a
               href="#"
+              role="button"
+              aria-label={t('next')}
               onClick={handleNextCard}
               className="absolute bottom-[5%] right-[8%] z-10 flex items-center gap-x-3 font-serif text-2xl text-dark-green bg-white/80 backdrop-blur-sm px-6 py-2 rounded-full shadow-lg transition-all duration-300 ease-out hover:bg-dark-green hover:text-white hover:shadow-lg hover:scale-105 group"
             >
@@ -183,7 +186,7 @@ export default function WeeklyOffer({ products }: WeeklyOfferProps) {
             )}
             <SiteImage
               src={currentCard.mainImage}
-              alt={loc(currentCard.name)}
+              alt={t('alt_product', { name: loc(currentCard.name) })}
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover"
             />

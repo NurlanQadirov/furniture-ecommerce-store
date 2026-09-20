@@ -27,7 +27,7 @@ export default async function Philosophy() {
         <div className="animate-item relative aspect-[3/2] rounded-lg overflow-hidden shadow-lg">
           <Image
             src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1932"
-            alt="Müasir İnteryer"
+            alt={t('alt_interior')}
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover"

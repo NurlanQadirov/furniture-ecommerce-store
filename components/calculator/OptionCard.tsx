@@ -1,6 +1,7 @@
 'use client';
 
 import SiteImage from '@/components/SiteImage';
+import { useT } from '@/components/providers/TranslationProvider';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import type { ReactNode } from 'react';
 
@@ -24,6 +25,8 @@ export default function OptionCard({
   selected,
   onSelect,
 }: OptionCardProps) {
+  const t = useT();
+
   return (
     <button
       type="button"
@@ -39,7 +42,7 @@ export default function OptionCard({
         <div className="relative h-28 sm:h-32 w-full overflow-hidden bg-custom-green">
           <SiteImage
             src={image}
-            alt={title}
+            alt={t('alt_calculator_option', { name: title })}
             sizes="(min-width: 640px) 25vw, 50vw"
             className="object-cover"
           />
