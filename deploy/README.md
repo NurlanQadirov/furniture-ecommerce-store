@@ -9,7 +9,8 @@ nginx. Heç bir mövcud sayt konfiqi dəyişdirilmir — yalnız yeni fayllar ə
 | Qovluq | `/srv/apps/mebeltech` |
 | Servis | `mebeltech.service` |
 | Next.js portu | `127.0.0.1:3004` (yalnız loopback) |
-| Nginx portu | `8083` (müvəqqəti — domen olanda `listen 80`) |
+| Domen | `bakumebel.az` (DNS: Hetzner, `www` → apex 301) |
+| Nginx | `:80`/`:443`, `server_name bakumebel.az` |
 | Env | `/srv/apps/mebeltech/.env` (0600, `deploy`-a məxsus) |
 
 ## Yeniləmə (yerli kompüterdən)
@@ -68,28 +69,41 @@ ssh root@91.99.96.163 'journalctl -u mebeltech -n 100 --no-pager'
 ## Sayt ünvanı (SEO üçün)
 
 Canonical, `hreflang`, JSON-LD `@id`-ləri, OpenGraph şəkilləri, `robots.txt` və
-`sitemap.xml` — hamısı `NEXT_PUBLIC_SITE_URL`-dən qurulur. `.env`-də hazırda yoxdur,
-yəni koddakı `https://mebeltech.az` defoltu işləyir: sayt `91.99.96.163:8083`-də
-açılsa da, canonical-lar `mebeltech.az` göstərir. Domen hələ bağlanmadığı və saytın
-heç yerdən linki olmadığı üçün bunu indi oxuyan bir crawler yoxdur, amma domen
-bağlanan kimi bu dəyər düz olmalıdır.
+`sitemap.xml` — hamısı `NEXT_PUBLIC_SITE_URL`-dən qurulur (`.env`-də
+`https://bakumebel.az`; yoxdursa koddakı defolt da eynidir).
 
 `NEXT_PUBLIC_*` build zamanı koda yazılır, runtime-da oxunmur — dəyişəndən sonra
-sadəcə restart bəs etmir, mütləq yenidən build lazımdır:
+sadəcə restart bəs etmir, mütləq yenidən build lazımdır.
+
+## Domenin bağlanması (bakumebel.az)
+
+DNS Hetzner-dədir (nameserverlər: `hydrogen.ns.hetzner.com`, `oxygen.ns.hetzner.com`,
+`helium.ns.hetzner.de`). Zonada lazım olan qeydlər:
+
+| Tip | Ad | Dəyər |
+|---|---|---|
+| A | `@` | `91.99.96.163` |
+| A | `www` | `91.99.96.163` |
+
+2026-09-28-də bağlanıb. Aşağıdakı addımlar o zaman bir dəfə işlədilib — yalnız
+serveri sıfırdan qurmaq lazım olsa təkrarlanır (certbot HTTP-01 yoxlaması DNS-siz
+alınmır). Bu halda əvvəl faylın SSL hissəsiz, yalnız `:80` variantı qoyulur (sertifikat hələ yoxdursa, nginx `ssl_certificate` yollarını tapmayıb `nginx -t`-də yıxılır) — o variantdan `listen 443`, `ssl_*`, `include` sətirlərini və certbot-un iki `:80` blokunu çıxarıb `listen 80;` qaytarmaqla alınır:
 
 ```bash
-ssh root@91.99.96.163 'echo "NEXT_PUBLIC_SITE_URL=https://domen.az" >> /srv/apps/mebeltech/.env &&
-  cd /srv/apps/mebeltech &&
+rsync -az deploy/nginx-mebeltech.conf root@91.99.96.163:/etc/nginx/sites-available/mebeltech
+ssh root@91.99.96.163 'nginx -t && systemctl reload nginx'
+ssh -t root@91.99.96.163 'certbot --nginx -d bakumebel.az -d www.bakumebel.az --redirect'
+ssh root@91.99.96.163 'cd /srv/apps/mebeltech &&
+  { grep -q "^NEXT_PUBLIC_SITE_URL=" .env || echo "NEXT_PUBLIC_SITE_URL=https://bakumebel.az" >> .env; } &&
   sudo -u deploy env HOME=/srv/apps/mebeltech NODE_ENV=production npm run build &&
-  systemctl restart mebeltech'
+  systemctl restart mebeltech && ufw delete allow 8083/tcp'
 ```
 
-## Domen bağlananda
+`certbot --nginx` sertifikatı alır, `sites-available/mebeltech`-ə `listen 443 ssl`
+əlavə edir və `:80`-i HTTPS-ə yönləndirir; yeniləməni `certbot.timer` edir.
+`deploy/nginx-mebeltech.conf` certbot-dan sonrakı canlı faylın nüsxəsidir.
 
-1. `deploy/nginx-mebeltech.conf`-da `listen 8083` → `listen 80;` + `server_name domen.az www.domen.az;`
-   (`default_server` YAZMA — o rol `000-catchall`-dadır).
-2. `certbot --nginx -d domen.az -d www.domen.az` ilə sertifikat.
-3. `.env`-də `ADMIN_EMAIL`/`ADMIN_PASSWORD` real dəyərlərlə əvəz olunsun; `ufw delete allow 8083/tcp`.
+Dəyişiklikdən əvvəlki nginx faylı və `.env` yedəkləri: `/root/nginx-backups/`.
 
-HTTPS-ə keçənə qədər giriş şifrəsi şifrələnməmiş kanalla gedir — `admin123` yalnız
-test üçündür.
+Sonra `.env`-də `ADMIN_EMAIL`/`ADMIN_PASSWORD` real dəyərlərlə əvəz olunsun
+(`admin123` yalnız test üçündür) və `systemctl restart mebeltech`.

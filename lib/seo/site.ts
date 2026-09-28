@@ -15,7 +15,7 @@ import type { Language } from '@/types';
  * Azerbaijani is the default and keeps the bare URL, which is also `x-default`.
  */
 
-const FALLBACK_ORIGIN = 'https://mebeltech.az';
+const FALLBACK_ORIGIN = 'https://bakumebel.az';
 
 /** Strips a trailing slash and anything after the origin, so joins stay clean. */
 function normalizeOrigin(value: string | undefined): string {
