@@ -112,12 +112,12 @@ export default async function Footer() {
           <p>{t('footer_copyright', { year: currentYear })}</p>
           {/* Developer credit — the same English line in every language. */}
           <p className="mt-2">
-            Designed &amp; Developed{' '}
+            Designed &amp; Developed by{' '}
             <a
               href="https://nurlanqadirov.az"
               target="_blank"
               rel="noopener"
-              className="text-gray-300 underline underline-offset-2 hover:text-white transition-colors"
+              className="text-gray-300 hover:text-white transition-colors"
             >
               Nurlan Qadirov
             </a>
