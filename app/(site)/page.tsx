@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
-import HeroSlider from '@/components/home/HeroSlider';
-import WhyMebeltech from '@/components/home/WhyMebeltech';
-import CatalogPicks from '@/components/home/CatalogPicks';
-import CalculatorTeaser from '@/components/home/CalculatorTeaser';
-import Philosophy from '@/components/home/Philosophy';
-import WeeklyOffer from '@/components/home/WeeklyOffer';
+import HomeShell from '@/components/home/HomeShell';
+import SpatialHero from '@/components/home/hero/SpatialHero';
+import AtelierBento from '@/components/home/atelier/AtelierBento';
+import Collection from '@/components/home/Collection';
+import Commission from '@/components/home/Commission';
+import { displayFont, specFont } from '@/components/home/fonts';
 import JsonLd from '@/components/seo/JsonLd';
 import { getSchemaContext } from '@/lib/seo/context';
 import {
@@ -60,14 +60,12 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div>
+    <HomeShell fontClassName={`${displayFont.variable} ${specFont.variable}`}>
       <JsonLd id="mebeltech-home" data={pageGraph} />
-      <HeroSlider />
-      <WhyMebeltech />
-      <CatalogPicks products={picks.slice(0, 3)} />
-      <CalculatorTeaser />
-      <Philosophy />
-      <WeeklyOffer products={picks} />
-    </div>
+      <SpatialHero />
+      <AtelierBento />
+      <Collection products={picks} />
+      <Commission />
+    </HomeShell>
   );
 }

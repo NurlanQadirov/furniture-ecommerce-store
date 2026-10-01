@@ -11,14 +11,6 @@ export interface LanguageOption {
   name: string;
 }
 
-/** One slide of the home page hero carousel. */
-export interface HeroSlide {
-  img: string;
-  title: string;
-  desc: string;
-  subtitle: string;
-}
-
 /** Size variants of the language switcher. */
 export type SwitcherSize = 'default' | 'small';
 

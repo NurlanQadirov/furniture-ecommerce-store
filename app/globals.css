@@ -49,3 +49,24 @@
     transform: none;
   }
 }
+
+/*
+ * Masked line reveal for the home page's display headings: the line rises out
+ * of its own `overflow: hidden` parent instead of fading up. Opacity stays at
+ * 1, so the heading is painted from the first frame.
+ */
+[data-reveal] .animate-item.reveal-mask {
+  transition-duration: 1100ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal='pending'] .animate-item.reveal-mask {
+  opacity: 1;
+  transform: translateY(105%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal='pending'] .animate-item.reveal-mask {
+    transform: none;
+  }
+}
