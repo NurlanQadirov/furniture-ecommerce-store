@@ -14,12 +14,20 @@ const STORE_FILE = path.join(STORE_DIR, 'store.json');
  */
 let writeQueue: Promise<unknown> = Promise.resolve();
 
+/** A stored timestamp, kept only if it parses — a hand edit can leave anything there. */
+function validTimestamp(value: unknown): string | undefined {
+  return typeof value === 'string' && !Number.isNaN(Date.parse(value)) ? value : undefined;
+}
+
 /** Fills in anything a hand-edited or older `store.json` is missing. */
 function withDefaults(raw: Partial<SiteStore> | null): SiteStore {
   const defaults = createDefaultStore();
   if (!raw) return defaults;
 
   const store: SiteStore = {
+    // Deliberately not defaulted: an absent stamp means "unknown", and
+    // `mutateStore` fills it with the best guess available, once.
+    contentModifiedAt: validTimestamp(raw.contentModifiedAt),
     categories: raw.categories ?? defaults.categories,
     products: raw.products ?? defaults.products,
     contact: { ...defaults.contact, ...raw.contact },
@@ -66,19 +74,38 @@ async function loadStore(): Promise<SiteStore> {
  */
 export const readStore = cache(loadStore);
 
-/**
- * When the catalogue last changed, for `<lastmod>`.
- *
- * The store file is rewritten by every admin edit, so its mtime is the one
- * honest answer the site has — better than stamping the sitemap with the time
- * the crawler happened to ask, which tells a crawler nothing.
- */
-export async function getStoreModifiedAt(): Promise<Date> {
+/** The store file's mtime — rewritten by every write, a new lead included. */
+async function fileModifiedAt(): Promise<Date | undefined> {
   try {
     return (await fs.stat(STORE_FILE)).mtime;
   } catch {
-    return new Date();
+    return undefined;
   }
+}
+
+/**
+ * When the public content last changed, for `<lastmod>`.
+ *
+ * This used to be the store file's mtime, but leads live in the same file:
+ * every measurement request a visitor sent re-dated every URL in the sitemap,
+ * and a `<lastmod>` that moves when nothing on the page did is one a crawler
+ * learns to ignore. The stamp `mutateStore` keeps moves only with the content.
+ *
+ * A store from before the stamp existed falls back to the mtime — the old
+ * behaviour, and still better than the time the crawler happened to ask.
+ */
+export async function getContentModifiedAt(): Promise<Date> {
+  const { contentModifiedAt } = await readStore();
+  if (contentModifiedAt) return new Date(contentModifiedAt);
+  return (await fileModifiedAt()) ?? new Date();
+}
+
+/**
+ * Everything a visitor can see, as one comparable string. Leads are left out
+ * on purpose: they are the one thing a write can change that no page shows.
+ */
+function publicContent(store: SiteStore): string {
+  return JSON.stringify([store.categories, store.products, store.contact, store.calculator]);
 }
 
 export async function writeStore(store: SiteStore): Promise<void> {
@@ -92,7 +119,23 @@ export async function mutateStore<T>(
 ): Promise<T> {
   const run = writeQueue.then(async () => {
     const store = await loadStore();
+    const before = publicContent(store);
+
+    // A store from before the stamp: pin the mtime now, before this write
+    // (a lead, perhaps) moves it. From here on only real edits move the date.
+    if (!store.contentModifiedAt) {
+      store.contentModifiedAt = ((await fileModifiedAt()) ?? new Date()).toISOString();
+    }
+
     const result = await mutator(store);
+
+    // Compared rather than stamped per route: every admin save is covered
+    // without each handler having to remember it, a lead never counts, and a
+    // save that changed nothing does not re-date the whole sitemap.
+    if (publicContent(store) !== before) {
+      store.contentModifiedAt = new Date().toISOString();
+    }
+
     await writeStore(store);
     return result;
   });

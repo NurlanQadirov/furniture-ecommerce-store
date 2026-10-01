@@ -6,28 +6,67 @@ import {
   breadcrumbNode,
   calculatorAppNode,
   graph,
+  pricingCatalogNode,
+  serviceNode,
   webPageNode,
 } from '@/lib/seo/jsonld';
 import { pageMetadata } from '@/lib/seo/metadata';
 import { nodeId } from '@/lib/seo/site';
-import { getCalculatorSettings } from '@/lib/store/server';
+import type { Translator } from '@/lib/i18n/translate';
+import type { CalculatorSettings } from '@/lib/store/schema';
+import { getCalculatorSettings, getCategories } from '@/lib/store/server';
+
+/** The cheapest option the owner has priced, or nothing if none is. */
+function lowest(prices: number[]): number | undefined {
+  const priced = prices.filter((price) => price > 0);
+  return priced.length > 0 ? Math.min(...priced) : undefined;
+}
+
+/**
+ * "Prices: kitchen units from 260 AZN per running metre, wardrobes from…"
+ *
+ * The wizard only shows its rates once someone clicks through it, so the
+ * snippet is the one place a searcher — or an answer engine — can read them
+ * without running it. Read from the live settings, so it follows every edit
+ * the owner makes in the panel.
+ */
+function startingRates(settings: CalculatorSettings, t: Translator): string {
+  const rates = [
+    ['seo_rate_kitchen', lowest(settings.kitchen.materials.map((item) => item.lowerPerM))],
+    ['seo_rate_wardrobe', lowest(settings.wardrobe.materials.map((item) => item.pricePerM2))],
+    ['seo_rate_living', lowest(settings.living.materials.map((item) => item.pricePerM2))],
+    ['seo_rate_fixed', lowest(settings.fixed.models.map((item) => item.price))],
+  ] as const;
+
+  const parts = rates
+    .filter(([, price]) => price !== undefined)
+    .map(([key, price]) => t(key, { price: price as number }));
+
+  return parts.length > 0 ? t('seo_calculator_rates', { rates: parts.join(', ') }) : '';
+}
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { language, t } = await getSchemaContext();
+  const [{ language, t }, settings] = await Promise.all([
+    getSchemaContext(),
+    getCalculatorSettings(),
+  ]);
 
   return pageMetadata({
     path: '/calculator',
     title: t('seo_calculator_title'),
-    description: t('seo_calculator_description'),
+    description: [startingRates(settings, t), t('seo_calculator_description')]
+      .filter(Boolean)
+      .join(' '),
     language,
     t,
   });
 }
 
 export default async function CalculatorPage() {
-  const [settings, schema] = await Promise.all([
+  const [settings, schema, categories] = await Promise.all([
     getCalculatorSettings(),
     getSchemaContext(),
+    getCategories(),
   ]);
 
   const pageGraph = graph([
@@ -46,7 +85,11 @@ export default async function CalculatorPage() {
       ],
       '/calculator',
     ),
-    calculatorAppNode(schema),
+    calculatorAppNode(schema, settings),
+    // The service the rates belong to, and the rates themselves: the one page
+    // where both are in full, so the price list is never a dangling reference.
+    serviceNode(schema, categories),
+    pricingCatalogNode(schema, settings),
   ]);
 
   return (

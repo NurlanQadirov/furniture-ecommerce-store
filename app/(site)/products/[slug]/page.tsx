@@ -31,17 +31,26 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   const name = loc(category.name);
   const products = await getProductsByCategory(category.id);
+  const prices = products
+    .map((product) => product.price)
+    .filter((price): price is number => typeof price === 'number' && price > 0);
 
   return pageMetadata({
     path: `/products/${category.slug}`,
     title: t('seo_category_title', { name }),
-    // The description carries the category's own copy plus the model names
-    // inside it, so the snippet answers "which wardrobes do they make?".
+    // Facts first, in the order a searcher asks them — what, where, from how
+    // much, which models — then the category's own copy. The snippet is cut at
+    // 160 characters, and the model names used to sit after that cut.
     description: [
-      t('seo_category_description', { name, description: loc(category.description) }),
+      t('seo_category_description', { name }),
+      prices.length > 0 ? t('seo_price_from', { price: Math.min(...prices) }) : '',
       products.length > 0
-        ? products.slice(0, 4).map((product) => loc(product.name)).join(', ')
+        ? t('seo_category_models', {
+            models: products.slice(0, 4).map((product) => loc(product.name)).join(', '),
+          })
         : '',
+      loc(category.description),
+      t('seo_service_promise'),
     ]
       .filter(Boolean)
       .join(' '),
@@ -78,6 +87,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       image: category.image,
       mainEntity: nodeId(path, 'itemlist'),
       hasBreadcrumb: true,
+      parentPath: '/products',
     }),
     breadcrumbNode(
       schema,

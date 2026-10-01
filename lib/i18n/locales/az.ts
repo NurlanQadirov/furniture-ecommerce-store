@@ -167,10 +167,10 @@ export const az = {
   seo_products_description:
     'Mebeltech kataloqu: mətbəx mebeli, qarderob və şkaflar, salon və TV divarları, yataq otağı, ofis və uşaq otağı mebeli. Hər model Bakıda ölçüyə uyğun hazırlanır.',
   seo_category_title: '{{name}} — Bakıda sifarişlə hazırlanır',
-  seo_category_description:
-    '{{name}} — {{description}} Mebeltech Bakıda ölçüyə uyğun hazırlayır: pulsuz ölçü, rəsmi zəmanət, çatdırılma və montaj.',
+  seo_category_description: '{{name}} — Bakıda Mebeltech tərəfindən ölçüyə uyğun hazırlanır.',
   seo_product_title: '{{name}} — {{category}}',
-  seo_product_description: '{{name}} — {{description}}',
+  seo_product_description:
+    '{{name}} ({{category}}) — Bakıda Mebeltech tərəfindən ölçüyə uyğun hazırlanır. {{description}}',
   seo_product_price_note: 'Qiymət {{price}} AZN.',
   seo_about_title: 'Haqqımızda — Mebeltech mebel emalatxanası',
   seo_about_description:
@@ -181,6 +181,18 @@ export const az = {
   seo_calculator_title: 'Mebel qiymət kalkulyatoru — təxmini büdcə',
   seo_calculator_description:
     'Mətbəx, qarderob, salon və yataq mebelinin təxmini qiymətini 40 saniyəyə hesablayın: material, furnitura və aksesuar seçin, nəticəni dərhal görün. Dəqiq qiymət pulsuz ölçüdən sonra verilir.',
+  seo_price_from: 'Qiymət {{price}} AZN-dən.',
+  seo_category_models: 'Modellər: {{models}}.',
+  seo_service_promise: 'Pulsuz ölçü, rəsmi zəmanət, çatdırılma və montaj.',
+  seo_calculator_rates: 'Qiymətlər: {{rates}}.',
+  seo_rate_kitchen: 'mətbəx modulları metri {{price}} AZN-dən',
+  seo_rate_wardrobe: 'qarderoblar {{price}} AZN/m²-dən',
+  seo_rate_living: 'TV divarları {{price}} AZN/m²-dən',
+  seo_rate_fixed: 'yataq otağı modelləri {{price}} AZN-dən',
+  schema_service_name: 'Sifarişlə mebel: dizayn, istehsal, çatdırılma və montaj',
+  schema_pricing_name: 'Mebeltech qiymət cədvəli — kalkulyator tarifləri',
+  schema_calc_range:
+    'Nəticə hesablanmış məbləğin ±{{percent}}% aralığında göstərilir və {{step}} AZN-ə yuvarlaqlaşdırılır.',
   seo_keywords:
     'mebel, Bakı mebel, sifarişlə mebel, ölçüyə uyğun mebel, mətbəx mebeli, qarderob, kupe şkaf, TV divarı, yataq otağı mebeli, ofis mebeli, uşaq otağı mebeli, mebel qiyməti, Mebeltech',
 

@@ -104,6 +104,12 @@ export interface CalculatorSettings {
 
 /** Everything the site renders that the owner can edit from `/admin`. */
 export interface SiteStore {
+  /**
+   * ISO time the public content — categories, products, contact, calculator —
+   * last changed. Set by `mutateStore`, never by a lead. Absent in stores
+   * written before it existed.
+   */
+  contentModifiedAt?: string;
   categories: Category[];
   products: Product[];
   contact: ContactInfo;

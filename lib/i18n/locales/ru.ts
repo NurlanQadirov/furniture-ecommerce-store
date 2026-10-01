@@ -171,10 +171,10 @@ export const ru: Translation = {
   seo_products_description:
     'Каталог Mebeltech: кухонная мебель, гардеробы и шкафы, гостиные и ТВ-стенки, мебель для спальни, офиса и детской. Каждая модель изготавливается в Баку точно по вашим размерам.',
   seo_category_title: '{{name}} — на заказ в Баку',
-  seo_category_description:
-    '{{name}} — {{description}} Mebeltech изготовит по вашим размерам в Баку: бесплатный замер, официальная гарантия, доставка и монтаж.',
+  seo_category_description: '{{name}} на заказ в Баку от Mebeltech.',
   seo_product_title: '{{name}} — {{category}}',
-  seo_product_description: '{{name}} — {{description}}',
+  seo_product_description:
+    '{{name}} ({{category}}) — на заказ в Баку от Mebeltech. {{description}}',
   seo_product_price_note: 'Цена {{price}} AZN.',
   seo_about_title: 'О нас — мебельная мастерская Mebeltech',
   seo_about_description:
@@ -185,6 +185,18 @@ export const ru: Translation = {
   seo_calculator_title: 'Калькулятор цены мебели — примерный бюджет',
   seo_calculator_description:
     'Рассчитайте примерную стоимость кухни, гардероба, гостиной или спальни за 40 секунд: выберите материал, фурнитуру и аксессуары и сразу увидите диапазон. Точная цена — после бесплатного замера.',
+  seo_price_from: 'Цена от {{price}} AZN.',
+  seo_category_models: 'Модели: {{models}}.',
+  seo_service_promise: 'Бесплатный замер, официальная гарантия, доставка и монтаж.',
+  seo_calculator_rates: 'Цены: {{rates}}.',
+  seo_rate_kitchen: 'кухонные модули от {{price}} AZN за погонный метр',
+  seo_rate_wardrobe: 'шкафы от {{price}} AZN/м²',
+  seo_rate_living: 'ТВ-стенки от {{price}} AZN/м²',
+  seo_rate_fixed: 'модели для спальни от {{price}} AZN',
+  schema_service_name: 'Мебель на заказ: дизайн, производство, доставка и монтаж',
+  schema_pricing_name: 'Прайс-лист Mebeltech — тарифы калькулятора',
+  schema_calc_range:
+    'Результат показывается как диапазон ±{{percent}}% от расчётной суммы, округлённый до {{step}} AZN.',
   seo_keywords:
     'мебель, мебель Баку, мебель на заказ, кухонная мебель, гардероб, шкаф-купе, ТВ-стенка, мебель для спальни, офисная мебель, детская мебель, цена мебели, Mebeltech',
 

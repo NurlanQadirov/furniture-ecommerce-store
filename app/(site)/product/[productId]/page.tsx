@@ -44,11 +44,17 @@ export async function generateMetadata({
     title: t('seo_product_title', { name, category: categoryName }),
     // Price first when there is one: it is the single fact most likely to win
     // the click, and the one an answer engine quotes back.
+    // Then the brand and the city, which the admin-entered copy never names
+    // and which is what ties the snippet to "made-to-measure furniture, Baku".
     description: [
       typeof product.price === 'number'
         ? t('seo_product_price_note', { price: product.price })
         : '',
-      t('seo_product_description', { name, description: loc(product.description) }),
+      t('seo_product_description', {
+        name,
+        category: categoryName,
+        description: loc(product.description),
+      }),
     ]
       .filter(Boolean)
       .join(' '),
@@ -89,6 +95,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       image: product.mainImage,
       mainEntity: productSchemaId(product),
       hasBreadcrumb: true,
+      parentPath: category ? `/products/${category.slug}` : '/products',
+      datePublished: product.createdAt,
     }),
     breadcrumbNode(
       schema,
@@ -102,7 +110,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       ],
       path,
     ),
-    productNode(schema, product, category),
+    productNode(schema, product, category, related),
   ]);
 
   return (

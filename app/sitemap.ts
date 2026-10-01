@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { supportedLanguages } from '@/lib/i18n/languages';
 import { absoluteImageUrl, absoluteUrl, hrefLangs, localizedUrl } from '@/lib/seo/site';
-import { getCategories, getProducts, getStoreModifiedAt } from '@/lib/store/server';
+import { getCategories, getProducts, getContentModifiedAt } from '@/lib/store/server';
 import type { Language } from '@/types';
 
 /**
@@ -48,10 +48,10 @@ function expand(route: RouteInput): MetadataRoute.Sitemap {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [categories, products, storeModifiedAt] = await Promise.all([
+  const [categories, products, contentModifiedAt] = await Promise.all([
     getCategories(),
     getProducts(),
-    getStoreModifiedAt(),
+    getContentModifiedAt(),
   ]);
 
   const counts = products.reduce<Record<string, number>>((totals, product) => {
@@ -62,30 +62,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes: RouteInput[] = [
     {
       path: '/',
-      lastModified: storeModifiedAt,
+      lastModified: contentModifiedAt,
       changeFrequency: 'weekly',
       priority: 1,
       images: ['/furniture.jpg'],
     },
     {
       path: '/products',
-      lastModified: storeModifiedAt,
+      lastModified: contentModifiedAt,
       changeFrequency: 'weekly',
       priority: 0.9,
       images: categories.slice(0, 5).map((category) => category.image),
     },
     {
       path: '/calculator',
-      lastModified: storeModifiedAt,
+      lastModified: contentModifiedAt,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    { path: '/about', lastModified: storeModifiedAt, changeFrequency: 'yearly', priority: 0.5, images: ['/team.jpg'] },
-    { path: '/contact', lastModified: storeModifiedAt, changeFrequency: 'monthly', priority: 0.7 },
+    { path: '/about', lastModified: contentModifiedAt, changeFrequency: 'yearly', priority: 0.5, images: ['/team.jpg'] },
+    { path: '/contact', lastModified: contentModifiedAt, changeFrequency: 'monthly', priority: 0.7 },
 
     ...categories.map((category) => ({
       path: `/products/${category.slug}`,
-      lastModified: storeModifiedAt,
+      lastModified: contentModifiedAt,
       changeFrequency: 'weekly' as const,
       // An empty category is a thin page; it stays in the sitemap but does not
       // claim the same weight as one with a catalogue behind it.
@@ -96,10 +96,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...products.map((product) => ({
       path: `/product/${product.id}`,
       // The store records when a product was added, not when it was edited, so
-      // this is the later of the two dates it can actually stand behind.
-      lastModified: new Date(
-        Math.max(new Date(product.createdAt).getTime() || 0, 0) || storeModifiedAt.getTime(),
-      ),
+      // this is the one date it can stand behind — the content stamp only when
+      // `createdAt` is missing or unreadable.
+      lastModified: new Date(new Date(product.createdAt).getTime() || contentModifiedAt.getTime()),
       changeFrequency: 'monthly' as const,
       priority: product.featured ? 0.8 : 0.7,
       images: [product.mainImage, ...product.images],

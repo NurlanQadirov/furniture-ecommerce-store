@@ -494,6 +494,8 @@ export const defaultCalculator: CalculatorSettings = {
 
 export function createDefaultStore(): SiteStore {
   return {
+    // Seeding is the moment the content comes into being.
+    contentModifiedAt: new Date().toISOString(),
     categories: defaultCategories,
     products: defaultProducts,
     contact: defaultContact,

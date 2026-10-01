@@ -169,10 +169,10 @@ export const en: Translation = {
   seo_products_description:
     'The Mebeltech catalogue: kitchen furniture, wardrobes and cabinets, living rooms and TV walls, bedroom, office and kids room furniture. Every model is built to your measurements in Baku.',
   seo_category_title: '{{name}} — made to measure in Baku',
-  seo_category_description:
-    '{{name}} — {{description}} Mebeltech builds it to your measurements in Baku: free measurement, official warranty, delivery and installation.',
+  seo_category_description: '{{name}} made to measure in Baku by Mebeltech.',
   seo_product_title: '{{name}} — {{category}}',
-  seo_product_description: '{{name}} — {{description}}',
+  seo_product_description:
+    '{{name}} ({{category}}), made to measure in Baku by Mebeltech. {{description}}',
   seo_product_price_note: 'Priced at {{price}} AZN.',
   seo_about_title: 'About us — the Mebeltech furniture workshop',
   seo_about_description:
@@ -183,6 +183,19 @@ export const en: Translation = {
   seo_calculator_title: 'Furniture price calculator — estimate your budget',
   seo_calculator_description:
     'Estimate the price of a kitchen, wardrobe, living room or bedroom in 40 seconds: choose materials, hardware and accessories and see the range at once. The exact price follows a free on-site measurement.',
+  seo_price_from: 'From {{price}} AZN.',
+  seo_category_models: 'Models: {{models}}.',
+  seo_service_promise: 'Free measurement, official warranty, delivery and installation.',
+  seo_calculator_rates: 'Prices: {{rates}}.',
+  seo_rate_kitchen: 'kitchen units from {{price}} AZN per running metre',
+  seo_rate_wardrobe: 'wardrobes from {{price}} AZN/m²',
+  seo_rate_living: 'TV walls from {{price}} AZN/m²',
+  seo_rate_fixed: 'bedroom models from {{price}} AZN',
+  schema_service_name:
+    'Made-to-measure furniture: design, manufacturing, delivery and installation',
+  schema_pricing_name: 'Mebeltech price list — calculator rates',
+  schema_calc_range:
+    'The estimate is shown as a range of ±{{percent}}% around the calculated total, rounded to {{step}} AZN.',
   seo_keywords:
     'furniture, Baku furniture, custom furniture, made-to-measure furniture, kitchen furniture, wardrobe, sliding wardrobe, TV wall, bedroom furniture, office furniture, kids room furniture, furniture price, Mebeltech',
 

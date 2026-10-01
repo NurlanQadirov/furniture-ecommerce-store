@@ -48,7 +48,7 @@ export default async function SiteLayout({ children }: SiteLayoutProps) {
     organizationNode(schema, categories),
     localBusinessNode(schema, products),
     webSiteNode(schema),
-    categories.length > 0 ? offerCatalogNode(schema, categories, counts) : undefined,
+    categories.length > 0 ? offerCatalogNode(schema, categories, counts, products) : undefined,
   ]);
 
   return (

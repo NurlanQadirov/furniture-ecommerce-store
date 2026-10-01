@@ -8,7 +8,9 @@ import {
   nodeId,
 } from '@/lib/seo/site';
 import { supportedLanguages } from '@/lib/i18n/languages';
+import type { TranslationKey } from '@/lib/i18n/resources';
 import type { Translator } from '@/lib/i18n/translate';
+import type { CalculatorSettings, RoomType } from '@/lib/store/schema';
 import type { Category, ContactInfo, Language, Localized, Product } from '@/types';
 
 /**
@@ -22,6 +24,8 @@ import type { Category, ContactInfo, Language, Localized, Product } from '@/type
  *   #organization   the business as a legal/brand entity — products point here
  *   #localbusiness  the Baku storefront: address, geo, service area
  *   #website        the site itself, publisher → #organization
+ *   #service        made-to-measure work, offering the catalogue and the rates
+ *   /calculator#pricing   the calculator's unit rates, as an offer catalogue
  *
  * Nothing here invents a fact. Opening hours, ratings and reviews are absent
  * because the store holds none, and fabricated ones are both a Google
@@ -35,6 +39,9 @@ export const ORGANIZATION_ID = `${SITE_URL}/#organization`;
 export const LOCAL_BUSINESS_ID = `${SITE_URL}/#localbusiness`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const LOGO_ID = `${SITE_URL}/#logo`;
+export const SERVICE_ID = `${SITE_URL}/#service`;
+export const PRICING_ID = nodeId('/calculator', 'pricing');
+const CATALOG_ID = nodeId('/products', 'catalog');
 
 /** A reference to another node in the graph. */
 const ref = (id: string) => ({ '@id': id });
@@ -105,6 +112,15 @@ function geoCoordinates(mapEmbedUrl: string): JsonLdNode | undefined {
   };
 }
 
+/**
+ * A map page a person or an agent can open. The embed URL itself only renders
+ * inside an iframe, so it is no use as `hasMap`.
+ */
+function mapUrl(geo: JsonLdNode | undefined): string | undefined {
+  if (!geo) return undefined;
+  return `https://www.google.com/maps/search/?api=1&query=${geo.latitude},${geo.longitude}`;
+}
+
 /** Where the workshop delivers and installs — Baku, inside Azerbaijan. */
 function areaServed(language: Language): JsonLdNode[] {
   return [
@@ -161,10 +177,11 @@ export function organizationNode(
     '@id': ORGANIZATION_ID,
     name: SITE_NAME,
     alternateName: ['Mebel Tech', 'Мебельтех', `${SITE_NAME} ${countryNames[language]}`],
-    legalName: SITE_NAME,
+    // No `legalName` or `slogan`: the store holds neither, and the brand name
+    // or a section heading passed off as one is a claim an answer engine repeats.
     url: localizedUrl('/', language),
     description: t('footer_desc'),
-    slogan: t('whyMebeltech_title'),
+    // Stated in the About copy in all three languages.
     foundingDate: '2015',
     logo: {
       '@type': 'ImageObject',
@@ -182,8 +199,7 @@ export function organizationNode(
     knowsAbout: categories.map((category) => context.loc(category.name)),
     sameAs: sameAs(contact),
     contactPoint: contactPointNodes(context),
-    hasOfferCatalog:
-      categories.length > 0 ? ref(nodeId('/products', 'catalog')) : undefined,
+    hasOfferCatalog: categories.length > 0 ? ref(CATALOG_ID) : undefined,
     subOrganization: ref(LOCAL_BUSINESS_ID),
   };
 }
@@ -231,6 +247,7 @@ export function localBusinessNode(
   products: Product[] = [],
 ): JsonLdNode {
   const { contact, language, t } = context;
+  const geo = geoCoordinates(contact.mapEmbedUrl);
 
   return {
     '@type': ['FurnitureStore', 'HomeAndConstructionBusiness'],
@@ -244,8 +261,8 @@ export function localBusinessNode(
     email: contact.email || undefined,
     telephone: telephone(contact.phone),
     address: postalAddress(context),
-    geo: geoCoordinates(contact.mapEmbedUrl),
-    hasMap: contact.mapEmbedUrl || undefined,
+    geo,
+    hasMap: mapUrl(geo),
     areaServed: areaServed(language),
     currenciesAccepted: 'AZN',
     priceRange: priceRange(products),
@@ -271,57 +288,69 @@ export function webSiteNode(context: SchemaContext): JsonLdNode {
   };
 }
 
+
 /**
  * What the workshop actually does, as opposed to what it lists. This is the
  * node an answer engine reads to decide whether "custom kitchen in Baku"
- * describes this business.
+ * describes this business — and, through the rates catalogue, what it costs.
  */
 export function serviceNode(context: SchemaContext, categories: Category[]): JsonLdNode {
   const { language, t } = context;
 
   return {
     '@type': 'Service',
-    '@id': `${SITE_URL}/#service`,
-    name: t('calc_title'),
+    '@id': SERVICE_ID,
+    name: t('schema_service_name'),
     serviceType: categories.map((category) => context.loc(category.name)),
-    description: t('whyMebeltech_desc'),
+    description: t('seo_home_description'),
+    url: localizedUrl('/', language),
     provider: ref(ORGANIZATION_ID),
     areaServed: areaServed(language),
-    availableLanguage: knowsLanguage(),
-    audience: { '@type': 'Audience', audienceType: t('about_page_subtitle') },
-    termsOfService: localizedUrl('/calculator', language),
-    hasOfferCatalog:
-      categories.length > 0 ? ref(nodeId('/products', 'catalog')) : undefined,
+    // The rates live on `/calculator`; the id resolves there even from pages
+    // that do not carry the node itself.
+    hasOfferCatalog: [ref(PRICING_ID), categories.length > 0 ? ref(CATALOG_ID) : undefined].filter(
+      Boolean,
+    ),
   };
 }
 
-/** The catalogue as a nested offer catalogue, one branch per category. */
+/**
+ * The catalogue as a nested offer catalogue, one branch per category, each
+ * branch naming the products in it. That makes the relation readable in both
+ * directions from any page: a product says who makes it, and the organisation
+ * says what it makes.
+ */
 export function offerCatalogNode(
   context: SchemaContext,
   categories: Category[],
   counts: Record<string, number> = {},
+  products: Product[] = [],
 ): JsonLdNode {
   const { language, loc, t } = context;
 
   return {
     '@type': 'OfferCatalog',
-    '@id': nodeId('/products', 'catalog'),
+    '@id': CATALOG_ID,
     name: t('categories_title'),
     description: t('categories_subtitle'),
     url: localizedUrl('/products', language),
-    inLanguage: language,
-    provider: ref(ORGANIZATION_ID),
     numberOfItems: categories.length,
-    itemListElement: categories.map((category, index) => ({
+    itemListElement: categories.map((category) => ({
       '@type': 'OfferCatalog',
       '@id': nodeId(`/products/${category.slug}`, 'catalog'),
-      position: index + 1,
       name: loc(category.name),
       description: loc(category.description),
       url: localizedUrl(`/products/${category.slug}`, language),
       image: absoluteImageUrl(category.image),
       numberOfItems: counts[category.id] ?? undefined,
-      provider: ref(ORGANIZATION_ID),
+      itemListElement: products
+        .filter((product) => product.categoryId === category.id)
+        .map((product) => ({
+          '@type': 'Offer',
+          itemOffered: productStub(context, product),
+          ...priceFields(product),
+          seller: ref(ORGANIZATION_ID),
+        })),
     })),
   };
 }
@@ -359,11 +388,16 @@ interface WebPageOptions {
   /** The `@id` of the thing this page is primarily about. */
   mainEntity?: string;
   hasBreadcrumb?: boolean;
+  /** Route path of the page this one sits under — a product's category. */
+  parentPath?: string;
+  /** Only where the store records it; nothing here guesses a date. */
+  datePublished?: string;
 }
 
 export function webPageNode(context: SchemaContext, options: WebPageOptions): JsonLdNode {
   const { language } = context;
   const url = localizedUrl(options.path, language);
+  const image = absoluteImageUrl(options.image);
 
   return {
     '@type': options.type ?? 'WebPage',
@@ -372,13 +406,16 @@ export function webPageNode(context: SchemaContext, options: WebPageOptions): Js
     name: options.name,
     description: options.description,
     inLanguage: language,
-    isPartOf: ref(WEBSITE_ID),
-    about: ref(ORGANIZATION_ID),
-    primaryImageOfPage: options.image
-      ? { '@type': 'ImageObject', url: options.image }
-      : undefined,
+    isPartOf: options.parentPath
+      ? [ref(WEBSITE_ID), ref(nodeId(options.parentPath, 'webpage'))]
+      : ref(WEBSITE_ID),
+    // What the page is about is what it is mainly about; the organisation is
+    // only the fallback, and it is the publisher of every page anyway.
+    about: ref(options.mainEntity ?? ORGANIZATION_ID),
+    primaryImageOfPage: image ? { '@type': 'ImageObject', url: image } : undefined,
     mainEntity: options.mainEntity ? ref(options.mainEntity) : undefined,
     breadcrumb: options.hasBreadcrumb ? ref(nodeId(options.path, 'breadcrumb')) : undefined,
+    datePublished: options.datePublished,
     publisher: ref(ORGANIZATION_ID),
     potentialAction: {
       '@type': 'ReadAction',
@@ -391,18 +428,45 @@ export function webPageNode(context: SchemaContext, options: WebPageOptions): Js
 
 export const productId = (product: Product) => nodeId(`/product/${product.id}`, 'product');
 
+const productPath = (product: Product) => `/product/${product.id}`;
+
 /** December 31st of next year — a horizon that never quietly expires mid-year. */
 function priceValidUntil(): string {
   return `${new Date().getFullYear() + 1}-12-31`;
+}
+
+/**
+ * Everything in the catalogue is built to the customer's measurements — the
+ * catalogue copy says so in all three languages — so "in stock" would be the
+ * one false thing in an otherwise factual offer.
+ */
+const MADE_TO_ORDER = 'https://schema.org/MadeToOrder';
+
+/** Only quoted where the owner entered a price; a placeholder would be a false claim. */
+function priceFields(product: Product): JsonLdNode {
+  return typeof product.price === 'number'
+    ? { price: product.price, priceCurrency: 'AZN', availability: MADE_TO_ORDER }
+    : {};
+}
+
+/** A named, linkable reference to a product described in full on its own page. */
+function productStub(context: SchemaContext, product: Product): JsonLdNode {
+  return {
+    '@type': 'Product',
+    '@id': productId(product),
+    name: context.loc(product.name),
+    url: localizedUrl(productPath(product), context.language),
+  };
 }
 
 export function productNode(
   context: SchemaContext,
   product: Product,
   category: Category | undefined,
+  related: Product[] = [],
 ): JsonLdNode {
   const { language, loc, t } = context;
-  const path = `/product/${product.id}`;
+  const path = productPath(product);
   const images = [product.mainImage, ...product.images]
     .map(absoluteImageUrl)
     .filter((url): url is string => Boolean(url));
@@ -414,28 +478,26 @@ export function productNode(
     description: loc(product.description),
     image: images.length > 0 ? images : [defaultOgImage],
     url: localizedUrl(path, language),
+    mainEntityOfPage: ref(nodeId(path, 'webpage')),
     sku: product.id,
     productID: product.id,
     category: category ? loc(category.name) : undefined,
-    inLanguage: language,
     countryOfOrigin: { '@type': 'Country', name: countryNames[language] },
     // The seller is the brand here: everything in the catalogue is made in the
     // workshop, so both point at the one organisation node.
     brand: ref(ORGANIZATION_ID),
     manufacturer: ref(ORGANIZATION_ID),
-    isRelatedTo: category ? ref(nodeId(`/products/${category.slug}`, 'catalog')) : undefined,
-    // Only quoted where the owner entered a price. A placeholder figure would
-    // be a false claim in a rich result and in an answer engine's summary.
+    // The same models the page shows under "Picks from the catalogue".
+    isRelatedTo:
+      related.length > 0 ? related.map((item) => productStub(context, item)) : undefined,
     offers:
       typeof product.price === 'number'
         ? {
             '@type': 'Offer',
             '@id': nodeId(path, 'offer'),
             url: localizedUrl(path, language),
-            price: product.price,
-            priceCurrency: 'AZN',
+            ...priceFields(product),
             priceValidUntil: priceValidUntil(),
-            availability: 'https://schema.org/InStock',
             itemCondition: 'https://schema.org/NewCondition',
             seller: ref(ORGANIZATION_ID),
             areaServed: areaServed(language),
@@ -472,24 +534,19 @@ export function productListNode(
     itemListElement: products.map((product, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      url: localizedUrl(`/product/${product.id}`, language),
+      url: localizedUrl(productPath(product), language),
       item: {
-        '@type': 'Product',
-        '@id': productId(product),
-        name: loc(product.name),
+        ...productStub(context, product),
         description: loc(product.description),
         image: absoluteImageUrl(product.mainImage) ?? defaultOgImage,
-        url: localizedUrl(`/product/${product.id}`, language),
         sku: product.id,
         brand: ref(ORGANIZATION_ID),
         offers:
           typeof product.price === 'number'
             ? {
                 '@type': 'Offer',
-                price: product.price,
-                priceCurrency: 'AZN',
-                availability: 'https://schema.org/InStock',
-                url: localizedUrl(`/product/${product.id}`, language),
+                ...priceFields(product),
+                url: localizedUrl(productPath(product), language),
                 seller: ref(ORGANIZATION_ID),
               }
             : undefined,
@@ -532,15 +589,225 @@ export function categoryListNode(
   };
 }
 
+/* --------------------------------------------------------------- calculator */
+
+/** The same labels the wizard's room cards use, so the markup reads like the page. */
+const roomLabels: Record<RoomType, { title: TranslationKey; desc: TranslationKey }> = {
+  kitchen: { title: 'room_kitchen', desc: 'room_kitchen_desc' },
+  wardrobe: { title: 'room_wardrobe', desc: 'room_wardrobe_desc' },
+  living: { title: 'room_living', desc: 'room_living_desc' },
+  fixed: { title: 'room_fixed', desc: 'room_fixed_desc' },
+};
+
+const roomOrder: RoomType[] = ['kitchen', 'wardrobe', 'living', 'fixed'];
+
+/** UN/CEFACT common codes, which is what `unitCode` expects. */
+const units = {
+  metre: { unitCode: 'MTR', unitText: 'm' },
+  squareMetre: { unitCode: 'MTK', unitText: 'm²' },
+  piece: { unitCode: 'C62', unitText: 'pcs' },
+} as const;
+
+interface RateOptions {
+  name: string;
+  price: number;
+  unit: keyof typeof units;
+  /** What the rate buys: a furniture element or a service like delivery. */
+  kind?: 'Product' | 'Service';
+  category?: string;
+  material?: string;
+  description?: string;
+}
+
+/** Options the owner has not priced yet stay out of the price list. */
+function positive<T>(items: T[], price: (item: T) => number): T[] {
+  return items.filter((item) => price(item) > 0);
+}
+
+/** One line of the price list: a price per metre, per m² or per piece. */
+function rateOffer(options: RateOptions): JsonLdNode {
+  const { unitCode, unitText } = units[options.unit];
+
+  return {
+    '@type': 'Offer',
+    name: options.name,
+    price: options.price,
+    priceCurrency: 'AZN',
+    priceSpecification: {
+      '@type': 'UnitPriceSpecification',
+      price: options.price,
+      priceCurrency: 'AZN',
+      referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode, unitText },
+    },
+    itemOffered: {
+      '@type': options.kind ?? 'Product',
+      name: options.name,
+      category: options.category,
+      material: options.material,
+      description: options.description,
+    },
+    seller: ref(ORGANIZATION_ID),
+  };
+}
+
+/**
+ * The calculator's tariffs as a price list.
+ *
+ * The wizard runs in the browser, so a crawler sees its first step and none of
+ * the numbers behind it — yet "how much is a kitchen per metre in Baku" is the
+ * question this page exists to answer. Every figure below is one the wizard
+ * itself shows next to an option, read from the same admin-managed settings,
+ * so the markup can never drift from what a visitor is quoted.
+ */
+export function pricingCatalogNode(
+  context: SchemaContext,
+  settings: CalculatorSettings,
+): JsonLdNode {
+  const { language, loc, t } = context;
+  const { kitchen, wardrobe, living, fixed } = settings;
+
+  const sections: Record<RoomType, JsonLdNode[]> = {
+    kitchen: [
+      ...positive(kitchen.materials, (item) => item.lowerPerM).map((item) =>
+        rateOffer({
+          name: `${t('calc_line_lower')} — ${loc(item.name)}`,
+          price: item.lowerPerM,
+          unit: 'metre',
+          category: t('room_kitchen'),
+          material: loc(item.name),
+        }),
+      ),
+      ...positive(kitchen.materials, (item) => item.upperPerM).map((item) =>
+        rateOffer({
+          name: `${t('calc_line_upper')} — ${loc(item.name)}`,
+          price: item.upperPerM,
+          unit: 'metre',
+          category: t('room_kitchen'),
+          material: loc(item.name),
+        }),
+      ),
+      ...positive(kitchen.counterTops, (item) => item.pricePerM).map((item) =>
+        rateOffer({
+          name: `${t('calc_line_counter')} — ${loc(item.name)}`,
+          price: item.pricePerM,
+          unit: 'metre',
+          category: t('room_kitchen'),
+          material: loc(item.name),
+        }),
+      ),
+      ...positive(kitchen.accessories, (item) => item.price).map((item) =>
+        rateOffer({ name: loc(item.name), price: item.price, unit: 'piece', category: t('room_kitchen') }),
+      ),
+    ],
+    wardrobe: [
+      ...positive(wardrobe.materials, (item) => item.pricePerM2).map((item) =>
+        rateOffer({
+          name: `${t('calc_line_facade')} — ${loc(item.name)}`,
+          price: item.pricePerM2,
+          unit: 'squareMetre',
+          category: t('room_wardrobe'),
+          material: loc(item.name),
+        }),
+      ),
+      ...positive(wardrobe.glassOptions, (item) => item.pricePerM2).map((item) =>
+        rateOffer({
+          name: `${t('calc_line_glass')} — ${loc(item.name)}`,
+          price: item.pricePerM2,
+          unit: 'squareMetre',
+          category: t('room_wardrobe'),
+          material: loc(item.name),
+        }),
+      ),
+      ...positive(wardrobe.interiorItems, (item) => item.price).map((item) =>
+        rateOffer({ name: loc(item.name), price: item.price, unit: 'piece', category: t('room_wardrobe') }),
+      ),
+    ],
+    living: [
+      ...positive(living.materials, (item) => item.pricePerM2).map((item) =>
+        rateOffer({
+          name: `${t('calc_line_facade')} — ${loc(item.name)}`,
+          price: item.pricePerM2,
+          unit: 'squareMetre',
+          category: t('room_living'),
+          material: loc(item.name),
+        }),
+      ),
+      ...positive(living.modules, (item) => item.price).map((item) =>
+        rateOffer({ name: loc(item.name), price: item.price, unit: 'piece', category: t('room_living') }),
+      ),
+    ],
+    fixed: positive(fixed.models, (item) => item.price).map((item) =>
+      rateOffer({
+        name: loc(item.name),
+        price: item.price,
+        unit: 'piece',
+        category: t('room_fixed'),
+        description: loc(item.description),
+      }),
+    ),
+  };
+
+  const services = [
+    settings.installationFee > 0
+      ? rateOffer({
+          name: t('calc_line_installation'),
+          price: settings.installationFee,
+          unit: 'piece',
+          kind: 'Service',
+        })
+      : undefined,
+    settings.deliveryFee > 0
+      ? rateOffer({
+          name: t('calc_line_delivery'),
+          price: settings.deliveryFee,
+          unit: 'piece',
+          kind: 'Service',
+        })
+      : undefined,
+  ].filter((node): node is JsonLdNode => Boolean(node));
+
+  const branches = roomOrder
+    .filter((room) => sections[room].length > 0)
+    .map((room) => ({
+      '@type': 'OfferCatalog',
+      '@id': nodeId('/calculator', `pricing-${room}`),
+      name: t(roomLabels[room].title),
+      description: t(roomLabels[room].desc),
+      numberOfItems: sections[room].length,
+      itemListElement: sections[room],
+    }));
+
+  return {
+    '@type': 'OfferCatalog',
+    '@id': PRICING_ID,
+    name: t('schema_pricing_name'),
+    // The caveat travels with the numbers, so nobody quotes them as final.
+    description: `${t('calc_note')} ${t('schema_calc_range', {
+      percent: settings.rangePercent,
+      step: settings.roundTo,
+    })}`,
+    url: localizedUrl('/calculator', language),
+    numberOfItems: branches.length + services.length,
+    itemListElement: [...branches, ...services],
+  };
+}
+
 /** The estimator, described as the tool it is. */
-export function calculatorAppNode(context: SchemaContext): JsonLdNode {
+export function calculatorAppNode(
+  context: SchemaContext,
+  settings: CalculatorSettings,
+): JsonLdNode {
   const { language, t } = context;
 
   return {
     '@type': 'WebApplication',
     '@id': nodeId('/calculator', 'app'),
     name: t('calc_title'),
-    description: `${t('calc_subtitle')} ${t('calc_note')}`.trim(),
+    description: [
+      t('calc_subtitle'),
+      t('calc_note'),
+      t('schema_calc_range', { percent: settings.rangePercent, step: settings.roundTo }),
+    ].join(' '),
     url: localizedUrl('/calculator', language),
     applicationCategory: 'BusinessApplication',
     applicationSubCategory: t('calculator'),
@@ -548,6 +815,10 @@ export function calculatorAppNode(context: SchemaContext): JsonLdNode {
     browserRequirements: 'Requires JavaScript',
     inLanguage: supportedLanguages,
     isAccessibleForFree: true,
+    featureList: roomOrder.map(
+      (room) => `${t(roomLabels[room].title)} — ${t(roomLabels[room].desc)}`,
+    ),
+    about: ref(SERVICE_ID),
     provider: ref(ORGANIZATION_ID),
     offers: {
       '@type': 'Offer',
