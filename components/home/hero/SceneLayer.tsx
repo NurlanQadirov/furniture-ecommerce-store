@@ -6,10 +6,11 @@ import { useT } from '@/components/providers/TranslationProvider';
 import { ALL_HOTSPOTS, type Scene } from '@/components/home/content';
 import { coverBoxSizes, coverBoxStyle } from '@/components/home/coverBox';
 import { HotspotPin } from '@/components/home/hero/Hotspot';
+import useAfterLoad from '@/components/home/useAfterLoad';
 
 interface SceneLayerProps {
   scene: Scene;
-  /** The first scene is the page's largest paint; the others load right behind it. */
+  /** The first scene is the page's largest paint; the others wait until the page has loaded. */
   priority?: boolean;
   /** The camera's dolly into the room, applied around the scene's focus. */
   boxScale?: MotionValue<number>;
@@ -36,6 +37,7 @@ export default function SceneLayer({
   onToggle,
 }: SceneLayerProps) {
   const t = useT();
+  const showPhoto = useAfterLoad(!priority);
 
   return (
     <m.div
@@ -46,19 +48,21 @@ export default function SceneLayer({
         transformOrigin: `${scene.focus.x * 100}% ${scene.focus.y * 100}%`,
       }}
     >
-      <Image
-        src={scene.src}
-        alt={t(scene.alt)}
-        fill
-        sizes={coverBoxSizes(scene.aspect)}
-        priority={priority}
-        // The later rooms must be decoded before the scroll reaches them, but
-        // never at the expense of the first: React preloads every eager image
-        // it renders, so these ask for the lowest priority.
-        loading={priority ? undefined : 'eager'}
-        fetchPriority={priority ? undefined : 'low'}
-        className="object-cover"
-      />
+      {showPhoto && (
+        <Image
+          src={scene.src}
+          alt={t(scene.alt)}
+          fill
+          sizes={coverBoxSizes(scene.aspect)}
+          priority={priority}
+          // The later rooms are not rendered until the page has loaded (see
+          // `useAfterLoad`); once they are, they must be decoded before the
+          // scroll reaches them, so they load eagerly, behind anything else.
+          loading={priority ? undefined : 'eager'}
+          fetchPriority={priority ? undefined : 'low'}
+          className="object-cover"
+        />
+      )}
       {showHotspots && (
         <m.div
           className="absolute inset-0"

@@ -45,11 +45,11 @@ const config: Config = {
           '0%': { transform: 'scale(0.75)', opacity: '0.9' },
           '100%': { transform: 'scale(1.9)', opacity: '0' },
         },
+        // A bead of light running down the track. Only `transform` changes:
+        // animating `transform-origin` as well kept it off the compositor.
         'lux-scroll': {
-          '0%': { transform: 'scaleY(0)', transformOrigin: 'top' },
-          '45%': { transform: 'scaleY(1)', transformOrigin: 'top' },
-          '55%': { transform: 'scaleY(1)', transformOrigin: 'bottom' },
-          '100%': { transform: 'scaleY(0)', transformOrigin: 'bottom' },
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(100%)' },
         },
         kenburns: {
           '0%': { transform: 'scale(1) translate(0, 0)' },

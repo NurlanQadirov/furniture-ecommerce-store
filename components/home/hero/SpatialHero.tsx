@@ -46,6 +46,9 @@ const dolly = (from: number, to: number, t: number) =>
 /** The share of the stage the closing frame shrinks the last room to. */
 const FRAME_SCALE = 0.5;
 
+/** Chapter numerals, shared by the counter, the rail and the cues. */
+const NUMERALS = ['I', 'II', 'III', 'IV'] as const;
+
 /** Fades something in and out across a `[in, full, hold, out]` window. */
 function useBand(progress: MotionValue<number>, range: readonly number[]) {
   const opacity = useTransform(progress, [...range], [0, 1, 1, 0]);
@@ -113,6 +116,23 @@ function IntroCopy({ style }: { style?: MotionStyle }) {
 }
 
 /**
+ * "II · Next room": says what a transition is for while it happens, so the
+ * arch reads as a doorway and the rising panel as the room after it.
+ */
+function NextRoomCue({ numeral }: { numeral: string }) {
+  const t = useT();
+  return (
+    <span className="inline-flex items-center gap-3 whitespace-nowrap rounded-full border border-lux-brass/60 bg-lux-obsidian/70 px-4 py-2 font-spec text-[10px] uppercase tracking-[0.28em] text-lux-sand md:text-[11px]">
+      <span className="text-lux-brass">{numeral}</span>
+      {t('home_next_room')}
+      <svg aria-hidden="true" viewBox="0 0 10 12" className="h-3 w-2.5 fill-none stroke-current">
+        <path d="M5 0v11M1 7l4 4 4-4" strokeWidth="1.1" />
+      </svg>
+    </span>
+  );
+}
+
+/**
  * Where the site header turns transparent and light: everywhere over the hero
  * except its last stretch, which the next section slides up to cover.
  */
@@ -161,6 +181,8 @@ function ScrollHero() {
   const desktopRef = useRef(isDesktop);
   /** How far the arch must grow before its straight sides clear the stage. */
   const coverScale = useRef(8);
+  /** Half the arch's height at rest, so the cue above it can ride its top edge. */
+  const archHalf = useRef(0);
 
   useEffect(() => {
     desktopRef.current = isDesktop;
@@ -176,6 +198,7 @@ function ScrollHero() {
       const w = portal.offsetWidth;
       const h = portal.offsetHeight;
       if (!w || h <= w) return;
+      archHalf.current = h / 2;
       // Width has to span the stage; height is counted from where the
       // semicircular top meets the sides, so no curve is left on screen.
       coverScale.current = Math.max(stage.clientWidth / w, stage.clientHeight / (h - w)) * 1.04;
@@ -185,6 +208,17 @@ function ScrollHero() {
     const observer = new ResizeObserver(measure);
     observer.observe(stage);
     return () => observer.disconnect();
+  }, []);
+
+  // Lets the scroll settle on the rooms' resting points (the snap markers
+  // below). Proximity, not mandatory: it only nudges a scroll that already
+  // stopped close to a room, and leaves the rest of the page free.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.scrollSnapType = 'y proximity';
+    return () => {
+      root.style.scrollSnapType = '';
+    };
   }, []);
 
   // The section is pulled up under the (transparent) site header, so it
@@ -203,9 +237,11 @@ function ScrollHero() {
   });
 
   useMotionValueEvent(progress, 'change', (p) => {
-    // Written straight to the DOM: a per-frame number is not React state.
-    if (counterRef.current) {
-      counterRef.current.textContent = String(Math.round(p * 100)).padStart(3, '0');
+    // Written straight to the DOM: a per-frame value is not React state.
+    const chapter = TIMELINE.chapters.findLastIndex((start) => p >= start);
+    const numeral = NUMERALS[Math.max(0, chapter)] ?? 'I';
+    if (counterRef.current && counterRef.current.textContent !== numeral) {
+      counterRef.current.textContent = numeral;
     }
     const reached = ALL_HOTSPOTS.find(
       (hotspot) =>
@@ -253,7 +289,10 @@ function ScrollHero() {
     [portalDepth, portalScale],
     ([depth = 1, scale = 1]: number[]) => depth / scale,
   );
-  const portalOutline = useTransform(progress, [0.2, 0.24, 0.29, 0.34], [0, 1, 1, 0]);
+  const portalOutline = useTransform(progress, [...TIMELINE.portalOutline], [0, 1, 1, 0]);
+  const portalCue = useBand(progress, TIMELINE.portalCue);
+  // Rides the arch's top edge as it settles and starts to grow.
+  const portalCueY = useTransform(portalScale, (scale) => -(scale - 1) * archHalf.current);
   const portalVisibility = useTransform(progress, (p): string =>
     p >= TIMELINE.portalIn[0] && p <= TIMELINE.nookRise[1] + 0.01 ? 'visible' : 'hidden',
   );
@@ -280,6 +319,12 @@ function ScrollHero() {
     p >= TIMELINE.nookRise[0] ? 'visible' : 'hidden',
   );
   const nookPins = useBand(progress, TIMELINE.nookHotspots);
+  const nookCue = useBand(progress, [
+    TIMELINE.nookRise[0],
+    TIMELINE.nookRise[0] + 0.02,
+    TIMELINE.nookRise[1] - 0.04,
+    TIMELINE.nookRise[1] - 0.01,
+  ]);
 
   /* Copy that enters and leaves with the camera. */
   const introOpacity = useTransform(progress, [...TIMELINE.introOut], [1, 0]);
@@ -293,18 +338,9 @@ function ScrollHero() {
     o > 0.01 ? 'visible' : 'hidden',
   );
   const captions = [
-    {
-      key: SCENES.salon.caption,
-      band: useBand(progress, [0.07, 0.1, 0.19, 0.22]),
-    },
-    {
-      key: SCENES.loft.caption,
-      band: useBand(progress, [0.42, 0.45, 0.58, 0.61]),
-    },
-    {
-      key: SCENES.nook.caption,
-      band: useBand(progress, [0.69, 0.72, 0.78, 0.81]),
-    },
+    { scene: SCENES.salon, band: useBand(progress, TIMELINE.salonCaption) },
+    { scene: SCENES.loft, band: useBand(progress, TIMELINE.loftCaption) },
+    { scene: SCENES.nook, band: useBand(progress, TIMELINE.nookCaption) },
   ];
 
   const activeHotspot = ALL_HOTSPOTS.find((hotspot) => hotspot.id === activeId);
@@ -314,9 +350,18 @@ function ScrollHero() {
     <section
       ref={sectionRef}
       aria-label={t('home_hero_aria')}
-      className="relative -mt-[72px] h-[440svh] bg-lux-obsidian"
+      className="relative -mt-[72px] h-[600svh] bg-lux-obsidian"
     >
       <HeaderOverlayZone />
+      {TIMELINE.stops.map((stop) => (
+        <div
+          key={stop}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 h-px [scroll-snap-align:start]"
+          // The stage scrolls for the section's height less its own.
+          style={{ top: `calc(${stop} * (100% - max(100svh, 560px)))` }}
+        />
+      ))}
       <div
         ref={stageRef}
         className="sticky top-0 h-svh min-h-[560px] overflow-hidden bg-lux-obsidian [container-type:size]"
@@ -340,6 +385,20 @@ function ScrollHero() {
         </m.div>
 
         {/* II — The loft, through the arch */}
+        <m.div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-[calc(50cqh-min(46cqw,34cqh)*0.725)] z-[2]"
+          style={{
+            x: '-50%',
+            y: portalCueY,
+            opacity: portalCue.opacity,
+            visibility: portalCue.visibility,
+          }}
+        >
+          <div className="-translate-y-full pb-4">
+            <NextRoomCue numeral={NUMERALS[1]} />
+          </div>
+        </m.div>
         <m.div
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-1/2 z-[1] aspect-[1/1.45] w-[min(46cqw,34cqh)] rounded-t-full border border-lux-brass will-change-transform"
@@ -394,6 +453,13 @@ function ScrollHero() {
             hotspotVisibility={nookPins.visibility}
             {...pinHandlers}
           />
+          <m.div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-6 flex justify-center"
+            style={{ opacity: nookCue.opacity, visibility: nookCue.visibility }}
+          >
+            <NextRoomCue numeral={NUMERALS[2]} />
+          </m.div>
         </m.div>
 
         {/* IV — The close: the room steps back and the offer steps in */}
@@ -442,8 +508,8 @@ function ScrollHero() {
             <p className="mt-1 text-lux-sand/45">40.4093° N · 49.8671° E</p>
           </div>
           <div className="absolute right-5 top-[88px] font-spec text-[10px] tracking-[0.24em] text-lux-sand/80 md:right-10 md:top-[104px]">
-            <span ref={counterRef}>000</span>
-            <span className="text-lux-sand/40"> / 100</span>
+            <span ref={counterRef}>{NUMERALS[0]}</span>
+            <span className="text-lux-sand/40"> / {NUMERALS[3]}</span>
           </div>
           <div className="absolute right-6 top-1/2 hidden -translate-y-1/2 flex-col items-center gap-4 font-spec text-[9px] text-lux-sand/50 sm:flex md:right-10">
             <span>I</span>
@@ -452,17 +518,29 @@ function ScrollHero() {
                 className="absolute inset-0 origin-top bg-lux-amber"
                 style={{ scaleY: progress }}
               />
+              {TIMELINE.chapters.slice(1).map((start) => (
+                <span
+                  key={start}
+                  className="absolute -left-[3px] h-px w-[7px] bg-lux-sand/60"
+                  style={{ top: `${start * 100}%` }}
+                />
+              ))}
             </div>
             <span>IV</span>
           </div>
-          {captions.map(({ key, band }) => (
-            <m.p
-              key={key}
-              className="absolute bottom-5 left-5 font-display text-xl italic text-lux-sand md:bottom-10 md:left-10 md:text-3xl"
+          {captions.map(({ scene, band }) => (
+            <m.div
+              key={scene.id}
+              className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-lux-obsidian/75 via-lux-obsidian/35 to-transparent px-5 pb-6 pt-24 md:px-10 md:pb-10"
               style={{ opacity: band.opacity, visibility: band.visibility }}
             >
-              {t(key)}
-            </m.p>
+              <p className="font-display text-2xl italic leading-tight text-lux-sand md:text-4xl">
+                {t(scene.caption)}
+              </p>
+              <p className="mt-2 max-w-sm text-[13px] leading-relaxed text-lux-sand/80 md:max-w-md md:text-[15px]">
+                {t(scene.note)}
+              </p>
+            </m.div>
           ))}
           <m.div
             className="absolute bottom-10 right-10 hidden flex-col items-center gap-3 md:flex"
@@ -477,17 +555,19 @@ function ScrollHero() {
           </m.div>
         </div>
 
-        {/* Phones: the open pin's sheet docks at the top, clear of the furniture */}
+        {/* Phones: the open pin's sheet docks at the top, clear of the furniture.
+            Sheets cross-fade in place rather than queueing (`mode="wait"`),
+            so a fast scroll never leaves an old sheet over the next room. */}
         <div className="absolute inset-x-3 top-[128px] z-40 md:hidden" aria-live="polite">
-          <AnimatePresence mode="wait">
+          <AnimatePresence initial={false}>
             {activeHotspot && (
               <m.div
                 key={activeHotspot.id}
                 initial={{ opacity: 0, y: -12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="rounded-2xl border border-white/10 bg-lux-obsidian/95 p-5 text-lux-sand shadow-2xl"
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-x-0 top-0 rounded-2xl border border-white/10 bg-lux-obsidian/95 p-5 text-lux-sand shadow-2xl"
               >
                 <HotspotSpecs hotspot={activeHotspot} index={ALL_HOTSPOTS.indexOf(activeHotspot)} />
               </m.div>

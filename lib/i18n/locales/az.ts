@@ -244,6 +244,10 @@ export const az = {
   home_scene2_caption: 'II — Dəri və canlı işıq',
   home_scene3_caption: 'III — Əl ilə yonulmuş',
   home_scene4_caption: 'IV — Sizin otağınız',
+  home_scene1_note: 'Mebeldəki işarələri seçin — material, mənşə və ölçü açılır.',
+  home_scene2_note: 'İtalyan dərisi, palıd və latun — eyni emalatxana, başqa xarakter.',
+  home_scene3_note: 'Tornada yivlənmiş qoz masalar və əl ilə toxunmuş puf.',
+  home_next_room: 'Növbəti otaq',
   home_scene1_alt: 'Künc şezlonq divan, dairəvi palıd masa və hörmə kreslo olan işıqlı qonaq otağı',
   home_scene2_alt:
     'İki çəhrayı fırlanan kreslo arasında konyak rəngli dəri divan, X-ayaqlı palıd masa və latun torşer',

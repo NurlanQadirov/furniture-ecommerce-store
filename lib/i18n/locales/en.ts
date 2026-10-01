@@ -247,6 +247,10 @@ export const en: Translation = {
   home_scene2_caption: 'II — Leather and Living Light',
   home_scene3_caption: 'III — Turned by Hand',
   home_scene4_caption: 'IV — Yours',
+  home_scene1_note: 'Select a marker on the furniture for its material, origin and size.',
+  home_scene2_note: 'Italian leather, oak and brass — the same workshop, another character.',
+  home_scene3_note: 'Walnut tables ribbed on the lathe, and a pouf knitted by hand.',
+  home_next_room: 'Next room',
   home_scene1_alt:
     'A light living room with a corner chaise sofa, a round oak table and a cane armchair',
   home_scene2_alt:

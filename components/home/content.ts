@@ -42,6 +42,8 @@ export interface Scene {
   focus: { x: number; y: number };
   alt: TranslationKey;
   caption: TranslationKey;
+  /** One line under the caption: what to look at in this room. */
+  note: TranslationKey;
   hotspots: Hotspot[];
 }
 
@@ -53,13 +55,14 @@ export const SCENES: Record<SceneId, Scene> = {
     focus: { x: 0.62, y: 0.66 },
     alt: 'home_scene1_alt',
     caption: 'home_scene1_caption',
+    note: 'home_scene1_note',
     hotspots: [
       {
         id: 'salon-table',
         x: 0.553,
         y: 0.775,
         side: 'left',
-        window: [0.05, 0.125],
+        window: [0.07, 0.145],
         name: 'home_hs_salon_table',
         material: 'home_hs_salon_table_material',
         origin: 'home_hs_salon_table_origin',
@@ -70,7 +73,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.69,
         y: 0.665,
         side: 'right',
-        window: [0.125, 0.2],
+        window: [0.145, 0.22],
         name: 'home_hs_salon_sofa',
         material: 'home_hs_salon_sofa_material',
         origin: 'home_hs_salon_sofa_origin',
@@ -96,13 +99,14 @@ export const SCENES: Record<SceneId, Scene> = {
     focus: { x: 0.56, y: 0.72 },
     alt: 'home_scene2_alt',
     caption: 'home_scene2_caption',
+    note: 'home_scene2_note',
     hotspots: [
       {
         id: 'loft-table',
         x: 0.545,
         y: 0.81,
         side: 'left',
-        window: [0.43, 0.5],
+        window: [0.46, 0.51],
         name: 'home_hs_loft_table',
         material: 'home_hs_loft_table_material',
         origin: 'home_hs_loft_table_origin',
@@ -113,7 +117,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.67,
         y: 0.73,
         side: 'right',
-        window: [0.5, 0.56],
+        window: [0.51, 0.56],
         name: 'home_hs_loft_sofa',
         material: 'home_hs_loft_sofa_material',
         origin: 'home_hs_loft_sofa_origin',
@@ -140,13 +144,14 @@ export const SCENES: Record<SceneId, Scene> = {
     focus: { x: 0.45, y: 0.72 },
     alt: 'home_scene3_alt',
     caption: 'home_scene3_caption',
+    note: 'home_scene3_note',
     hotspots: [
       {
         id: 'nook-tables',
         x: 0.4,
         y: 0.72,
         side: 'right',
-        window: [0.69, 0.735],
+        window: [0.74, 0.785],
         name: 'home_hs_nook_tables',
         material: 'home_hs_nook_tables_material',
         origin: 'home_hs_nook_tables_origin',
@@ -157,7 +162,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.79,
         y: 0.82,
         side: 'left',
-        window: [0.735, 0.78],
+        window: [0.785, 0.83],
         name: 'home_hs_nook_pouf',
         material: 'home_hs_nook_pouf_material',
         origin: 'home_hs_nook_pouf_origin',
@@ -172,20 +177,42 @@ export const ALL_HOTSPOTS: Hotspot[] = Object.values(SCENES).flatMap((scene) => 
 /**
  * The hero's choreography, in fractions of its scroll distance. Every moving
  * part reads its range from here, so retiming a beat is a one-line change.
+ *
+ * Each room is a hold — caption up, pins opening one after another, the
+ * camera barely moving — and the rooms are joined by transitions in which
+ * nothing else happens. Nothing from one room is still on screen while the
+ * camera is on its way to the next, so every move reads as one thing: through
+ * the doorway, then the next room rising, then stepping back.
  */
 export const TIMELINE = {
-  introOut: [0, 0.07],
-  salonZoom: [0, 0.4],
-  salonHotspots: [0.03, 0.05, 0.19, 0.22],
-  portalIn: [0.2, 0.26],
-  portalGrow: [0.26, 0.42],
-  loftZoom: [0.42, 0.68],
-  loftHotspots: [0.42, 0.44, 0.59, 0.61],
-  nookRise: [0.6, 0.7],
-  nookSettle: [0.6, 0.78],
-  nookHotspots: [0.68, 0.7, 0.77, 0.79],
-  nookFrame: [0.79, 0.89],
-  closeIn: [0.84, 0.91],
+  introOut: [0.015, 0.06],
+  salonZoom: [0, 0.3],
+  salonHotspots: [0.05, 0.07, 0.22, 0.24],
+  salonCaption: [0.05, 0.08, 0.22, 0.25],
+  /* Through the doorway */
+  portalIn: [0.25, 0.3],
+  portalCue: [0.25, 0.28, 0.31, 0.34],
+  portalOutline: [0.25, 0.29, 0.33, 0.37],
+  portalGrow: [0.3, 0.42],
+  loftZoom: [0.42, 0.66],
+  loftHotspots: [0.44, 0.46, 0.6, 0.62],
+  loftCaption: [0.43, 0.46, 0.6, 0.63],
+  /* The next room rises */
+  nookRise: [0.63, 0.72],
+  nookSettle: [0.63, 0.78],
+  nookHotspots: [0.72, 0.74, 0.83, 0.85],
+  nookCaption: [0.72, 0.75, 0.83, 0.86],
+  /* Stepping back to the offer */
+  nookFrame: [0.86, 0.94],
+  closeIn: [0.9, 0.96],
+  /** Where each chapter takes over the counter: I, II, III, IV. */
+  chapters: [0, 0.34, 0.68, 0.88],
+  /**
+   * Resting points the scroll settles on when it stops near one (proximity
+   * snapping): the middle of each room's hold. A flick on a phone then lands
+   * in a room instead of halfway through a transition.
+   */
+  stops: [0.145, 0.535, 0.785],
 } as const;
 
 export type MaterialId = 'leather' | 'walnut' | 'marble';

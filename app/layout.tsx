@@ -29,6 +29,10 @@ const allura = Allura({
   display: 'swap',
   // Same reason as Poppins — Cyrillic headings must land on plain `serif`.
   adjustFontFallback: false,
+  // A display script for a few headings on the inner pages; the home page
+  // never sets it, yet its 48 KB were preloaded there ahead of the hero image.
+  // Pages that use it fetch it from the stylesheet as soon as it is needed.
+  preload: false,
 });
 
 const inter = Inter({

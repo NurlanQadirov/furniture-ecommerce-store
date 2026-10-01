@@ -99,8 +99,10 @@ export default function Header() {
             <Image
               src="/Logo2.png"
               alt={t('alt_logo')}
-              width={500}
-              height={500}
+              // Drawn 48px tall: declaring the real size keeps the srcset at
+              // 96/256px instead of a 1080px PNG for a phone's first screen.
+              width={96}
+              height={96}
               className={`h-12 w-auto transition-[filter] duration-500 ${
                 overHero ? 'brightness-0 invert' : ''
               }`}

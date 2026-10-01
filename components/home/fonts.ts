@@ -15,6 +15,13 @@ export const displayFont = Cormorant_Garamond({
   style: ['normal', 'italic'],
   variable: '--font-display',
   display: 'swap',
+  // Not preloaded. Three subsets in two styles are six files, ~190 KB, and
+  // as preloads they all went out at the highest priority — on a slow phone
+  // connection ahead of the hero photograph, which is the page's largest
+  // paint. Left to the (inlined) stylesheet, the browser fetches only the
+  // subsets and styles the visible text actually uses; the metric-matched
+  // fallback holds the headline's shape until then.
+  preload: false,
 });
 
 export const specFont = JetBrains_Mono({

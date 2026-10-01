@@ -46,13 +46,16 @@ yazdığı canlı məzmundur, deploy onları silməməlidir.
 ## Build-dən sonra şəkil keşini isit
 
 `npm run build` `.next/cache`-i silir, deməli ilk ziyarətçi hero şəkillərinin
-WebP-ə çevrilməsini gözləyir. Deploy-un sonunda bunu qabaqcadan et:
+AVIF/WebP-ə çevrilməsini gözləyir (AVIF kodlaması xüsusilə yavaşdır — 2048px
+üçün bir neçə saniyə). Deploy-un sonunda hər iki formatı qabaqcadan et:
 
 ```bash
 ssh root@91.99.96.163 'for img in furniture.jpg furniture2.jpg furniture3.jpg team.jpg; do
   for w in 640 750 828 1080 1200 1920 2048; do
-    curl -s -o /dev/null -H "Accept: image/webp,*/*" \
-      "http://127.0.0.1:3004/_next/image?url=%2F$img&w=$w&q=75"
+    for fmt in avif webp; do
+      curl -s -o /dev/null -H "Accept: image/$fmt,*/*" \
+        "http://127.0.0.1:3004/_next/image?url=%2F$img&w=$w&q=75"
+    done
   done
 done'
 ```

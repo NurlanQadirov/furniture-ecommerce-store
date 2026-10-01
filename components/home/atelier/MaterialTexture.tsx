@@ -12,6 +12,10 @@ import type { MaterialId } from '@/components/home/content';
  * of the panel — the reveal, each text swap, each hover. That was the freeze.
  * Now each texture is filtered exactly once, off the critical path, into a
  * canvas; every swatch and panel afterwards only copies pixels.
+ *
+ * Even once, each pass is a long task — longer still on a mid-range phone —
+ * so none of them runs during page load: a texture is only filtered when its
+ * panel comes within a screen of the viewport.
  */
 
 /** Edge of the square master bitmap, in device pixels. */
@@ -196,20 +200,32 @@ export default function MaterialTexture({ material, tone, className = '' }: Mate
       );
     };
 
-    loadTexture(material)
-      .then((canvas) => {
-        if (cancelled) return;
-        source = canvas;
-        paint();
-        setReady(true);
-      })
-      // The tone underneath is an acceptable surface if filters are unavailable.
-      .catch(() => undefined);
+    const load = () =>
+      loadTexture(material)
+        .then((canvas) => {
+          if (cancelled) return;
+          source = canvas;
+          paint();
+          setReady(true);
+        })
+        // The tone underneath is an acceptable surface if filters are unavailable.
+        .catch(() => undefined);
+
+    const approach = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        approach.disconnect();
+        load();
+      },
+      { rootMargin: '100% 0px' },
+    );
+    approach.observe(target);
 
     const observer = new ResizeObserver(paint);
     observer.observe(target);
     return () => {
       cancelled = true;
+      approach.disconnect();
       observer.disconnect();
     };
   }, [material]);

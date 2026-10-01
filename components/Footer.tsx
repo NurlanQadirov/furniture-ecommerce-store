@@ -32,8 +32,8 @@ export default async function Footer() {
               <Image
                 src="/Logo2.png"
                 alt={t('alt_logo')}
-                width={500}
-                height={500}
+                width={80}
+                height={80}
                 className="h-10 w-auto bg-white p-2 rounded-md"
               />
             </Link>
