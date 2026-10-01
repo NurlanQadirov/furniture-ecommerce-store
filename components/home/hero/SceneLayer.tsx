@@ -60,6 +60,10 @@ export default function SceneLayer({
           // scroll reaches them, so they load eagerly, behind anything else.
           loading={priority ? undefined : 'eager'}
           fetchPriority={priority ? undefined : 'low'}
+          // Decoded now, while the room is still hidden. Otherwise a 2048px
+          // photo is decoded on the frame its transition starts, and the
+          // camera visibly stalls there.
+          onLoad={priority ? undefined : (event) => void event.currentTarget.decode().catch(() => undefined)}
           className="object-cover"
         />
       )}

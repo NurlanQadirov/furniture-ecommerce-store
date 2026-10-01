@@ -62,7 +62,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.553,
         y: 0.775,
         side: 'left',
-        window: [0.07, 0.145],
+        window: [0.06, 0.12],
         name: 'home_hs_salon_table',
         material: 'home_hs_salon_table_material',
         origin: 'home_hs_salon_table_origin',
@@ -73,7 +73,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.69,
         y: 0.665,
         side: 'right',
-        window: [0.145, 0.22],
+        window: [0.12, 0.18],
         name: 'home_hs_salon_sofa',
         material: 'home_hs_salon_sofa_material',
         origin: 'home_hs_salon_sofa_origin',
@@ -106,7 +106,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.545,
         y: 0.81,
         side: 'left',
-        window: [0.46, 0.51],
+        window: [0.42, 0.47],
         name: 'home_hs_loft_table',
         material: 'home_hs_loft_table_material',
         origin: 'home_hs_loft_table_origin',
@@ -117,7 +117,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.67,
         y: 0.73,
         side: 'right',
-        window: [0.51, 0.56],
+        window: [0.47, 0.52],
         name: 'home_hs_loft_sofa',
         material: 'home_hs_loft_sofa_material',
         origin: 'home_hs_loft_sofa_origin',
@@ -128,7 +128,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.298,
         y: 0.435,
         side: 'right',
-        window: [0.56, 0.6],
+        window: [0.52, 0.56],
         desktopOnly: true,
         name: 'home_hs_loft_lamp',
         material: 'home_hs_loft_lamp_material',
@@ -151,7 +151,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.4,
         y: 0.72,
         side: 'right',
-        window: [0.74, 0.785],
+        window: [0.72, 0.77],
         name: 'home_hs_nook_tables',
         material: 'home_hs_nook_tables_material',
         origin: 'home_hs_nook_tables_origin',
@@ -162,7 +162,7 @@ export const SCENES: Record<SceneId, Scene> = {
         x: 0.79,
         y: 0.82,
         side: 'left',
-        window: [0.785, 0.83],
+        window: [0.77, 0.82],
         name: 'home_hs_nook_pouf',
         material: 'home_hs_nook_pouf_material',
         origin: 'home_hs_nook_pouf_origin',
@@ -185,34 +185,28 @@ export const ALL_HOTSPOTS: Hotspot[] = Object.values(SCENES).flatMap((scene) => 
  * the doorway, then the next room rising, then stepping back.
  */
 export const TIMELINE = {
-  introOut: [0.015, 0.06],
-  salonZoom: [0, 0.3],
-  salonHotspots: [0.05, 0.07, 0.22, 0.24],
-  salonCaption: [0.05, 0.08, 0.22, 0.25],
-  /* Through the doorway */
-  portalIn: [0.25, 0.3],
-  portalCue: [0.25, 0.28, 0.31, 0.34],
-  portalOutline: [0.25, 0.29, 0.33, 0.37],
-  portalGrow: [0.3, 0.42],
-  loftZoom: [0.42, 0.66],
-  loftHotspots: [0.44, 0.46, 0.6, 0.62],
-  loftCaption: [0.43, 0.46, 0.6, 0.63],
+  introOut: [0.015, 0.05],
+  salonZoom: [0, 0.24],
+  salonHotspots: [0.04, 0.06, 0.18, 0.2],
+  salonCaption: [0.04, 0.07, 0.18, 0.2],
+  /* Through the doorway: the longest move, so it gets the most scroll. */
+  portalIn: [0.2, 0.26],
+  portalCue: [0.2, 0.23, 0.27, 0.3],
+  portalOutline: [0.2, 0.24, 0.29, 0.33],
+  portalGrow: [0.26, 0.4],
+  loftZoom: [0.4, 0.6],
+  loftHotspots: [0.4, 0.42, 0.56, 0.58],
+  loftCaption: [0.4, 0.43, 0.56, 0.59],
   /* The next room rises */
-  nookRise: [0.63, 0.72],
-  nookSettle: [0.63, 0.78],
-  nookHotspots: [0.72, 0.74, 0.83, 0.85],
-  nookCaption: [0.72, 0.75, 0.83, 0.86],
+  nookRise: [0.58, 0.7],
+  nookSettle: [0.58, 0.76],
+  nookHotspots: [0.7, 0.72, 0.82, 0.84],
+  nookCaption: [0.7, 0.73, 0.82, 0.85],
   /* Stepping back to the offer */
-  nookFrame: [0.86, 0.94],
-  closeIn: [0.9, 0.96],
+  nookFrame: [0.85, 0.93],
+  closeIn: [0.89, 0.95],
   /** Where each chapter takes over the counter: I, II, III, IV. */
-  chapters: [0, 0.34, 0.68, 0.88],
-  /**
-   * Resting points the scroll settles on when it stops near one (proximity
-   * snapping): the middle of each room's hold. A flick on a phone then lands
-   * in a room instead of halfway through a transition.
-   */
-  stops: [0.145, 0.535, 0.785],
+  chapters: [0, 0.32, 0.66, 0.87],
 } as const;
 
 export type MaterialId = 'leather' | 'walnut' | 'marble';

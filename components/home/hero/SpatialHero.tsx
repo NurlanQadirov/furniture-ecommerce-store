@@ -31,7 +31,6 @@ const segment = (p: number, [start, end]: readonly [number, number]) =>
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
 const easeInOutSine = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
-const easeInQuad = (t: number) => t * t;
 
 /**
  * A camera move between two magnifications.
@@ -151,15 +150,32 @@ function useHotspotFocus() {
   const [autoId, setAutoId] = useState<string | null>(null);
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [pinnedId, setPinnedId] = useState<string | null>(null);
+  const lastPointerMove = useRef(0);
+
+  useEffect(() => {
+    const moved = () => {
+      lastPointerMove.current = performance.now();
+    };
+    window.addEventListener('pointermove', moved, { passive: true });
+    return () => window.removeEventListener('pointermove', moved);
+  }, []);
 
   return {
     activeId: pinnedId ?? hoverId ?? autoId,
     setAutoId: (id: string | null) => {
       setAutoId(id);
-      // A tap holds a card open only until the scroll moves on to the next one.
+      // A tap or a hover holds a card open only until the scroll moves on to
+      // the next one.
       setPinnedId(null);
+      setHoverId(null);
     },
-    onHover: setHoverId,
+    onHover: (id: string | null) => {
+      // While the wheel turns, the pins slide under a mouse that is standing
+      // still, and the browser reports that as hovering. Only a pointer that
+      // actually moved onto a pin may take the card from the scroll.
+      if (id && performance.now() - lastPointerMove.current > 200) return;
+      setHoverId(id);
+    },
     onToggle: (id: string) => setPinnedId((current) => (current === id ? null : id)),
   };
 }
@@ -210,29 +226,19 @@ function ScrollHero() {
     return () => observer.disconnect();
   }, []);
 
-  // Lets the scroll settle on the rooms' resting points (the snap markers
-  // below). Proximity, not mandatory: it only nudges a scroll that already
-  // stopped close to a room, and leaves the rest of the page free.
-  useEffect(() => {
-    const root = document.documentElement;
-    root.style.scrollSnapType = 'y proximity';
-    return () => {
-      root.style.scrollSnapType = '';
-    };
-  }, []);
-
   // The section is pulled up under the (transparent) site header, so it
   // starts at the very top of the document.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
-  // A critically damped spring between the wheel and the camera: trackpad
-  // jitter and coarse mouse-wheel steps both arrive as one continuous glide.
+  // An overdamped spring between the wheel and the camera: trackpad jitter
+  // and coarse mouse-wheel steps both arrive as one continuous glide, and a
+  // flick is spread over a quarter of a second instead of landing at once.
   const progress = useSpring(scrollYProgress, {
-    stiffness: 170,
-    damping: 34,
-    mass: 0.32,
+    stiffness: 120,
+    damping: 30,
+    mass: 0.4,
     restDelta: 0.0001,
   });
 
@@ -276,7 +282,9 @@ function ScrollHero() {
   const portalOpacity = useTransform(progress, [...TIMELINE.portalIn], [0, 1]);
   const portalScale = useTransform(progress, (p) => {
     const appear = lerp(0.72, 1, easeOutCubic(segment(p, TIMELINE.portalIn)));
-    return appear * dolly(1, coverScale.current, easeInQuad(segment(p, TIMELINE.portalGrow)));
+    // Eased at both ends: accelerating all the way, the last stretch of the
+    // doorway rushed past at twice the average speed.
+    return appear * dolly(1, coverScale.current, easeInOutSine(segment(p, TIMELINE.portalGrow)));
   });
   // The room inside the arch starts a little closer and settles back, so
   // stepping through has parallax instead of a flat wipe.
@@ -306,7 +314,9 @@ function ScrollHero() {
   /* III — the nook rises like a panel, then steps back into a frame. */
   const nookY = useTransform(
     progress,
-    (p) => `${(1 - easeOutCubic(segment(p, TIMELINE.nookRise))) * 100}%`,
+    // Eased in as well as out: an ease-out alone launched the panel at three
+    // times its average speed.
+    (p) => `${(1 - easeInOutCubic(segment(p, TIMELINE.nookRise))) * 100}%`,
   );
   const nookScale = useTransform(progress, (p) =>
     lerp(1.18, 1, easeOutCubic(segment(p, TIMELINE.nookSettle))),
@@ -350,18 +360,9 @@ function ScrollHero() {
     <section
       ref={sectionRef}
       aria-label={t('home_hero_aria')}
-      className="relative -mt-[72px] h-[600svh] bg-lux-obsidian"
+      className="relative -mt-[72px] h-[700svh] bg-lux-obsidian"
     >
       <HeaderOverlayZone />
-      {TIMELINE.stops.map((stop) => (
-        <div
-          key={stop}
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 h-px [scroll-snap-align:start]"
-          // The stage scrolls for the section's height less its own.
-          style={{ top: `calc(${stop} * (100% - max(100svh, 560px)))` }}
-        />
-      ))}
       <div
         ref={stageRef}
         className="sticky top-0 h-svh min-h-[560px] overflow-hidden bg-lux-obsidian [container-type:size]"
