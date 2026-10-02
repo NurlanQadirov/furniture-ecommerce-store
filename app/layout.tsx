@@ -76,9 +76,12 @@ export async function generateMetadata(): Promise<Metadata> {
     // of formatting: let the browser linkify them.
     formatDetection: { telephone: true, address: true, email: true },
     icons: {
-      icon: '/Logo2.png',
-      shortcut: '/Logo2.png',
-      apple: '/Logo2.png',
+      icon: [
+        { url: '/favicon.ico', sizes: '48x48' },
+        { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+      ],
+      shortcut: '/favicon.ico',
+      apple: { url: '/apple-touch-icon.png', sizes: '180x180' },
     },
     robots: {
       index: true,

@@ -97,7 +97,7 @@ export default function AdminShell({ children }: AdminShellProps) {
     <div className="min-h-screen bg-gray-50">
       {/* Mobile bar */}
       <div className="lg:hidden sticky top-0 z-30 flex items-center justify-between bg-white border-b border-gray-200 px-4 h-16">
-        <Image src="/Logo2.png" alt="BakuMebel" width={200} height={200} className="h-9 w-auto" />
+        <Image src="/bakumebel-logo.png" alt="BakuMebel" width={208} height={36} className="h-9 w-auto" />
         <button
           type="button"
           onClick={() => setMenuOpen(true)}
@@ -128,11 +128,11 @@ export default function AdminShell({ children }: AdminShellProps) {
         <aside className="hidden lg:flex w-64 flex-col gap-4 border-r border-gray-200 bg-white p-4 min-h-screen sticky top-0">
           <Link href="/admin" className="px-2 py-3">
             <Image
-              src="/Logo2.png"
+              src="/bakumebel-logo.png"
               alt="BakuMebel"
-              width={300}
-              height={300}
-              className="h-10 w-auto"
+              width={185}
+              height={32}
+              className="h-8 w-auto"
             />
             <span className="mt-2 block text-[11px] uppercase tracking-widest text-gray-400">
               İdarə paneli

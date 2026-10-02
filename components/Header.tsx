@@ -97,13 +97,13 @@ export default function Header() {
         <header className="w-full max-w-[1200px] mx-auto px-4 flex justify-between items-center h-[72px]">
           <Link href="/" aria-label={`${t('alt_logo')} — ${t('home')}`}>
             <Image
-              src="/Logo2.png"
+              src="/bakumebel-logo.png"
               alt={t('alt_logo')}
-              // Drawn 48px tall: declaring the real size keeps the srcset at
-              // 96/256px instead of a 1080px PNG for a phone's first screen.
-              width={96}
-              height={96}
-              className={`h-12 w-auto transition-[filter] duration-500 ${
+              // Drawn 40px tall: declaring the real size keeps the srcset at
+              // 1x/2x of that instead of the 1200px source for a phone's first screen.
+              width={231}
+              height={40}
+              className={`h-10 w-auto transition-[filter] duration-500 ${
                 overHero ? 'brightness-0 invert' : ''
               }`}
               priority

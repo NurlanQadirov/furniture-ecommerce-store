@@ -49,11 +49,11 @@ export default function LoginForm() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <Image
-            src="/Logo2.png"
+            src="/bakumebel-logo.png"
             alt="BakuMebel"
-            width={400}
-            height={400}
-            className="h-12 w-auto mx-auto"
+            width={231}
+            height={40}
+            className="h-10 w-auto mx-auto"
             priority
           />
           <h1 className="mt-4 text-lg font-bold">İdarə paneli</h1>

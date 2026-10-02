@@ -30,10 +30,10 @@ export default async function Footer() {
           <div className="space-y-4 md:col-span-1">
             <Link href="/" aria-label={`${t('alt_logo')} — ${t('home')}`}>
               <Image
-                src="/Logo2.png"
+                src="/bakumebel-logo.png"
                 alt={t('alt_logo')}
-                width={80}
-                height={80}
+                width={139}
+                height={24}
                 className="h-10 w-auto bg-white p-2 rounded-md"
               />
             </Link>
