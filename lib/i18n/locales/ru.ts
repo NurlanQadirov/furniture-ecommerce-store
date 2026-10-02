@@ -19,7 +19,7 @@ export const ru: Translation = {
   goToCatalog: 'Перейти в каталог',
 
   // Home Page
-  whyMebeltech_title: 'Почему Mebeltech?',
+  whyMebeltech_title: 'Почему BakuMebel?',
   whyMebeltech_desc:
     'Мы не просто продаем мебель, мы приносим комфорт и красоту в ваш дом. Качество, надежность и современный дизайн – наши главные принципы.',
   quality_title: 'Высокое Качество',
@@ -53,7 +53,7 @@ export const ru: Translation = {
     'Наша цель — не просто продавать мебель, а предлагать решения, которые приносят комфорт, функциональность и красоту в ваш дом и офис.',
   our_story_title: 'Наша История',
   our_story_p1:
-    'Как **Mebeltech**, мы работаем с 2015 года. Каждый клиент для нас ценен, и их удовлетворение — наш главный приоритет.',
+    'Как **BakuMebel**, мы работаем с 2015 года. Каждый клиент для нас ценен, и их удовлетворение — наш главный приоритет.',
   our_story_p2:
     'Наша команда состоит из профессиональных дизайнеров, мастеров и специалистов по продажам. Мы строго контролируем все процессы от дизайна до производства, используя только самые качественные и экологически чистые материалы.',
   contact_us: 'Связаться с нами',
@@ -74,7 +74,7 @@ export const ru: Translation = {
   footer_address_value: 'Баку, ул. Низами 123',
   footer_phone_value: '+994 50 123 45 67',
   footer_email_value: 'info@mebeltech.az',
-  footer_copyright: '© {{year}} Mebeltech. Все права защищены.',
+  footer_copyright: '© {{year}} BakuMebel. Все права защищены.',
 
   // Catalogue — categories
   categories_title: 'Категории',
@@ -164,24 +164,24 @@ export const ru: Translation = {
   currency_azn: 'AZN',
 
   // SEO — заголовки и описания страниц
-  seo_home_title: 'Mebeltech — мебель на заказ в Баку: кухни, гардеробные, гостиные',
+  seo_home_title: 'BakuMebel — мебель на заказ в Баку: кухни, гардеробные, гостиные',
   seo_home_description:
-    'Mebeltech с 2015 года изготавливает мебель на заказ в Баку: кухонные гарнитуры, шкафы-купе и распашные гардеробы, ТВ-стенки, мебель для спальни и офиса. Бесплатный замер, официальная гарантия, онлайн-калькулятор цены.',
+    'BakuMebel с 2015 года изготавливает мебель на заказ в Баку: кухонные гарнитуры, шкафы-купе и распашные гардеробы, ТВ-стенки, мебель для спальни и офиса. Бесплатный замер, официальная гарантия, онлайн-калькулятор цены.',
   seo_products_title: 'Каталог мебели — все категории',
   seo_products_description:
-    'Каталог Mebeltech: кухонная мебель, гардеробы и шкафы, гостиные и ТВ-стенки, мебель для спальни, офиса и детской. Каждая модель изготавливается в Баку точно по вашим размерам.',
+    'Каталог BakuMebel: кухонная мебель, гардеробы и шкафы, гостиные и ТВ-стенки, мебель для спальни, офиса и детской. Каждая модель изготавливается в Баку точно по вашим размерам.',
   seo_category_title: '{{name}} — на заказ в Баку',
-  seo_category_description: '{{name}} на заказ в Баку от Mebeltech.',
+  seo_category_description: '{{name}} на заказ в Баку от BakuMebel.',
   seo_product_title: '{{name}} — {{category}}',
   seo_product_description:
-    '{{name}} ({{category}}) — на заказ в Баку от Mebeltech. {{description}}',
+    '{{name}} ({{category}}) — на заказ в Баку от BakuMebel. {{description}}',
   seo_product_price_note: 'Цена {{price}} AZN.',
-  seo_about_title: 'О нас — мебельная мастерская Mebeltech',
+  seo_about_title: 'О нас — мебельная мастерская BakuMebel',
   seo_about_description:
-    'Команда Mebeltech работает в Баку с 2015 года: дизайнеры, мастера и специалисты по продажам. Экологически чистые материалы, официальная гарантия и производство точно по вашим размерам.',
+    'Команда BakuMebel работает в Баку с 2015 года: дизайнеры, мастера и специалисты по продажам. Экологически чистые материалы, официальная гарантия и производство точно по вашим размерам.',
   seo_contact_title: 'Контакты — адрес, телефон и WhatsApp',
   seo_contact_description:
-    'Связаться с Mebeltech: {{address}}. Телефон {{phone}}, эл. почта {{email}}. Напишите в WhatsApp или закажите бесплатный замер.',
+    'Связаться с BakuMebel: {{address}}. Телефон {{phone}}, эл. почта {{email}}. Напишите в WhatsApp или закажите бесплатный замер.',
   seo_calculator_title: 'Калькулятор цены мебели — примерный бюджет',
   seo_calculator_description:
     'Рассчитайте примерную стоимость кухни, гардероба, гостиной или спальни за 40 секунд: выберите материал, фурнитуру и аксессуары и сразу увидите диапазон. Точная цена — после бесплатного замера.',
@@ -194,21 +194,21 @@ export const ru: Translation = {
   seo_rate_living: 'ТВ-стенки от {{price}} AZN/м²',
   seo_rate_fixed: 'модели для спальни от {{price}} AZN',
   schema_service_name: 'Мебель на заказ: дизайн, производство, доставка и монтаж',
-  schema_pricing_name: 'Прайс-лист Mebeltech — тарифы калькулятора',
+  schema_pricing_name: 'Прайс-лист BakuMebel — тарифы калькулятора',
   schema_calc_range:
     'Результат показывается как диапазон ±{{percent}}% от расчётной суммы, округлённый до {{step}} AZN.',
   seo_keywords:
-    'мебель, мебель Баку, мебель на заказ, кухонная мебель, гардероб, шкаф-купе, ТВ-стенка, мебель для спальни, офисная мебель, детская мебель, цена мебели, Mebeltech',
+    'мебель, мебель Баку, мебель на заказ, кухонная мебель, гардероб, шкаф-купе, ТВ-стенка, мебель для спальни, офисная мебель, детская мебель, цена мебели, BakuMebel',
 
   // Alt-тексты изображений
-  alt_logo: 'Mebeltech — изготовление мебели на заказ в Баку',
-  alt_hero_slide: '{{title}} — интерьер с мебелью Mebeltech',
-  alt_product: '{{name}} — мебель, изготовленная Mebeltech по индивидуальным размерам',
-  alt_product_in_category: '{{name}} — {{category}}, Mebeltech Баку',
+  alt_logo: 'BakuMebel — изготовление мебели на заказ в Баку',
+  alt_hero_slide: '{{title}} — интерьер с мебелью BakuMebel',
+  alt_product: '{{name}} — мебель, изготовленная BakuMebel по индивидуальным размерам',
+  alt_product_in_category: '{{name}} — {{category}}, BakuMebel Баку',
   alt_product_photo: '{{name}} — фото {{index}} из {{total}}',
-  alt_category: 'Категория «{{name}}» — каталог мебели Mebeltech',
-  alt_team: 'Команда Mebeltech — дизайнеры и мастера в мастерской',
-  alt_interior: 'Современный интерьер с мебелью Mebeltech',
+  alt_category: 'Категория «{{name}}» — каталог мебели BakuMebel',
+  alt_team: 'Команда BakuMebel — дизайнеры и мастера в мастерской',
+  alt_interior: 'Современный интерьер с мебелью BakuMebel',
   alt_calculator_option: '{{name}} — вариант на выбор в калькуляторе',
 
   // Метки доступности
@@ -228,14 +228,14 @@ export const ru: Translation = {
   aria_product_gallery: 'Галерея фотографий товара',
   aria_lead_form: 'Форма заказа бесплатного замера',
   aria_calculator_progress: 'Шаги калькулятора',
-  aria_map: 'Расположение салона Mebeltech на карте',
+  aria_map: 'Расположение салона BakuMebel на карте',
   aria_category_products: 'Товары категории «{{name}}»',
   aria_open_menu: 'Открыть меню',
   aria_close_menu: 'Закрыть меню',
   aria_decrease: '{{name}} — уменьшить количество',
   aria_increase: '{{name}} — увеличить количество',
   aria_calculator_options: '{{question}} — варианты',
-  aria_hero: 'Коллекции мебели Mebeltech — слайдер',
+  aria_hero: 'Коллекции мебели BakuMebel — слайдер',
   // Home — spatial showcase
   home_hero_aria: 'Интерактивная прогулка по трём обставленным комнатам',
   home_hero_eyebrow: 'Мебель на заказ · Баку',

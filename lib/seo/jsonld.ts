@@ -279,7 +279,7 @@ export function webSiteNode(context: SchemaContext): JsonLdNode {
     '@type': 'WebSite',
     '@id': WEBSITE_ID,
     name: SITE_NAME,
-    alternateName: 'Mebeltech.az',
+    alternateName: 'bakumebel.az',
     url: localizedUrl('/', language),
     description: t('footer_desc'),
     inLanguage: supportedLanguages,

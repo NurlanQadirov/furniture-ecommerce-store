@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Mebeltech — İdarə paneli',
+  title: 'BakuMebel — İdarə paneli',
   robots: { index: false, follow: false },
 };
 

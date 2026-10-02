@@ -109,4 +109,4 @@ ssh root@91.99.96.163 'cd /srv/apps/mebeltech &&
 Dəyişiklikdən əvvəlki nginx faylı və `.env` yedəkləri: `/root/nginx-backups/`.
 
 Sonra `.env`-də `ADMIN_EMAIL`/`ADMIN_PASSWORD` real dəyərlərlə əvəz olunsun
-(`admin123` yalnız test üçündür) və `systemctl restart mebeltech`.
+(`1234` yalnız test üçündür) və `systemctl restart mebeltech`.

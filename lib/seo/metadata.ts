@@ -29,7 +29,7 @@ export interface PageMetadataOptions {
   path: string;
   title: string;
   description: string;
-  /** Skips the `… | Mebeltech` template — used by the home page. */
+  /** Skips the `… | BakuMebel` template — used by the home page. */
   titleIsAbsolute?: boolean;
   /** Page-specific pictures; falls back to the hero photo. */
   images?: (string | undefined)[];
@@ -57,7 +57,7 @@ export async function pageMetadata(options: PageMetadataOptions): Promise<Metada
   }));
 
   // The title the card shows has to be the finished one: OpenGraph never sees
-  // the layout's `%s | Mebeltech` template.
+  // the layout's `%s | BakuMebel` template.
   const socialTitle = options.titleIsAbsolute
     ? options.title
     : `${options.title} | ${SITE_NAME}`;

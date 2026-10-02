@@ -15,7 +15,7 @@ export const az = {
   goToCatalog: 'Kataloqa Keçid',
 
   // Home Page
-  whyMebeltech_title: 'Niyə Mebeltech?',
+  whyMebeltech_title: 'Niyə BakuMebel?',
   whyMebeltech_desc:
     'Biz sadəcə mebel satmırıq, biz sizin evinizə rahatlıq və gözəllik gətiririk. Keyfiyyət, etibar və müasir dizayn bizim əsas prinsiplərimizdir.',
   quality_title: 'Yüksək Keyfiyyət',
@@ -49,7 +49,7 @@ export const az = {
     'Məqsədimiz sadəcə mebel satmaq deyil, evinizə və ofisinizə rahatlıq, funksionallıq və gözəllik gətirən həllər təqdim etməkdir.',
   our_story_title: 'Bizim Hekayəmiz',
   our_story_p1:
-    '**Mebeltech** olaraq 2015-ci ildən fəaliyyət göstəririk. Bizim üçün hər bir müştəri dəyərlidir və onların məmnuniyyəti bizim əsas prioritetimizdir.',
+    '**BakuMebel** olaraq 2015-ci ildən fəaliyyət göstəririk. Bizim üçün hər bir müştəri dəyərlidir və onların məmnuniyyəti bizim əsas prioritetimizdir.',
   our_story_p2:
     'Komandamız peşəkar dizaynerlər, sənətkarlar və satış mütəxəssislərindən ibarətdir. Hər bir məhsulun dizaynından tutmuş istehsalına qədər olan bütün proseslərə ciddi nəzarət edir, yalnız ən keyfiyyətli və ekoloji təmiz materiallardan istifadə edirik.',
   contact_us: 'Bizimlə Əlaqə',
@@ -70,7 +70,7 @@ export const az = {
   footer_address_value: 'Bakı, Nizami küç. 123',
   footer_phone_value: '+994 50 123 45 67',
   footer_email_value: 'info@mebeltech.az',
-  footer_copyright: '© {{year}} Mebeltech. Bütün hüquqlar qorunur.',
+  footer_copyright: '© {{year}} BakuMebel. Bütün hüquqlar qorunur.',
 
   // Catalogue — categories
   categories_title: 'Kateqoriyalar',
@@ -160,24 +160,24 @@ export const az = {
   currency_azn: 'AZN',
 
   // SEO — səhifə başlıqları və təsvirləri
-  seo_home_title: 'Mebeltech — Bakıda ölçüyə uyğun mebel: mətbəx, qarderob, salon',
+  seo_home_title: 'BakuMebel — Bakıda ölçüyə uyğun mebel: mətbəx, qarderob, salon',
   seo_home_description:
-    'Mebeltech 2015-ci ildən Bakıda sifarişlə mebel hazırlayır: mətbəx dəstləri, kupe və qarderob şkaflar, TV divarları, yataq və ofis mebeli. Pulsuz ölçü, rəsmi zəmanət, onlayn qiymət kalkulyatoru.',
+    'BakuMebel 2015-ci ildən Bakıda sifarişlə mebel hazırlayır: mətbəx dəstləri, kupe və qarderob şkaflar, TV divarları, yataq və ofis mebeli. Pulsuz ölçü, rəsmi zəmanət, onlayn qiymət kalkulyatoru.',
   seo_products_title: 'Mebel kataloqu — bütün kateqoriyalar',
   seo_products_description:
-    'Mebeltech kataloqu: mətbəx mebeli, qarderob və şkaflar, salon və TV divarları, yataq otağı, ofis və uşaq otağı mebeli. Hər model Bakıda ölçüyə uyğun hazırlanır.',
+    'BakuMebel kataloqu: mətbəx mebeli, qarderob və şkaflar, salon və TV divarları, yataq otağı, ofis və uşaq otağı mebeli. Hər model Bakıda ölçüyə uyğun hazırlanır.',
   seo_category_title: '{{name}} — Bakıda sifarişlə hazırlanır',
-  seo_category_description: '{{name}} — Bakıda Mebeltech tərəfindən ölçüyə uyğun hazırlanır.',
+  seo_category_description: '{{name}} — Bakıda BakuMebel tərəfindən ölçüyə uyğun hazırlanır.',
   seo_product_title: '{{name}} — {{category}}',
   seo_product_description:
-    '{{name}} ({{category}}) — Bakıda Mebeltech tərəfindən ölçüyə uyğun hazırlanır. {{description}}',
+    '{{name}} ({{category}}) — Bakıda BakuMebel tərəfindən ölçüyə uyğun hazırlanır. {{description}}',
   seo_product_price_note: 'Qiymət {{price}} AZN.',
-  seo_about_title: 'Haqqımızda — Mebeltech mebel emalatxanası',
+  seo_about_title: 'Haqqımızda — BakuMebel mebel emalatxanası',
   seo_about_description:
-    '2015-ci ildən Bakıda fəaliyyət göstərən Mebeltech komandası: dizaynerlər, sənətkarlar və satış mütəxəssisləri. Ekoloji təmiz materiallar, rəsmi zəmanət və ölçüyə uyğun istehsal.',
+    '2015-ci ildən Bakıda fəaliyyət göstərən BakuMebel komandası: dizaynerlər, sənətkarlar və satış mütəxəssisləri. Ekoloji təmiz materiallar, rəsmi zəmanət və ölçüyə uyğun istehsal.',
   seo_contact_title: 'Əlaqə — ünvan, telefon və WhatsApp',
   seo_contact_description:
-    'Mebeltech ilə əlaqə: {{address}}. Telefon {{phone}}, e-poçt {{email}}. WhatsApp ilə yazın və ya pulsuz ölçü üçün müraciət edin.',
+    'BakuMebel ilə əlaqə: {{address}}. Telefon {{phone}}, e-poçt {{email}}. WhatsApp ilə yazın və ya pulsuz ölçü üçün müraciət edin.',
   seo_calculator_title: 'Mebel qiymət kalkulyatoru — təxmini büdcə',
   seo_calculator_description:
     'Mətbəx, qarderob, salon və yataq mebelinin təxmini qiymətini 40 saniyəyə hesablayın: material, furnitura və aksesuar seçin, nəticəni dərhal görün. Dəqiq qiymət pulsuz ölçüdən sonra verilir.',
@@ -190,21 +190,21 @@ export const az = {
   seo_rate_living: 'TV divarları {{price}} AZN/m²-dən',
   seo_rate_fixed: 'yataq otağı modelləri {{price}} AZN-dən',
   schema_service_name: 'Sifarişlə mebel: dizayn, istehsal, çatdırılma və montaj',
-  schema_pricing_name: 'Mebeltech qiymət cədvəli — kalkulyator tarifləri',
+  schema_pricing_name: 'BakuMebel qiymət cədvəli — kalkulyator tarifləri',
   schema_calc_range:
     'Nəticə hesablanmış məbləğin ±{{percent}}% aralığında göstərilir və {{step}} AZN-ə yuvarlaqlaşdırılır.',
   seo_keywords:
-    'mebel, Bakı mebel, sifarişlə mebel, ölçüyə uyğun mebel, mətbəx mebeli, qarderob, kupe şkaf, TV divarı, yataq otağı mebeli, ofis mebeli, uşaq otağı mebeli, mebel qiyməti, Mebeltech',
+    'mebel, Bakı mebel, sifarişlə mebel, ölçüyə uyğun mebel, mətbəx mebeli, qarderob, kupe şkaf, TV divarı, yataq otağı mebeli, ofis mebeli, uşaq otağı mebeli, mebel qiyməti, BakuMebel',
 
   // Şəkil alt mətnləri
-  alt_logo: 'Mebeltech — Bakıda ölçüyə uyğun mebel istehsalı',
-  alt_hero_slide: '{{title}} — Mebeltech tərəfindən hazırlanmış mebel interyeri',
-  alt_product: '{{name}} — Mebeltech tərəfindən ölçüyə uyğun hazırlanan mebel',
-  alt_product_in_category: '{{name}} — {{category}}, Mebeltech Bakı',
+  alt_logo: 'BakuMebel — Bakıda ölçüyə uyğun mebel istehsalı',
+  alt_hero_slide: '{{title}} — BakuMebel tərəfindən hazırlanmış mebel interyeri',
+  alt_product: '{{name}} — BakuMebel tərəfindən ölçüyə uyğun hazırlanan mebel',
+  alt_product_in_category: '{{name}} — {{category}}, BakuMebel Bakı',
   alt_product_photo: '{{name}} — foto {{index}} / {{total}}',
-  alt_category: '{{name}} kateqoriyası — Mebeltech mebel kataloqu',
-  alt_team: 'Mebeltech komandası — dizaynerlər və sənətkarlar emalatxanada',
-  alt_interior: 'Mebeltech mebeli ilə təchiz olunmuş müasir interyer',
+  alt_category: '{{name}} kateqoriyası — BakuMebel mebel kataloqu',
+  alt_team: 'BakuMebel komandası — dizaynerlər və sənətkarlar emalatxanada',
+  alt_interior: 'BakuMebel mebeli ilə təchiz olunmuş müasir interyer',
   alt_calculator_option: '{{name}} — kalkulyatorda seçilə bilən variant',
 
   // Əlçatanlıq etiketləri
@@ -224,14 +224,14 @@ export const az = {
   aria_product_gallery: 'Məhsulun şəkil qalereyası',
   aria_lead_form: 'Pulsuz ölçü sifarişi formu',
   aria_calculator_progress: 'Kalkulyatorun addımları',
-  aria_map: 'Mebeltech mağazasının xəritədəki yeri',
+  aria_map: 'BakuMebel mağazasının xəritədəki yeri',
   aria_category_products: '{{name}} kateqoriyasındakı məhsullar',
   aria_open_menu: 'Menyunu aç',
   aria_close_menu: 'Menyunu bağla',
   aria_decrease: '{{name}} — sayı azalt',
   aria_increase: '{{name}} — sayı artır',
   aria_calculator_options: '{{question}} — variantlar',
-  aria_hero: 'Mebeltech mebel kolleksiyaları — slayder',
+  aria_hero: 'BakuMebel mebel kolleksiyaları — slayder',
   // Home — spatial showcase
   home_hero_aria: 'Mebelli üç otaq boyunca interaktiv gəzinti',
   home_hero_eyebrow: 'Fərdi mebel · Bakı',

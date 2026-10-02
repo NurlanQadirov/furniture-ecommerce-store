@@ -20,7 +20,7 @@ export function getAdminEmail(): string {
 }
 
 export function getAdminPassword(): string {
-  return process.env.ADMIN_PASSWORD ?? 'mebeltech2024';
+  return process.env.ADMIN_PASSWORD || '1234';
 }
 
 /** Mail addresses are not case-sensitive, so neither is the login form. */
@@ -29,7 +29,7 @@ export function normalizeEmail(value: string): string {
 }
 
 function getSecret(): string {
-  return process.env.ADMIN_SECRET ?? `${getAdminPassword()}::mebeltech-session`;
+  return process.env.ADMIN_SECRET || `${getAdminPassword()}::mebeltech-session`;
 }
 
 async function sign(payload: string): Promise<string> {

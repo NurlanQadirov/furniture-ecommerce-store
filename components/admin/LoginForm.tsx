@@ -50,7 +50,7 @@ export default function LoginForm() {
         <div className="text-center mb-8">
           <Image
             src="/Logo2.png"
-            alt="Mebeltech"
+            alt="BakuMebel"
             width={400}
             height={400}
             className="h-12 w-auto mx-auto"

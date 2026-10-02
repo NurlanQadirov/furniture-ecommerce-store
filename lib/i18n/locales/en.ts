@@ -17,7 +17,7 @@ export const en: Translation = {
   goToCatalog: 'Go to Catalog',
 
   // Home Page
-  whyMebeltech_title: 'Why Mebeltech?',
+  whyMebeltech_title: 'Why BakuMebel?',
   whyMebeltech_desc:
     "We don't just sell furniture; we bring comfort and beauty to your home. Quality, reliability, and modern design are our core principles.",
   quality_title: 'High Quality',
@@ -51,7 +51,7 @@ export const en: Translation = {
     'Our goal is not just to sell furniture, but to offer solutions that bring comfort, functionality, and beauty to your home and office.',
   our_story_title: 'Our Story',
   our_story_p1:
-    'As **Mebeltech**, we have been operating since 2015. Every customer is valuable to us, and their satisfaction is our main priority.',
+    'As **BakuMebel**, we have been operating since 2015. Every customer is valuable to us, and their satisfaction is our main priority.',
   our_story_p2:
     'Our team consists of professional designers, craftsmen, and sales specialists. We strictly control all processes from design to production, using only the highest quality and eco-friendly materials.',
   contact_us: 'Contact Us',
@@ -72,7 +72,7 @@ export const en: Translation = {
   footer_address_value: 'Baku, Nizami st. 123',
   footer_phone_value: '+994 50 123 45 67',
   footer_email_value: 'info@mebeltech.az',
-  footer_copyright: '© {{year}} Mebeltech. All rights reserved.',
+  footer_copyright: '© {{year}} BakuMebel. All rights reserved.',
 
   // Catalogue — categories
   categories_title: 'Categories',
@@ -162,24 +162,24 @@ export const en: Translation = {
   currency_azn: 'AZN',
 
   // SEO — page titles and descriptions
-  seo_home_title: 'Mebeltech — made-to-measure furniture in Baku: kitchens, wardrobes, living rooms',
+  seo_home_title: 'BakuMebel — made-to-measure furniture in Baku: kitchens, wardrobes, living rooms',
   seo_home_description:
-    'Mebeltech has been building made-to-measure furniture in Baku since 2015: kitchen sets, sliding and hinged wardrobes, TV walls, bedroom and office furniture. Free measurement, official warranty, online price calculator.',
+    'BakuMebel has been building made-to-measure furniture in Baku since 2015: kitchen sets, sliding and hinged wardrobes, TV walls, bedroom and office furniture. Free measurement, official warranty, online price calculator.',
   seo_products_title: 'Furniture catalogue — all categories',
   seo_products_description:
-    'The Mebeltech catalogue: kitchen furniture, wardrobes and cabinets, living rooms and TV walls, bedroom, office and kids room furniture. Every model is built to your measurements in Baku.',
+    'The BakuMebel catalogue: kitchen furniture, wardrobes and cabinets, living rooms and TV walls, bedroom, office and kids room furniture. Every model is built to your measurements in Baku.',
   seo_category_title: '{{name}} — made to measure in Baku',
-  seo_category_description: '{{name}} made to measure in Baku by Mebeltech.',
+  seo_category_description: '{{name}} made to measure in Baku by BakuMebel.',
   seo_product_title: '{{name}} — {{category}}',
   seo_product_description:
-    '{{name}} ({{category}}), made to measure in Baku by Mebeltech. {{description}}',
+    '{{name}} ({{category}}), made to measure in Baku by BakuMebel. {{description}}',
   seo_product_price_note: 'Priced at {{price}} AZN.',
-  seo_about_title: 'About us — the Mebeltech furniture workshop',
+  seo_about_title: 'About us — the BakuMebel furniture workshop',
   seo_about_description:
-    'The Mebeltech team has worked in Baku since 2015: designers, craftsmen and sales specialists. Environmentally clean materials, an official warranty and production built to your measurements.',
+    'The BakuMebel team has worked in Baku since 2015: designers, craftsmen and sales specialists. Environmentally clean materials, an official warranty and production built to your measurements.',
   seo_contact_title: 'Contact — address, phone and WhatsApp',
   seo_contact_description:
-    'Get in touch with Mebeltech: {{address}}. Phone {{phone}}, email {{email}}. Write on WhatsApp or book a free measurement.',
+    'Get in touch with BakuMebel: {{address}}. Phone {{phone}}, email {{email}}. Write on WhatsApp or book a free measurement.',
   seo_calculator_title: 'Furniture price calculator — estimate your budget',
   seo_calculator_description:
     'Estimate the price of a kitchen, wardrobe, living room or bedroom in 40 seconds: choose materials, hardware and accessories and see the range at once. The exact price follows a free on-site measurement.',
@@ -193,21 +193,21 @@ export const en: Translation = {
   seo_rate_fixed: 'bedroom models from {{price}} AZN',
   schema_service_name:
     'Made-to-measure furniture: design, manufacturing, delivery and installation',
-  schema_pricing_name: 'Mebeltech price list — calculator rates',
+  schema_pricing_name: 'BakuMebel price list — calculator rates',
   schema_calc_range:
     'The estimate is shown as a range of ±{{percent}}% around the calculated total, rounded to {{step}} AZN.',
   seo_keywords:
-    'furniture, Baku furniture, custom furniture, made-to-measure furniture, kitchen furniture, wardrobe, sliding wardrobe, TV wall, bedroom furniture, office furniture, kids room furniture, furniture price, Mebeltech',
+    'furniture, Baku furniture, custom furniture, made-to-measure furniture, kitchen furniture, wardrobe, sliding wardrobe, TV wall, bedroom furniture, office furniture, kids room furniture, furniture price, BakuMebel',
 
   // Image alt text
-  alt_logo: 'Mebeltech — made-to-measure furniture manufacturing in Baku',
-  alt_hero_slide: '{{title}} — an interior furnished by Mebeltech',
-  alt_product: '{{name}} — furniture built to measure by Mebeltech',
-  alt_product_in_category: '{{name}} — {{category}}, Mebeltech Baku',
+  alt_logo: 'BakuMebel — made-to-measure furniture manufacturing in Baku',
+  alt_hero_slide: '{{title}} — an interior furnished by BakuMebel',
+  alt_product: '{{name}} — furniture built to measure by BakuMebel',
+  alt_product_in_category: '{{name}} — {{category}}, BakuMebel Baku',
   alt_product_photo: '{{name}} — photo {{index}} of {{total}}',
-  alt_category: '{{name}} category — the Mebeltech furniture catalogue',
-  alt_team: 'The Mebeltech team — designers and craftsmen in the workshop',
-  alt_interior: 'A modern interior furnished with Mebeltech furniture',
+  alt_category: '{{name}} category — the BakuMebel furniture catalogue',
+  alt_team: 'The BakuMebel team — designers and craftsmen in the workshop',
+  alt_interior: 'A modern interior furnished with BakuMebel furniture',
   alt_calculator_option: '{{name}} — an option you can pick in the calculator',
 
   // Accessibility labels
@@ -227,14 +227,14 @@ export const en: Translation = {
   aria_product_gallery: 'Product photo gallery',
   aria_lead_form: 'Free measurement request form',
   aria_calculator_progress: 'Calculator steps',
-  aria_map: 'The Mebeltech showroom on the map',
+  aria_map: 'The BakuMebel showroom on the map',
   aria_category_products: 'Products in the {{name}} category',
   aria_open_menu: 'Open the menu',
   aria_close_menu: 'Close the menu',
   aria_decrease: '{{name}} — decrease the quantity',
   aria_increase: '{{name}} — increase the quantity',
   aria_calculator_options: '{{question}} — options',
-  aria_hero: 'Mebeltech furniture collections — slider',
+  aria_hero: 'BakuMebel furniture collections — slider',
   // Home — spatial showcase
   home_hero_aria: 'An interactive walk through three furnished rooms',
   home_hero_eyebrow: 'Bespoke furniture · Baku',

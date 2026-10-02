@@ -29,7 +29,7 @@ function normalizeOrigin(value: string | undefined): string {
 
 export const SITE_URL = normalizeOrigin(process.env.NEXT_PUBLIC_SITE_URL);
 
-export const SITE_NAME = 'Mebeltech';
+export const SITE_NAME = 'BakuMebel';
 
 /** The query parameter, and the header `proxy.ts` forwards it in. */
 export const LANGUAGE_QUERY = 'lang';
