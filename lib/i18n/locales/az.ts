@@ -69,7 +69,7 @@ export const az = {
   footer_address_label: 'Ünvan:',
   footer_address_value: 'Bakı, Nizami küç. 123',
   footer_phone_value: '+994 50 123 45 67',
-  footer_email_value: 'info@mebeltech.az',
+  footer_email_value: 'info@bakumebel.az',
   footer_copyright: '© {{year}} BakuMebel. Bütün hüquqlar qorunur.',
 
   // Catalogue — categories

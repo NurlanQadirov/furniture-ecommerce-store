@@ -187,7 +187,7 @@ export const defaultProducts: Product[] = [
 export const defaultContact: ContactInfo = {
   phone: '+994 50 123 45 67',
   whatsapp: '994501234567',
-  email: 'info@mebeltech.az',
+  email: 'info@bakumebel.az',
   address: {
     az: 'Bakı, Nizami küç. 123',
     en: 'Baku, Nizami str. 123',

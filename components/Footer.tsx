@@ -62,16 +62,6 @@ export default async function Footer() {
                 <span>{loc(contact.address)}</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="font-bold shrink-0">{t('phone_label')}:</span>
-                <a
-                  href={`tel:${contact.phone.replace(/\s/g, '')}`}
-                  aria-label={t('aria_call', { phone: contact.phone })}
-                  className="hover:text-white"
-                >
-                  {contact.phone}
-                </a>
-              </li>
-              <li className="flex items-start gap-2">
                 <span className="font-bold shrink-0">{t('email_label')}:</span>
                 <a
                   href={`mailto:${contact.email}`}

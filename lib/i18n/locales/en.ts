@@ -71,7 +71,7 @@ export const en: Translation = {
   footer_address_label: 'Address:',
   footer_address_value: 'Baku, Nizami st. 123',
   footer_phone_value: '+994 50 123 45 67',
-  footer_email_value: 'info@mebeltech.az',
+  footer_email_value: 'info@bakumebel.az',
   footer_copyright: '© {{year}} BakuMebel. All rights reserved.',
 
   // Catalogue — categories
