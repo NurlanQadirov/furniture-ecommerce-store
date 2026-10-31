@@ -10,7 +10,6 @@ import type { Localized } from '@/types';
 const menuLinks = [
   { href: '/', labelKey: 'home' },
   { href: '/products', labelKey: 'products' },
-  { href: '/calculator', labelKey: 'calculator' },
   { href: '/about', labelKey: 'about' },
   { href: '/contact', labelKey: 'contact' },
 ] as const;

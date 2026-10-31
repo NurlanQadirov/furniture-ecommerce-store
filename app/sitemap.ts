@@ -74,12 +74,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
       images: categories.slice(0, 5).map((category) => category.image),
     },
-    {
-      path: '/calculator',
-      lastModified: contentModifiedAt,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
     { path: '/about', lastModified: contentModifiedAt, changeFrequency: 'yearly', priority: 0.5, images: ['/team.jpg'] },
     { path: '/contact', lastModified: contentModifiedAt, changeFrequency: 'monthly', priority: 0.7 },
 

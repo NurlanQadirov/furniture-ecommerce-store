@@ -55,15 +55,12 @@ export default async function Commission() {
             <MagneticLink href="/contact" variant="solid-light" cursor={t('home_cursor_explore')}>
               {t('home_cta_bespoke')}
             </MagneticLink>
-            <MagneticLink href="/calculator" variant="outline-light" cursor={t('home_cursor_view')}>
-              {t('calc_title')}
-            </MagneticLink>
           </div>
         </div>
 
         <div className="animate-item mt-20 grid border-t border-white/10 md:mt-28 md:grid-cols-2 lg:grid-cols-4">
           <Link
-            href="/calculator"
+            href="/contact"
             className="group border-b border-white/10 py-8 pr-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lux-amber md:border-r lg:border-b-0"
           >
             <p className="font-spec text-[10px] tracking-[0.2em] text-lux-amber">00</p>

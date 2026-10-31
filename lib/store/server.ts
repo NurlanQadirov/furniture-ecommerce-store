@@ -3,7 +3,7 @@ import path from 'node:path';
 import { cache } from 'react';
 import { createDefaultStore } from '@/lib/store/defaults';
 import type { SiteStore } from '@/lib/store/schema';
-import type { Category, Lead, Product } from '@/types';
+import type { Category, Product } from '@/types';
 
 const STORE_DIR = path.join(process.cwd(), 'data');
 const STORE_FILE = path.join(STORE_DIR, 'store.json');
@@ -31,15 +31,6 @@ function withDefaults(raw: Partial<SiteStore> | null): SiteStore {
     categories: raw.categories ?? defaults.categories,
     products: raw.products ?? defaults.products,
     contact: { ...defaults.contact, ...raw.contact },
-    calculator: {
-      ...defaults.calculator,
-      ...raw.calculator,
-      kitchen: { ...defaults.calculator.kitchen, ...raw.calculator?.kitchen },
-      wardrobe: { ...defaults.calculator.wardrobe, ...raw.calculator?.wardrobe },
-      living: { ...defaults.calculator.living, ...raw.calculator?.living },
-      fixed: { ...defaults.calculator.fixed, ...raw.calculator?.fixed },
-    },
-    leads: raw.leads ?? [],
   };
 
   // A store written before ordering was per category (or hand-edited) can hold
@@ -74,7 +65,7 @@ async function loadStore(): Promise<SiteStore> {
  */
 export const readStore = cache(loadStore);
 
-/** The store file's mtime — rewritten by every write, a new lead included. */
+/** The store file's mtime — rewritten by every write. */
 async function fileModifiedAt(): Promise<Date | undefined> {
   try {
     return (await fs.stat(STORE_FILE)).mtime;
@@ -86,10 +77,9 @@ async function fileModifiedAt(): Promise<Date | undefined> {
 /**
  * When the public content last changed, for `<lastmod>`.
  *
- * This used to be the store file's mtime, but leads live in the same file:
- * every measurement request a visitor sent re-dated every URL in the sitemap,
- * and a `<lastmod>` that moves when nothing on the page did is one a crawler
- * learns to ignore. The stamp `mutateStore` keeps moves only with the content.
+ * A `<lastmod>` that moves when nothing on the page did is one a crawler
+ * learns to ignore, so the stamp `mutateStore` keeps moves only with the
+ * content, not with every write to the file.
  *
  * A store from before the stamp existed falls back to the mtime — the old
  * behaviour, and still better than the time the crawler happened to ask.
@@ -100,12 +90,9 @@ export async function getContentModifiedAt(): Promise<Date> {
   return (await fileModifiedAt()) ?? new Date();
 }
 
-/**
- * Everything a visitor can see, as one comparable string. Leads are left out
- * on purpose: they are the one thing a write can change that no page shows.
- */
+/** Everything a visitor can see, as one comparable string. */
 function publicContent(store: SiteStore): string {
-  return JSON.stringify([store.categories, store.products, store.contact, store.calculator]);
+  return JSON.stringify([store.categories, store.products, store.contact]);
 }
 
 export async function writeStore(store: SiteStore): Promise<void> {
@@ -122,7 +109,7 @@ export async function mutateStore<T>(
     const before = publicContent(store);
 
     // A store from before the stamp: pin the mtime now, before this write
-    // (a lead, perhaps) moves it. From here on only real edits move the date.
+    // moves it. From here on only real edits move the date.
     if (!store.contentModifiedAt) {
       store.contentModifiedAt = ((await fileModifiedAt()) ?? new Date()).toISOString();
     }
@@ -130,7 +117,7 @@ export async function mutateStore<T>(
     const result = await mutator(store);
 
     // Compared rather than stamped per route: every admin save is covered
-    // without each handler having to remember it, a lead never counts, and a
+    // without each handler having to remember it, and a
     // save that changed nothing does not re-date the whole sitemap.
     if (publicContent(store) !== before) {
       store.contentModifiedAt = new Date().toISOString();
@@ -180,16 +167,6 @@ export async function getProductById(id: string): Promise<Product | undefined> {
 export async function getContact() {
   const { contact } = await readStore();
   return contact;
-}
-
-export async function getCalculatorSettings() {
-  const { calculator } = await readStore();
-  return calculator;
-}
-
-export async function getLeads(): Promise<Lead[]> {
-  const { leads } = await readStore();
-  return [...leads].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
 /**

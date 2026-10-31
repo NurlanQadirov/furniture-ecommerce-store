@@ -8,9 +8,7 @@ import {
   nodeId,
 } from '@/lib/seo/site';
 import { supportedLanguages } from '@/lib/i18n/languages';
-import type { TranslationKey } from '@/lib/i18n/resources';
 import type { Translator } from '@/lib/i18n/translate';
-import type { CalculatorSettings, RoomType } from '@/lib/store/schema';
 import type { Category, ContactInfo, Language, Localized, Product } from '@/types';
 
 /**
@@ -24,8 +22,7 @@ import type { Category, ContactInfo, Language, Localized, Product } from '@/type
  *   #organization   the business as a legal/brand entity — products point here
  *   #localbusiness  the Baku storefront: address, geo, service area
  *   #website        the site itself, publisher → #organization
- *   #service        made-to-measure work, offering the catalogue and the rates
- *   /calculator#pricing   the calculator's unit rates, as an offer catalogue
+ *   #service        made-to-measure work, offering the catalogue
  *
  * Nothing here invents a fact. Opening hours, ratings and reviews are absent
  * because the store holds none, and fabricated ones are both a Google
@@ -40,7 +37,6 @@ export const LOCAL_BUSINESS_ID = `${SITE_URL}/#localbusiness`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const LOGO_ID = `${SITE_URL}/#logo`;
 export const SERVICE_ID = `${SITE_URL}/#service`;
-export const PRICING_ID = nodeId('/calculator', 'pricing');
 const CATALOG_ID = nodeId('/products', 'catalog');
 
 /** A reference to another node in the graph. */
@@ -292,7 +288,7 @@ export function webSiteNode(context: SchemaContext): JsonLdNode {
 /**
  * What the workshop actually does, as opposed to what it lists. This is the
  * node an answer engine reads to decide whether "custom kitchen in Baku"
- * describes this business — and, through the rates catalogue, what it costs.
+ * describes this business.
  */
 export function serviceNode(context: SchemaContext, categories: Category[]): JsonLdNode {
   const { language, t } = context;
@@ -306,11 +302,7 @@ export function serviceNode(context: SchemaContext, categories: Category[]): Jso
     url: localizedUrl('/', language),
     provider: ref(ORGANIZATION_ID),
     areaServed: areaServed(language),
-    // The rates live on `/calculator`; the id resolves there even from pages
-    // that do not carry the node itself.
-    hasOfferCatalog: [ref(PRICING_ID), categories.length > 0 ? ref(CATALOG_ID) : undefined].filter(
-      Boolean,
-    ),
+    hasOfferCatalog: categories.length > 0 ? ref(CATALOG_ID) : undefined,
   };
 }
 
@@ -586,246 +578,6 @@ export function categoryListNode(
         numberOfItems: counts[category.id] ?? 0,
       },
     })),
-  };
-}
-
-/* --------------------------------------------------------------- calculator */
-
-/** The same labels the wizard's room cards use, so the markup reads like the page. */
-const roomLabels: Record<RoomType, { title: TranslationKey; desc: TranslationKey }> = {
-  kitchen: { title: 'room_kitchen', desc: 'room_kitchen_desc' },
-  wardrobe: { title: 'room_wardrobe', desc: 'room_wardrobe_desc' },
-  living: { title: 'room_living', desc: 'room_living_desc' },
-  fixed: { title: 'room_fixed', desc: 'room_fixed_desc' },
-};
-
-const roomOrder: RoomType[] = ['kitchen', 'wardrobe', 'living', 'fixed'];
-
-/** UN/CEFACT common codes, which is what `unitCode` expects. */
-const units = {
-  metre: { unitCode: 'MTR', unitText: 'm' },
-  squareMetre: { unitCode: 'MTK', unitText: 'm²' },
-  piece: { unitCode: 'C62', unitText: 'pcs' },
-} as const;
-
-interface RateOptions {
-  name: string;
-  price: number;
-  unit: keyof typeof units;
-  /** What the rate buys: a furniture element or a service like delivery. */
-  kind?: 'Product' | 'Service';
-  category?: string;
-  material?: string;
-  description?: string;
-}
-
-/** Options the owner has not priced yet stay out of the price list. */
-function positive<T>(items: T[], price: (item: T) => number): T[] {
-  return items.filter((item) => price(item) > 0);
-}
-
-/** One line of the price list: a price per metre, per m² or per piece. */
-function rateOffer(options: RateOptions): JsonLdNode {
-  const { unitCode, unitText } = units[options.unit];
-
-  return {
-    '@type': 'Offer',
-    name: options.name,
-    price: options.price,
-    priceCurrency: 'AZN',
-    priceSpecification: {
-      '@type': 'UnitPriceSpecification',
-      price: options.price,
-      priceCurrency: 'AZN',
-      referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode, unitText },
-    },
-    itemOffered: {
-      '@type': options.kind ?? 'Product',
-      name: options.name,
-      category: options.category,
-      material: options.material,
-      description: options.description,
-    },
-    seller: ref(ORGANIZATION_ID),
-  };
-}
-
-/**
- * The calculator's tariffs as a price list.
- *
- * The wizard runs in the browser, so a crawler sees its first step and none of
- * the numbers behind it — yet "how much is a kitchen per metre in Baku" is the
- * question this page exists to answer. Every figure below is one the wizard
- * itself shows next to an option, read from the same admin-managed settings,
- * so the markup can never drift from what a visitor is quoted.
- */
-export function pricingCatalogNode(
-  context: SchemaContext,
-  settings: CalculatorSettings,
-): JsonLdNode {
-  const { language, loc, t } = context;
-  const { kitchen, wardrobe, living, fixed } = settings;
-
-  const sections: Record<RoomType, JsonLdNode[]> = {
-    kitchen: [
-      ...positive(kitchen.materials, (item) => item.lowerPerM).map((item) =>
-        rateOffer({
-          name: `${t('calc_line_lower')} — ${loc(item.name)}`,
-          price: item.lowerPerM,
-          unit: 'metre',
-          category: t('room_kitchen'),
-          material: loc(item.name),
-        }),
-      ),
-      ...positive(kitchen.materials, (item) => item.upperPerM).map((item) =>
-        rateOffer({
-          name: `${t('calc_line_upper')} — ${loc(item.name)}`,
-          price: item.upperPerM,
-          unit: 'metre',
-          category: t('room_kitchen'),
-          material: loc(item.name),
-        }),
-      ),
-      ...positive(kitchen.counterTops, (item) => item.pricePerM).map((item) =>
-        rateOffer({
-          name: `${t('calc_line_counter')} — ${loc(item.name)}`,
-          price: item.pricePerM,
-          unit: 'metre',
-          category: t('room_kitchen'),
-          material: loc(item.name),
-        }),
-      ),
-      ...positive(kitchen.accessories, (item) => item.price).map((item) =>
-        rateOffer({ name: loc(item.name), price: item.price, unit: 'piece', category: t('room_kitchen') }),
-      ),
-    ],
-    wardrobe: [
-      ...positive(wardrobe.materials, (item) => item.pricePerM2).map((item) =>
-        rateOffer({
-          name: `${t('calc_line_facade')} — ${loc(item.name)}`,
-          price: item.pricePerM2,
-          unit: 'squareMetre',
-          category: t('room_wardrobe'),
-          material: loc(item.name),
-        }),
-      ),
-      ...positive(wardrobe.glassOptions, (item) => item.pricePerM2).map((item) =>
-        rateOffer({
-          name: `${t('calc_line_glass')} — ${loc(item.name)}`,
-          price: item.pricePerM2,
-          unit: 'squareMetre',
-          category: t('room_wardrobe'),
-          material: loc(item.name),
-        }),
-      ),
-      ...positive(wardrobe.interiorItems, (item) => item.price).map((item) =>
-        rateOffer({ name: loc(item.name), price: item.price, unit: 'piece', category: t('room_wardrobe') }),
-      ),
-    ],
-    living: [
-      ...positive(living.materials, (item) => item.pricePerM2).map((item) =>
-        rateOffer({
-          name: `${t('calc_line_facade')} — ${loc(item.name)}`,
-          price: item.pricePerM2,
-          unit: 'squareMetre',
-          category: t('room_living'),
-          material: loc(item.name),
-        }),
-      ),
-      ...positive(living.modules, (item) => item.price).map((item) =>
-        rateOffer({ name: loc(item.name), price: item.price, unit: 'piece', category: t('room_living') }),
-      ),
-    ],
-    fixed: positive(fixed.models, (item) => item.price).map((item) =>
-      rateOffer({
-        name: loc(item.name),
-        price: item.price,
-        unit: 'piece',
-        category: t('room_fixed'),
-        description: loc(item.description),
-      }),
-    ),
-  };
-
-  const services = [
-    settings.installationFee > 0
-      ? rateOffer({
-          name: t('calc_line_installation'),
-          price: settings.installationFee,
-          unit: 'piece',
-          kind: 'Service',
-        })
-      : undefined,
-    settings.deliveryFee > 0
-      ? rateOffer({
-          name: t('calc_line_delivery'),
-          price: settings.deliveryFee,
-          unit: 'piece',
-          kind: 'Service',
-        })
-      : undefined,
-  ].filter((node): node is JsonLdNode => Boolean(node));
-
-  const branches = roomOrder
-    .filter((room) => sections[room].length > 0)
-    .map((room) => ({
-      '@type': 'OfferCatalog',
-      '@id': nodeId('/calculator', `pricing-${room}`),
-      name: t(roomLabels[room].title),
-      description: t(roomLabels[room].desc),
-      numberOfItems: sections[room].length,
-      itemListElement: sections[room],
-    }));
-
-  return {
-    '@type': 'OfferCatalog',
-    '@id': PRICING_ID,
-    name: t('schema_pricing_name'),
-    // The caveat travels with the numbers, so nobody quotes them as final.
-    description: `${t('calc_note')} ${t('schema_calc_range', {
-      percent: settings.rangePercent,
-      step: settings.roundTo,
-    })}`,
-    url: localizedUrl('/calculator', language),
-    numberOfItems: branches.length + services.length,
-    itemListElement: [...branches, ...services],
-  };
-}
-
-/** The estimator, described as the tool it is. */
-export function calculatorAppNode(
-  context: SchemaContext,
-  settings: CalculatorSettings,
-): JsonLdNode {
-  const { language, t } = context;
-
-  return {
-    '@type': 'WebApplication',
-    '@id': nodeId('/calculator', 'app'),
-    name: t('calc_title'),
-    description: [
-      t('calc_subtitle'),
-      t('calc_note'),
-      t('schema_calc_range', { percent: settings.rangePercent, step: settings.roundTo }),
-    ].join(' '),
-    url: localizedUrl('/calculator', language),
-    applicationCategory: 'BusinessApplication',
-    applicationSubCategory: t('calculator'),
-    operatingSystem: 'Web',
-    browserRequirements: 'Requires JavaScript',
-    inLanguage: supportedLanguages,
-    isAccessibleForFree: true,
-    featureList: roomOrder.map(
-      (room) => `${t(roomLabels[room].title)} — ${t(roomLabels[room].desc)}`,
-    ),
-    about: ref(SERVICE_ID),
-    provider: ref(ORGANIZATION_ID),
-    offers: {
-      '@type': 'Offer',
-      price: 0,
-      priceCurrency: 'AZN',
-      availability: 'https://schema.org/InStock',
-    },
   };
 }
 

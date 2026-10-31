@@ -98,7 +98,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The catalogue, contact details and calculator tariffs all live in a JSON
+ * The catalogue and contact details live in a JSON
  * store the owner edits at runtime, so nothing below this layout may be
  * captured into the build output.
  */

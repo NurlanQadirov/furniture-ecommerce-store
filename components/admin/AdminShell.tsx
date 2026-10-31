@@ -8,12 +8,10 @@ import {
   ArrowLeftOnRectangleIcon,
   ArrowTopRightOnSquareIcon,
   Bars3Icon,
-  CalculatorIcon,
   CubeIcon,
   PhoneIcon,
   RectangleGroupIcon,
   Squares2X2Icon,
-  UserGroupIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
 
@@ -27,9 +25,7 @@ const links: NavLink[] = [
   { href: '/admin', label: 'İcmal', icon: Squares2X2Icon },
   { href: '/admin/products', label: 'Məhsullar', icon: CubeIcon },
   { href: '/admin/categories', label: 'Kateqoriyalar', icon: RectangleGroupIcon },
-  { href: '/admin/calculator', label: 'Kalkulyator', icon: CalculatorIcon },
   { href: '/admin/contact', label: 'Əlaqə məlumatları', icon: PhoneIcon },
-  { href: '/admin/leads', label: 'Ölçü sorğuları', icon: UserGroupIcon },
 ];
 
 interface AdminShellProps {

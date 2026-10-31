@@ -8,8 +8,6 @@ interface ImageInputProps {
   label: string;
   value: string;
   onChange: (url: string) => void;
-  /** Compact variant used inside the calculator's dense option rows. */
-  compact?: boolean;
 }
 
 /**
@@ -20,7 +18,6 @@ export default function ImageInput({
   label,
   value,
   onChange,
-  compact = false,
 }: ImageInputProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -55,9 +52,7 @@ export default function ImageInput({
 
       <div className="flex items-start gap-3">
         <div
-          className={`relative flex-shrink-0 rounded-lg overflow-hidden border-2 border-gray-200 bg-gray-50 ${
-            compact ? 'h-16 w-16' : 'h-24 w-24'
-          }`}
+          className="relative flex-shrink-0 rounded-lg overflow-hidden border-2 border-gray-200 bg-gray-50 h-24 w-24"
         >
           {value ? (
             <>

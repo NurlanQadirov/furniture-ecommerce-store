@@ -3,9 +3,8 @@ import {
   CubeIcon,
   RectangleGroupIcon,
   StarIcon,
-  UserGroupIcon,
 } from '@heroicons/react/24/solid';
-import { getCategories, getLeads, getProducts } from '@/lib/store/server';
+import { getCategories, getProducts } from '@/lib/store/server';
 
 interface Tile {
   href: string;
@@ -15,11 +14,7 @@ interface Tile {
 }
 
 export default async function AdminDashboardPage() {
-  const [products, categories, leads] = await Promise.all([
-    getProducts(),
-    getCategories(),
-    getLeads(),
-  ]);
+  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
 
   const tiles: Tile[] = [
     { href: '/admin/products', label: 'Məhsul', value: products.length, icon: CubeIcon },
@@ -35,7 +30,6 @@ export default async function AdminDashboardPage() {
       value: products.filter((product) => product.featured).length,
       icon: StarIcon,
     },
-    { href: '/admin/leads', label: 'Ölçü sorğusu', value: leads.length, icon: UserGroupIcon },
   ];
 
   return (
@@ -45,7 +39,7 @@ export default async function AdminDashboardPage() {
         <p className="text-sm text-gray-500">Saytın məzmununu buradan idarə edin.</p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {tiles.map((tile) => {
           const Icon = tile.icon;
           return (

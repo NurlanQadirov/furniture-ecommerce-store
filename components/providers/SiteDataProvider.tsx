@@ -12,7 +12,7 @@ interface SiteDataProviderProps {
 
 /**
  * Carries the admin-managed contact details from the server layout down to the
- * client components that need them (header, footer, contact page, calculator)
+ * client components that need them (header, footer, contact page)
  * without every one of them re-fetching the store.
  */
 export default function SiteDataProvider({ contact, children }: SiteDataProviderProps) {

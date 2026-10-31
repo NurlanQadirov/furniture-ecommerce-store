@@ -4,7 +4,7 @@ import { Cormorant_Garamond, JetBrains_Mono } from 'next/font/google';
  * The two families only the home page sets type in.
  *
  * Declared here rather than in the root layout so their CSS and preload hints
- * ride on `/` alone: the catalogue, calculator and admin never pay for them.
+ * ride on `/` alone: the catalogue and admin never pay for them.
  * Both cover `latin-ext` (ə, ğ, ş) and `cyrillic`, so all three languages land
  * on the intended face instead of a fallback. The geometric sans is the Inter
  * the root layout already loads.

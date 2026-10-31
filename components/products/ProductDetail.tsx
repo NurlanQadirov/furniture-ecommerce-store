@@ -179,12 +179,6 @@ export default function ProductDetail({ product, category, related }: ProductDet
               <FaWhatsapp size={20} />
               {t('write_whatsapp')}
             </a>
-            <Link
-              href="/calculator"
-              className="inline-flex items-center justify-center gap-2 border-2 border-dark-green text-dark-green font-bold py-3 px-8 rounded-lg hover:bg-custom-green transition-all"
-            >
-              {t('calculator')}
-            </Link>
           </div>
         </div>
       </article>

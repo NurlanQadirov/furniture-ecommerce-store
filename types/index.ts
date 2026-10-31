@@ -48,7 +48,7 @@ export interface Product {
   createdAt: string;
 }
 
-/** Contact details rendered in the header, footer, contact page and calculator. */
+/** Contact details rendered in the header, footer and contact page. */
 export interface ContactInfo {
   phone: string;
   whatsapp: string;
@@ -57,18 +57,6 @@ export interface ContactInfo {
   instagram: string;
   /** Optional Google Maps embed URL for the contact page. */
   mapEmbedUrl: string;
-}
-
-/** A measurement request captured by the calculator. */
-export interface Lead {
-  id: string;
-  name: string;
-  phone: string;
-  /** Human readable summary of the configuration that produced the estimate. */
-  summary: string;
-  estimateMin: number;
-  estimateMax: number;
-  createdAt: string;
 }
 
 export type { TranslationKey };
